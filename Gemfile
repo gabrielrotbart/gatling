@@ -1,3 +1,5 @@
 source "http://rubygems.org"
 gem "rspec"
 gem "rmagick"
+gem "selenium-client"
+gem "capybara"
