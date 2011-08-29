@@ -10,17 +10,27 @@ class Comparison
     @actual = actual
   end
   
-  def matches?
+  def capture
     page.driver.browser.save_screenshot('temp.png')
+    temp_screenshot = Image.read('temp.png').first
+  end
+    
+  def matches?
+    
+    #finds crop paramaters for element
     element = @actual
     element = element.native
     location = element.location
     size = element.size
-    temp_screenshot = Image.read('temp.png').first
-    expected_img = Image.read(@expected).first
+   expected_img = Image.read(@expected).first
+
     
-    element_img = temp_screenshot.crop(location.x, location.y, size.width, size.height)    
+    #crops image accroding to element paramaters
+    element_img = capture.crop(location.x, location.y, size.width, size.height)    
+    
     raise "The design reference #{expected} does not exist" unless File.exists? "google_logo.png"
+    
+    #compares actual and expected
     diff_metric = element_img.compare_channel(expected_img, MeanAbsoluteErrorMetric)
     matches = diff_metric[1] == 0.0
     diff_metric.first.write('diff.png') unless matches
