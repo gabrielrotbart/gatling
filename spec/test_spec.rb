@@ -23,10 +23,7 @@ class Comparison
   end
     
   def matches?
-    cropped_element.write("cropped.png")
     raise "The design reference #{@expected} does not exist" unless File.exists? "google_logo.png"
-    
-    #compares actual and expected
     expected_img = Image.read(@expected).first
     diff_metric = cropped_element.compare_channel(expected_img, MeanAbsoluteErrorMetric)
     matches = diff_metric[1] == 0.0
@@ -43,7 +40,7 @@ end
 
 
 describe "Google search" do
-  it "blah" do
+  it "should compare" do
    visit('/')
    page.find(:css, '#hplogo').should look_like('google_logo.png')
   end
