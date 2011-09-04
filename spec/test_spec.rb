@@ -13,10 +13,17 @@ describe "Google search" do
    visit('/')
    page.find(:css, '#hplogo').should look_like('google_logo.png')
   end
-  it "should visit again" do
-   visit('http://www.reddit.com')
-  end
+  # it "should visit again" do
+  #  visit('/')
+  #  page.find(:css, '#hplogo').should look_like('google_logo_clean.png')
+  # end
 end
+
+describe "Reddit" do
+  it "should visit reddit" do
+    visit('http://www.reddit.com')
+  end
+end      
 
 
 
