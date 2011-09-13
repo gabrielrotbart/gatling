@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 
   # specify any dependencies here; for example:
   s.add_dependency "rspec"
-  s.add_dependency "rmagic"
+  s.add_dependency "rmagick"
   s.add_dependency "selenium-client"
   s.add_dependency "capybara" 
 end
