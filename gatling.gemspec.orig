@@ -19,5 +19,12 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # specify any dependencies here; for example:
+<<<<<<< HEAD
+  s.add_dependency "rspec"
   s.add_dependency "rmagick"
+  s.add_dependency "selenium-client"
+  s.add_dependency "capybara" 
+=======
+  s.add_dependency "rmagick"
+>>>>>>> 01f1c5b58a3aa249141ef026447e2fbe9f5a8b0f
 end
