@@ -1,19 +1,15 @@
-require "gatling/version"
 require 'RMagick'
 include Magick
 
-# The Gatling Comparison class allows you to build an Rspec / Capybara custom matcher comparing a :css or :xpath element to a referenced screenshot:
-# Example:
-# -----------
-# RSpec::Matchers.define :look_like do |expected|
-#   match do |actual|
-#     Gatling::Comparison.new(expected, actual).matches?
-#   end
-# end
-# -----------
-
 module Gatling
     class Comparison
+      
+      #TODO: Training mode
+      #TODO: Diff with reports
+      #TODO: Canidate in spec
+      #TODO: Point ref files to desired folder
+      #TODO: Fuzz matches
+      #TODO: Helpers for cucumber
 
       def initialize expected, actual
         @expected = expected
@@ -22,7 +18,7 @@ module Gatling
 
       def capture
         page.driver.browser.save_screenshot('temp.png')
-        temp_screenshot = Image.read('temp.png').first
+        temp_screenshot = Magick::Image.read('temp.png').first
       end
 
       def crop_element
@@ -42,7 +38,7 @@ module Gatling
       def matches?
         cropped_element = crop_element
         if File.exists?(@expected)
-          expected_img = Image.read(@expected).first
+          expected_img = Magick::Image.read(@expected).first
           diff_metric = cropped_element.compare_channel(expected_img, MeanAbsoluteErrorMetric)
           matches = diff_metric[1] == 0.0
           diff_metric.first.write('diff.png') unless matches
@@ -54,3 +50,5 @@ module Gatling
       end      
     end
   end
+  
+
