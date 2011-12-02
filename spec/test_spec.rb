@@ -3,7 +3,8 @@ include Capybara::DSL
 
 RSpec::Matchers.define :look_like do |expected|
   match do |actual|
-    Comparison.new(expected, actual).matches?
+    compare = Comparison.new(expected, actual)
+    compare.matches?
   end
 end
 

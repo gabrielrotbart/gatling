@@ -1,7 +1,23 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    capybara (1.1.2)
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      selenium-webdriver (~> 2.0)
+      xpath (~> 0.1.4)
+    childprocess (0.2.3)
+      ffi (~> 1.0.6)
     diff-lcs (1.1.2)
+    ffi (1.0.11)
+    mime-types (1.17.2)
+    multi_json (1.0.4)
+    nokogiri (1.5.0)
+    rack (1.3.5)
+    rack-test (0.6.1)
+      rack (>= 1.0)
     rmagick (2.13.1)
     rspec (2.6.0)
       rspec-core (~> 2.6.0)
@@ -11,10 +27,21 @@ GEM
     rspec-expectations (2.6.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.6.0)
+    rubyzip (0.9.5)
+    selenium-client (1.2.18)
+    selenium-webdriver (2.14.0)
+      childprocess (>= 0.2.1)
+      ffi (~> 1.0.9)
+      multi_json (~> 1.0.4)
+      rubyzip
+    xpath (0.1.4)
+      nokogiri (~> 1.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  capybara
   rmagick
   rspec
+  selenium-client
