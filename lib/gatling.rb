@@ -39,7 +39,7 @@ require 'RMagick'
         cropped_element = crop_element
         if File.exists?(@expected)
           expected_img = Magick::Image.read(@expected).first
-          diff_metric = cropped_element.compare_channel(expected_img, MeanAbsoluteErrorMetric)
+          diff_metric = cropped_element.Magick::Image.compare_channel(expected_img, MeanAbsoluteErrorMetric)
           matches = diff_metric[1] == 0.0
           diff_metric.first.write('diff.png') unless matches
           matches
