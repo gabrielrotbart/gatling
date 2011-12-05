@@ -1,7 +1,7 @@
+require "gatling"
 require 'RMagick'
-include Magick
 
-module Gatling
+# module Gatling
     class Comparison
       
       #TODO: Training mode
@@ -49,6 +49,6 @@ module Gatling
         end    
       end      
     end
-  end
+  # end
   
 
