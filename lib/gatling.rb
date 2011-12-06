@@ -6,7 +6,6 @@ module Gatling
       #TODO: Training mode
       #TODO: Diff with reports
       #TODO: Canidate in spec
-      #TODO: Point ref files to desired folder
       #TODO: Fuzz matches
       #TODO: Helpers for cucumber
 
@@ -15,7 +14,9 @@ module Gatling
         @actual = actual
       end
       
-
+      reference_image_path = reference_image_path
+      puts reference_image_path
+      
       def capture
         page.driver.browser.save_screenshot('temp.png')
         temp_screenshot = Magick::Image.read('temp.png').first
@@ -51,6 +52,21 @@ module Gatling
         end    
       end      
     end
+    
+    module Configuration
+
+      class << self
+
+        attr_accessor 'reference_image_path'
+
+        def reference_image_path
+           @reference_image_path ||= File.join(Rails.root, 'spec/reference_images')
+        end
+
+      end
+    end  
 end
+
+
   
 
