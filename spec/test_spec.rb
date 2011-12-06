@@ -7,12 +7,12 @@ describe "Google search" do
    page.find(:css, '#hplogo').should look_like('google_logo.png')
   end
 end
-
-describe "Reddit" do
-  it "should visit reddit" do
-    visit('http://www.reddit.com')
-  end
-end    
+# 
+# describe "Reddit" do
+#   it "should visit reddit" do
+#     visit('http://www.reddit.com')
+#   end
+# end    
 
 
 

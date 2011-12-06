@@ -13,15 +13,15 @@ module Gatling
         @expected = expected
         @actual = actual
       end
-      
-      reference_image_path = reference_image_path
-      puts reference_image_path
-      
+            
       def capture
-        page.driver.browser.save_screenshot('temp.png')
-        temp_screenshot = Magick::Image.read('temp.png').first
-        # puts temp_screenshot.inspect
-        # temp_screenshot.read('temp.png').first
+        if File.directory? File.join(@reference_image_path)
+          page.driver.browser.save_screenshot(File.join(@reference_image_path,'temp.png'))
+          temp_screenshot = Magick::Image.read('temp.png').first
+        else
+          Dir.mkdir(File.join(@reference_image_path))
+          capture
+        end    
       end
 
       def crop_element
@@ -39,6 +39,7 @@ module Gatling
 
 
       def matches?
+        @reference_image_path = Gatling::Configuration.reference_image_path
         cropped_element = crop_element
         if File.exists?(@expected)
           expected_img = Magick::Image.read(@expected).first
@@ -55,12 +56,16 @@ module Gatling
     
     module Configuration
 
-      class << self
+      class << self        
 
         attr_accessor 'reference_image_path'
 
         def reference_image_path
+          begin
            @reference_image_path ||= File.join(Rails.root, 'spec/reference_images')
+          rescue NameError
+            puts "Not using Rails? Please set the reference_image_path"
+          end  
         end
 
       end
