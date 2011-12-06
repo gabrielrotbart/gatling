@@ -40,8 +40,6 @@ module Gatling
         cropped_element = crop_element
         if File.exists?(@expected)
           expected_img = Magick::Image.read(@expected).first
-          puts "expected image: #{expected_img}"
-          puts "cropped image: #{cropped_element}"
           diff_metric = cropped_element.compare_channel(expected_img, Magick::MeanAbsoluteErrorMetric)
           matches = diff_metric[1] == 0.0
           diff_metric.first.write('diff.png') unless matches
