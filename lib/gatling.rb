@@ -13,15 +13,16 @@ module Gatling
         @expected = expected
         @actual = actual
       end
+
             
       def capture
-        if File.directory? File.join(@reference_image_path)
-          page.driver.browser.save_screenshot(File.join(@reference_image_path,'temp.png'))
-          temp_screenshot = Magick::Image.read('temp.png').first
-        else
-          Dir.mkdir(File.join(@reference_image_path))
-          capture
-        end    
+        temp_dir = "#{@reference_image_path}/temp"
+        
+        FileUtils::mkdir_p(temp_dir) unless File.exists?(temp_dir)
+        
+        #captures the uncropped full screen
+        page.driver.browser.save_screenshot("#{temp_dir}/temp.png")
+        temp_screenshot = Magick::Image.read("#{temp_dir}/temp.png").first
       end
 
       def crop_element
@@ -31,10 +32,14 @@ module Gatling
         capture.crop(location.x, location.y, size.width, size.height)
       end
 
-      def save_crop_as_reference(cropped_element)   
+      def save_crop_as_reference(cropped_element)
+        candidate_path = "#{@reference_image_path}/candidate"
+        
+        FileUtils::mkdir_p(candidate_path) unless File.exists?(candidate_path)
+           
         filename = "#{@expected}".sub(/\.[a-z]*/,'')
-        cropped_element.write("#{filename}_candidate.png")
-        return filename
+        cropped_element.write("#{candidate_path}/#{filename}_candidate.png")
+        candidate = "#{candidate_path}/#{filename}_candidate.png"
       end   
 
 
@@ -48,8 +53,8 @@ module Gatling
           diff_metric.first.write('diff.png') unless matches
           matches
         else
-          filename = save_crop_as_reference(cropped_element)
-          raise "The design reference #{@expected} does not exist, #{filename}_candidate.png is now available to be used as a reference"     
+          candidate = save_crop_as_reference(cropped_element)
+          raise "The design reference #{@expected} does not exist, #{candidate} is now available to be used as a reference"     
         end    
       end      
     end
@@ -69,7 +74,9 @@ module Gatling
         end
 
       end
-    end  
+      
+    end
+    
 end
 
 
