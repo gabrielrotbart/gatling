@@ -1,7 +1,6 @@
-require "gatling"
 require 'RMagick'
 
-# module Gatling
+module Gatling
     class Comparison
       
       #TODO: Training mode
@@ -19,6 +18,8 @@ require 'RMagick'
       def capture
         page.driver.browser.save_screenshot('temp.png')
         temp_screenshot = Magick::Image.read('temp.png').first
+        # puts temp_screenshot.inspect
+        # temp_screenshot.read('temp.png').first
       end
 
       def crop_element
@@ -39,7 +40,9 @@ require 'RMagick'
         cropped_element = crop_element
         if File.exists?(@expected)
           expected_img = Magick::Image.read(@expected).first
-          diff_metric = cropped_element.Magick::Image.compare_channel(expected_img, MeanAbsoluteErrorMetric)
+          puts "expected image: #{expected_img}"
+          puts "cropped image: #{cropped_element}"
+          diff_metric = cropped_element.compare_channel(expected_img, Magick::MeanAbsoluteErrorMetric)
           matches = diff_metric[1] == 0.0
           diff_metric.first.write('diff.png') unless matches
           matches
@@ -49,6 +52,6 @@ require 'RMagick'
         end    
       end      
     end
-  # end
+end
   
 
