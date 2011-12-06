@@ -19,6 +19,8 @@ module Gatling
       def capture
         page.driver.browser.save_screenshot('temp.png')
         temp_screenshot = Magick::Image.read('temp.png').first
+        # puts temp_screenshot.inspect
+        # temp_screenshot.read('temp.png').first
       end
 
       def crop_element
