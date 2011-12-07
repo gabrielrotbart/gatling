@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gatling (0.0.3)
+    gatling (1.0.0)
       capybara
       rmagick
       rspec

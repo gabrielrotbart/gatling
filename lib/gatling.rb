@@ -5,20 +5,23 @@ module Gatling
       
       #TODO: Training mode
       #TODO: Diff with reports
-      #TODO: Canidate in spec
       #TODO: Fuzz matches
       #TODO: Helpers for cucumber
 
       def initialize expected, actual
         @expected = expected
         @actual = actual
+
+        @reference_image_path = Gatling::Configuration.reference_image_path
+        @expected_image = "#{@reference_image_path}/#{@expected}"
+        @expected_filename = "#{@expected}".sub(/\.[a-z]*/,'')
       end
 
-            
+
       def capture
         temp_dir = "#{@reference_image_path}/temp"
         
-        FileUtils::mkdir_p(temp_dir) unless File.exists?(temp_dir)
+        FileUtils::mkdir_p(temp_dir)
         
         #captures the uncropped full screen
         page.driver.browser.save_screenshot("#{temp_dir}/temp.png")
@@ -34,27 +37,42 @@ module Gatling
 
       def save_crop_as_reference(cropped_element)
         candidate_path = "#{@reference_image_path}/candidate"
-        
-        FileUtils::mkdir_p(candidate_path) unless File.exists?(candidate_path)
-           
-        filename = "#{@expected}".sub(/\.[a-z]*/,'')
-        cropped_element.write("#{candidate_path}/#{filename}_candidate.png")
-        candidate = "#{candidate_path}/#{filename}_candidate.png"
-      end   
+
+        FileUtils::mkdir_p(candidate_path)
+
+        cropped_element.write("#{candidate_path}/#{@expected_filename}.png")
+        candidate = "#{candidate_path}/#{@expected_filename}.png"
+      end
+
+      def create_diff
+        diff_path = "#{@reference_image_path}/diff"
+
+        FileUtils::mkdir_p(diff_path)
+
+        @diff_metric.first.write("#{diff_path}/#{@expected_filename}_diff.png")
+
+        candidate = save_crop_as_reference(@cropped_element)
+        raise "element did not match #{@expected}. A diff image: #{@expected_filename}_diff.png was created in #{diff_path}. A new reference #{candidate} can be used to fix the test"
+      end
 
 
       def matches?
-        @reference_image_path = Gatling::Configuration.reference_image_path
-        cropped_element = crop_element
-        if File.exists?(@expected)
-          expected_img = Magick::Image.read(@expected).first
-          diff_metric = cropped_element.compare_channel(expected_img, Magick::MeanAbsoluteErrorMetric)
-          matches = diff_metric[1] == 0.0
-          diff_metric.first.write('diff.png') unless matches
+
+        @cropped_element = crop_element
+        if File.exists?(@expected_image)
+
+          expected_img = Magick::Image.read(@expected_image).first
+
+          @diff_metric = @cropped_element.compare_channel(expected_img, Magick::MeanAbsoluteErrorMetric)
+
+          matches = @diff_metric[1] == 0.0
+
+          create_diff unless matches
+
           matches
         else
-          candidate = save_crop_as_reference(cropped_element)
-          raise "The design reference #{@expected} does not exist, #{candidate} is now available to be used as a reference"     
+          candidate = save_crop_as_reference(@cropped_element)
+          raise "The design reference #{@expected} does not exist, #{candidate} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
         end    
       end      
     end
@@ -66,11 +84,14 @@ module Gatling
         attr_accessor 'reference_image_path'
 
         def reference_image_path
+          #if defined?(Rails) or @reference_image_path.nil?
+          #  @reference_image_path ||= File.join(Rails.root, 'spec/reference_images')
+          #end
           begin
-           @reference_image_path ||= File.join(Rails.root, 'spec/reference_images')
-          rescue NameError
-            puts "Not using Rails? Please set the reference_image_path"
-          end  
+          @reference_image_path ||= File.join(Rails.root, 'spec/reference_images')
+          rescue
+            raise "Not using Rails? Please set the reference_image_path"
+          end
         end
 
       end
