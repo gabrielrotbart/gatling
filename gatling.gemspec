@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Gatling::VERSION
   s.authors     = ["Gabriel Rotbart, Amanda Koh"]
   s.email       = ["grotbart@gmail.com"]
-  s.homepage    = ""
+  s.homepage    = "http://github.com/GabrielRotbart/gatling"
   s.summary     = %q{Automated visual testing}
   s.description = %q{Add visual comparison matchers for rspec}
 
