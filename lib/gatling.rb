@@ -1,7 +1,11 @@
 require 'RMagick'
+require 'capybara'
+require 'capybara/dsl'
+
 
 module Gatling
     class Comparison
+      include Capybara::DSL
       
       #TODO: Training mode
       #TODO: Diff with reports
