@@ -4,6 +4,8 @@ require 'gatling'
 require 'gatling/matchers/look_like_matcher'
 
 Capybara.default_driver = :selenium
-Capybara.app_host = 'http://www.google.com'
+#Capybara.app_host = 'http://www.google.com'
+
+#todo: spec folders clean up method
 
 

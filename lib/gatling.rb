@@ -61,7 +61,6 @@ module Gatling
 
 
       def matches?
-
         @cropped_element = crop_element
         if File.exists?(@expected_image)
 
