@@ -8,4 +8,5 @@ pkg/*
 *.orig
 test*
 .idea*
+*.DS_Store
 >>>>>>> 942d4a993ee6a3407063786d0431cdfd553629ed
