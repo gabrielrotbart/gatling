@@ -87,9 +87,6 @@ module Gatling
         attr_accessor 'reference_image_path'
 
         def reference_image_path
-          #if defined?(Rails) or @reference_image_path.nil?
-          #  @reference_image_path ||= File.join(Rails.root, 'spec/reference_images')
-          #end
           begin
           @reference_image_path ||= File.join(Rails.root, 'spec/reference_images')
           rescue

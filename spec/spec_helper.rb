@@ -12,16 +12,18 @@ require 'capybara/dsl'
 require 'capybara/rspec'
 require 'gatling'
 require 'gatling/matchers/look_like_matcher'
+require 'fileutils'
 
 
 Capybara.app = Sinatra::Application
 Capybara.default_driver = :selenium
 
-
-
-
 set :run, true
 set :environment, :test
+
+def remove_refs(dir)
+ FileUtils.rm_rf dir.to_s 
+end
 
 
 

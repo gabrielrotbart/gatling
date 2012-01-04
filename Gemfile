@@ -6,5 +6,4 @@ gemspec
 group :development, :test, :smoke do
 	gem 'sinatra' 	,'1.3.1'
 	gem 'rack-test'
-	gem 'spec'
 end
