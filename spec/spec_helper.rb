@@ -25,7 +25,17 @@ def remove_refs(dir)
  FileUtils.rm_rf dir.to_s 
 end
 
+def gatling_for_spec(expected)
+  visit('/')
+  @element = page.find(:css, "#smiley")
+  
+  @gatling = Gatling::Comparison.new(expected, @element)
+end
 
+def spec_support_root
+   File.join(File.dirname(__FILE__), 'support')
+end
+  
 
 #todo: spec folders clean up method
 
