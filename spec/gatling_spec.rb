@@ -1,7 +1,6 @@
 require 'spec_helper'
 include Capybara::DSL
   
-  
 
 describe 'gatling' do
   
@@ -18,14 +17,12 @@ describe 'gatling' do
     @example_good_image = 'smiley-faceicon.png'    
       
     @spec_support_root = spec_support_root 
-      
-    puts @spec_support_root 
   end
-      
+  
      
       
   after(:each) do
-    remove_refs('ref_path')
+    remove_refs(@ref_path)
   end
   
   
@@ -33,7 +30,6 @@ describe 'gatling' do
     
   before(:each) do
     @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
-    puts @ref_path   
   end  
     
     it "should notify that no reference exists for image and create a candidate" do
@@ -50,8 +46,6 @@ describe 'gatling' do
    end
  
     it 'captured and referenced images match' do 
-      puts Gatling::Configuration.reference_image_path
-      puts @ready_candidate_ref
       gatling = gatling_for_spec('smiley-faceicon.png')
       gatling.matches?.should be_true
     end

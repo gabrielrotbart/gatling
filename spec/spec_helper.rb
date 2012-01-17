@@ -18,7 +18,7 @@ require 'fileutils'
 Capybara.app = Sinatra::Application
 Capybara.default_driver = :selenium
 
-set :run, true
+set :run, false
 set :environment, :test
 
 def remove_refs(dir)

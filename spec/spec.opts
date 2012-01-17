@@ -1,4 +1,5 @@
---colour
---format progress
---loadby mtime
---reverse
+--color
+--require rubygems
+--require rspec/instafail
+--format RSpec::Instafail --format html --out reports/rspec_unit_test_output.html
+--profile
