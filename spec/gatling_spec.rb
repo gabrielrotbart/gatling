@@ -62,22 +62,22 @@ describe 'gatling' do
   # image magick saves screenshot
   #create diff creates the correct candidate
 
-  # describe 'training mode populates a candidate reference' do  #
-    #
-    #   before(:each) do
-    #     @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
-    #
-    #     visit('/')
-    #     element = page.find(:css, "#smiley")
-    #     @trainer = Gatling::Trainer.new(element)
-    #   end
-    #
-    #   it 'should create a reference from a candidate' do
-    #     @trainer.run
-    #     File.exists?(File.join(@ref_path,'smiley-faceicon.png')).should be_true
-    #   end
-    #
-    # end
+  describe 'training mode populates a candidate reference' do  #
+
+    before(:each) do
+      @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
+
+      visit('/')
+      element = page.find(:css, "#smiley")
+      @trainer = Gatling::Trainer.new(element, 'smiley-faceicon.png')
+    end
+
+    it 'should create a reference from a candidate' do
+      @trainer.run
+      File.exists?(File.join(@ref_path,'smiley-faceicon.png')).should be_true
+    end
+
+  end
 
 end
 

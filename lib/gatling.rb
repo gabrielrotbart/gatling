@@ -93,19 +93,30 @@ module Gatling
 
     end
 
-    class Trainer
+    class Trainer < Comparison
 
-      def initialize actual
-        super(@reference_image_path)
+      def initialize actual, expected
+        @reference_image_path = Gatling::Configuration.reference_image_path
+
+        @expected_filename = "#{expected}".sub(/\.[a-z]*/,'')
+
         @actual = actual
+        @cropped_element = Gatling::CaptureElement.new(@actual)
+      end
+
+      def create_reference
+        reference = @cropped_element.crop
+        @cropped_element.save_element(reference, @expected_filename, @reference_image_path)
+      end
+
+      #overrides Comparison matches command in order to save the initial references
+      def matches?
+        self.create_reference
       end
 
       def run
-        puts "-------------" + @reference_image_path
-        self.crop_element
+        self.matches?
       end
-
-
       #trainer will create candidates and move them to the correct folder
     end
 
