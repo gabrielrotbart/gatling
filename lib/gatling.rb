@@ -19,8 +19,13 @@ module Gatling
         @capture_element = Gatling::CaptureElement.new(@actual)
 
         @reference_image_path = Gatling::Configuration.reference_image_path
+        @trainer_toggle = Gatling::Configuration.trainer_toggle
+
         @expected_image = "#{@reference_image_path}/#{@expected}"
         @expected_filename = "#{@expected}".sub(/\.[a-z]*/,'')
+
+        puts "TRAINER TOGGLE = " + @trainer_toggle.inspect
+
       end
 
       def create_diff
@@ -93,38 +98,12 @@ module Gatling
 
     end
 
-    class Trainer < Comparison
-
-      def initialize actual, expected
-        @reference_image_path = Gatling::Configuration.reference_image_path
-
-        @expected_filename = "#{expected}".sub(/\.[a-z]*/,'')
-
-        @actual = actual
-        @cropped_element = Gatling::CaptureElement.new(@actual)
-      end
-
-      def create_reference
-        reference = @cropped_element.crop
-        @cropped_element.save_element(reference, @expected_filename, @reference_image_path)
-      end
-
-      #overrides Comparison matches command in order to save the initial references
-      def matches?
-        self.create_reference
-      end
-
-      def run
-        self.matches?
-      end
-      #trainer will create candidates and move them to the correct folder
-    end
 
     module Configuration
 
       class << self
 
-        attr_accessor 'reference_image_path'
+        attr_accessor 'reference_image_path', 'trainer_toggle'
 
         def reference_image_path
           begin
@@ -132,6 +111,10 @@ module Gatling
           rescue
             raise "Not using Rails? Please set the reference_image_path"
           end
+        end
+
+        def trainer_toggle
+          @trainer_toggle ||= false
         end
 
       end

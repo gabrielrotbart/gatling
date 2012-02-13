@@ -43,12 +43,19 @@ describe 'gatling' do
 
    before(:each) do
      @ready_ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ready_candidate_ref')
-     @gatling = gatling_for_spec('smiley-faceicon.png')
+     @trainer_toggle = Gatling::Configuration.trainer_toggle = true
    end
 
-    it 'captured and referenced images match' do
+    it 'images match' do
+      @gatling = gatling_for_spec('smiley-faceicon.png')
+
       @gatling.matches?.should be_true
     end
+
+    # it 'images do not match and diff created' do
+    #   #convert -fill none -stroke black -strokewidth 5 smiley-faceicon.png -draw 'arc 155,25 185,45 180' sad-faceicon.png
+    #   @gatling = gatling_for_spec('smiley-faceicon.png')
+    # end
 
     # it 'captured and referenced images do NOT match' do
     #       @gatling_bad_example = Gatling::Comparison.new('smiley-bad.png', @element)
@@ -61,23 +68,6 @@ describe 'gatling' do
   # correct size (340px*42px)
   # image magick saves screenshot
   #create diff creates the correct candidate
-
-  describe 'training mode populates a candidate reference' do  #
-
-    before(:each) do
-      @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
-
-      visit('/')
-      element = page.find(:css, "#smiley")
-      @trainer = Gatling::Trainer.new(element, 'smiley-faceicon.png')
-    end
-
-    it 'should create a reference from a candidate' do
-      @trainer.run
-      File.exists?(File.join(@ref_path,'smiley-faceicon.png')).should be_true
-    end
-
-  end
 
 end
 

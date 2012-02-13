@@ -22,20 +22,23 @@ set :run, false
 set :environment, :test
 
 def remove_refs(dir)
- FileUtils.rm_rf dir.to_s 
+ FileUtils.rm_rf dir.to_s
 end
 
 def gatling_for_spec(expected)
   visit('/')
   @element = page.find(:css, "#smiley")
-  
+
   @gatling = Gatling::Comparison.new(expected, @element)
 end
 
 def spec_support_root
    File.join(File.dirname(__FILE__), 'support')
 end
-  
+
+def save_element_for_test
+
+end
 
 #todo: spec folders clean up method
 
