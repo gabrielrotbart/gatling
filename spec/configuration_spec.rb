@@ -17,6 +17,8 @@ describe "Gatling::Configuration" do
       end
     end
 
+
+
     it "should default to <Rails.root>/spec/reference_images" do
       Gatling::Configuration.reference_image_path.should eql("fake_rails_root/spec/reference_images")
     end
@@ -38,6 +40,10 @@ describe "Gatling::Configuration" do
     it 'can be toggled to true' do
       Gatling::Configuration.trainer_toggle = true
       Gatling::Configuration.trainer_toggle.should eql(true)
+    end
+
+    after(:all) do
+      Gatling::Configuration.trainer_toggle = false
     end
 
   end

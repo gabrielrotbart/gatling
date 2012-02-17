@@ -39,23 +39,27 @@ describe 'gatling' do
       end
     end
 
+
+
   describe 'image comparison' do
 
    before(:each) do
-     @ready_ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ready_candidate_ref')
-     @trainer_toggle = Gatling::Configuration.trainer_toggle = true
+     # @ready_ref = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ready_candidate_ref')
+     @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
+     save_element_for_test
    end
 
     it 'images match' do
       @gatling = gatling_for_spec('smiley-faceicon.png')
-
       @gatling.matches?.should be_true
     end
 
-    # it 'images do not match and diff created' do
-    #   #convert -fill none -stroke black -strokewidth 5 smiley-faceicon.png -draw 'arc 155,25 185,45 180' sad-faceicon.png
-    #   @gatling = gatling_for_spec('smiley-faceicon.png')
-    # end
+    it 'images do not match and diff created' do
+       #convert -fill none -stroke black -strokewidth 5 smiley-faceicon.png -draw 'arc 155,25 185,45 180' sad-faceicon.png
+       convert_element_to_bad_element(File.join(@ref_path,'smiley-faceicon.png'))
+       gatling = gatling_for_spec('smiley-faceicon.png')
+       expect {gatling.matches?}.should raise_error(RuntimeError)
+     end
 
     # it 'captured and referenced images do NOT match' do
     #       @gatling_bad_example = Gatling::Comparison.new('smiley-bad.png', @element)
@@ -64,6 +68,23 @@ describe 'gatling' do
 
   end
 
+
+
+  describe 'trainer mode' do
+
+    before(:each) do
+      @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
+    end
+
+    it 'should save a reference file to the nominated folder without raising an exception' do
+      Gatling::Configuration.trainer_toggle = true
+      gatling = gatling_for_spec('smiley-faceicon.png')
+
+      expect {gatling.matches?}.should_not raise_error
+      File.exists?(File.join(@ref_path,'smiley-faceicon.png')).should be_true
+    end
+
+  end
   # MOCK SELENIUM ELEMENT
   # correct size (340px*42px)
   # image magick saves screenshot

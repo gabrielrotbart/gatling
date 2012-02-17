@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 *.png
-=======
 *.gem
 .bundle
 Gemfile.lock
@@ -11,4 +9,3 @@ test*
 .DS_Store
 spec/support/ready_candidate_ref/temp/*
 reports/*
->>>>>>> 942d4a993ee6a3407063786d0431cdfd553629ed

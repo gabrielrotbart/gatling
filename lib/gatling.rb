@@ -23,9 +23,6 @@ module Gatling
 
         @expected_image = "#{@reference_image_path}/#{@expected}"
         @expected_filename = "#{@expected}".sub(/\.[a-z]*/,'')
-
-        puts "TRAINER TOGGLE = " + @trainer_toggle.inspect
-
       end
 
       def create_diff
@@ -35,32 +32,44 @@ module Gatling
 
         @diff_metric.first.write("#{diff_path}/#{@expected_filename}_diff.png")
 
-        candidate = save_crop_as_reference(@cropped_element)
+        candidate = save_element_as_candidate(@cropped_element)
         raise "element did not match #{@expected}. A diff image: #{@expected_filename}_diff.png was created in #{diff_path}. A new reference #{candidate} can be used to fix the test"
       end
 
-      def save_element_as_reference(element)
+      def save_element_as_candidate(element)
         candidate_path = "#{@reference_image_path}/candidate"
-        @capture_element.save_element(element, @expected_filename, candidate_path)
+        candidate = @capture_element.save_element(element, @expected_filename, candidate_path)
+        raise "The design reference #{@expected} does not exist, #{candidate} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
+      end
+
+      def save_element_as_reference(element)
+          @capture_element.save_element(element, @expected_filename, @reference_image_path)
+          puts "Saved #{@expected_image} as reference"
       end
 
       def matches?
         @cropped_element = @capture_element.crop
-        if File.exists?(@expected_image)
-
-          expected_img = Magick::Image.read(@expected_image).first
-
-          @diff_metric = @cropped_element.compare_channel(expected_img, Magick::MeanAbsoluteErrorMetric)
-
-          matches = @diff_metric[1] == 0.0
-
-          create_diff unless matches
-
-          matches
+        if !@trainer_toggle
+          if File.exists?(@expected_image)
+            compare
+          else
+            save_element_as_candidate(@cropped_element)
+          end
         else
-          candidate = save_element_as_reference(@cropped_element)
-          raise "The design reference #{@expected} does not exist, #{candidate} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
+          save_element_as_reference(@cropped_element)
         end
+      end
+
+      def compare
+        expected_img = Magick::Image.read(@expected_image).first
+
+        @diff_metric = @cropped_element.compare_channel(expected_img, Magick::MeanAbsoluteErrorMetric)
+
+        matches = @diff_metric[1] == 0.0
+
+        create_diff unless matches
+
+        matches
       end
     end
 
@@ -74,11 +83,19 @@ module Gatling
       def capture
         temp_dir = "#{@reference_image_path}/temp"
 
-        FileUtils::mkdir_p(temp_dir)
+        begin
+          FileUtils::mkdir_p(temp_dir)
+        rescue
+          puts "Could not create directory #{temp_dir}. Please make sure you have permission"
+        end
 
         #captures the uncropped full screen
-        page.driver.browser.save_screenshot("#{temp_dir}/temp.png")
-        temp_screenshot = Magick::Image.read("#{temp_dir}/temp.png").first
+        begin
+          page.driver.browser.save_screenshot("#{temp_dir}/temp.png")
+          temp_screenshot = Magick::Image.read("#{temp_dir}/temp.png").first
+        rescue
+          raise "Could not save screenshot to #{temp_dir}. Please make sure you have permission"
+        end
       end
 
       def crop
@@ -89,10 +106,18 @@ module Gatling
       end
 
       def save_element(element, element_name, path)
-        FileUtils::mkdir_p(path)
+        begin
+          FileUtils::mkdir_p(path)
+        rescue
+          puts "Could not create directory #{path}. Please make sure you have permission"
+        end
 
-        element.write("#{path}/#{element_name}.png")
-        element = "#{path}/#{element_name}.png"
+        begin
+          element.write("#{path}/#{element_name}.png")
+          element = "#{path}/#{element_name}.png"
+        rescue
+          raise "Could not save #{element_name} to #{path}. Please make sure you have permission"
+        end
       end
 
 
@@ -115,6 +140,11 @@ module Gatling
 
         def trainer_toggle
           @trainer_toggle ||= false
+        end
+
+        def defaults
+          self.reference_image_path = File.join(Rails.root, 'spec/reference_images')
+          self.trainer_toggle = false
         end
 
       end
