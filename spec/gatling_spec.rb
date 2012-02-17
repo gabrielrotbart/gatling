@@ -43,11 +43,11 @@ describe 'gatling' do
 
   describe 'image comparison' do
 
-   before(:each) do
+    before(:each) do
      # @ready_ref = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ready_candidate_ref')
      @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
      save_element_for_test
-   end
+    end
 
     it 'images match' do
       @gatling = gatling_for_spec('smiley-faceicon.png')
@@ -56,16 +56,11 @@ describe 'gatling' do
 
     it 'images do not match and diff created' do
        #convert -fill none -stroke black -strokewidth 5 smiley-faceicon.png -draw 'arc 155,25 185,45 180' sad-faceicon.png
-       convert_element_to_bad_element(File.join(@ref_path,'smiley-faceicon.png'))
+       convert_element_to_bad_element(File.join(@ref_path,"#{@example_good_image}"))
        gatling = gatling_for_spec('smiley-faceicon.png')
        expect {gatling.matches?}.should raise_error(RuntimeError)
+       File.exists?(File.join(@ref_path,'diff',"#{@example_good_image}_diff"))
      end
-
-    # it 'captured and referenced images do NOT match' do
-    #       @gatling_bad_example = Gatling::Comparison.new('smiley-bad.png', @element)
-    #       expect {@gatling_bad_example.matches}.should be_true
-    #     end
-
   end
 
 
