@@ -20,7 +20,6 @@ describe 'Gatling' do
   end
 
 
-
   after(:each) do
     remove_refs(@ref_path)
   end
