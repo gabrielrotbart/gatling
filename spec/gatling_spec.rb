@@ -59,7 +59,7 @@ describe 'gatling' do
        convert_element_to_bad_element(File.join(@ref_path,"#{@example_good_image}"))
        gatling = gatling_for_spec('smiley-faceicon.png')
        expect {gatling.matches?}.should raise_error(RuntimeError)
-       File.exists?(File.join(@ref_path,'diff',"#{@example_good_image}_diff"))
+       File.exists?(File.join(@ref_path,'diff','smiley-faceicon_diff.png')).should be_true
      end
   end
 

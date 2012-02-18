@@ -14,7 +14,6 @@ require 'gatling'
 require 'gatling/matchers/look_like_matcher'
 require 'fileutils'
 
-
 Capybara.app = Sinatra::Application
 Capybara.default_driver = :selenium
 
