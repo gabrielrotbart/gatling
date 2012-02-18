@@ -2,8 +2,6 @@ require 'spec_helper'
 include Capybara::DSL
 
 
-
-
 describe 'rspec matcher' do
   
   before(:all) do
@@ -18,7 +16,6 @@ describe 'rspec matcher' do
     @example_good_image = 'smiley-faceicon.png'
 
     @spec_support_root = spec_support_root
-    puts @spec_support_root
   end
 
 
@@ -33,7 +30,6 @@ describe 'rspec matcher' do
     
     visit('/')
     @element = page.find(:css, "#smiley")
-    puts @element.inspect
     @element.should look_like('smiley-faceicon.png')
   end
   
