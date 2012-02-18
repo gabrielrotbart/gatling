@@ -31,7 +31,7 @@ describe "Gatling::Configuration" do
 
   end
 
-  describe 'trainer_toggle' do
+  describe '#trainer_toggle' do
 
     it 'should default to false' do
       Gatling::Configuration.trainer_toggle.should eql(false)

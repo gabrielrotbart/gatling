@@ -14,6 +14,11 @@ require 'gatling'
 require 'gatling/matchers/look_like_matcher'
 require 'fileutils'
 
+RSpec.configure do |config|
+  config.color_enabled = true
+  config.formatter     = 'documentation'
+end
+
 Capybara.app = Sinatra::Application
 Capybara.default_driver = :selenium
 

@@ -2,7 +2,7 @@ require 'spec_helper'
 include Capybara::DSL
 
 
-describe 'gatling' do
+describe 'Gatling' do
 
 
   before(:all) do
