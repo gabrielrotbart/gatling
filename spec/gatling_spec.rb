@@ -10,7 +10,7 @@ describe 'Gatling' do
     include Rack::Test::Methods
 
     def app
-      @app ||= Sinatra::Application
+      Sinatra::Application
     end
 
     #expected image to compare with
@@ -23,7 +23,8 @@ describe 'Gatling' do
   after(:each) do
     remove_refs(@ref_path)
   end
-
+  
+  
 
   describe 'creating an initial reference (expected) image' do
 
@@ -64,7 +65,7 @@ describe 'Gatling' do
 
 
 
-  describe 'trainer mode' do
+  describe 'trainer toggle' do
 
     before(:each) do
       @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
@@ -79,10 +80,29 @@ describe 'Gatling' do
     end
 
   end
+  
+  
+  describe 'rspec matcher' do
+    
+    it "should initialize and run gatling" do
+      @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
+      save_element_for_test
+      
+      visit('/')
+      @element = page.find(:css, "#smiley")
+      puts @element.inspect
+      @element.should look_like('smiley-faceicon.png')
+    end
+    
+  end
+  
+  
+  
   # MOCK SELENIUM ELEMENT
   # correct size (340px*42px)
   # image magick saves screenshot
   #create diff creates the correct candidate
-
+  
+  
 end
 

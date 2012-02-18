@@ -52,12 +52,12 @@ module Gatling
         @cropped_element = @capture_element.crop
         if !@trainer_toggle
           if File.exists?(@expected_image)
-            compare
+            self.compare
           else
-            save_element_as_candidate(@cropped_element)
+            self.save_element_as_candidate(@cropped_element)
           end
         else
-          save_element_as_reference(@cropped_element)
+          self.save_element_as_reference(@cropped_element)
         end
       end
 
@@ -72,30 +72,6 @@ module Gatling
 
         matches
       end
-    end
-
-    
-
-    module Configuration
-
-      class << self
-
-        attr_accessor 'reference_image_path', 'trainer_toggle'
-
-        def reference_image_path
-          begin
-          @reference_image_path ||= File.join(Rails.root, 'spec/reference_images')
-          rescue
-            raise "Not using Rails? Please set the reference_image_path"
-          end
-        end
-
-        def trainer_toggle
-          @trainer_toggle ||= false
-        end
-
-      end
-
     end
 
 end

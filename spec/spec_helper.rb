@@ -13,6 +13,7 @@ require 'capybara/rspec'
 require 'gatling'
 require 'gatling/matchers/look_like_matcher'
 require 'fileutils'
+require 'gatling/config'
 
 RSpec.configure do |config|
   config.color_enabled = true
@@ -21,6 +22,10 @@ end
 
 Capybara.app = Sinatra::Application
 Capybara.default_driver = :selenium
+
+def app
+  @app ||= Sinatra::Application
+end
 
 set :run, false
 set :environment, :test
