@@ -14,7 +14,20 @@ module Gatling
       end
 
       def trainer_toggle
-        @trainer_toggle ||= false
+        @trainer_value = ENV['GATLING_TRAINER']
+        
+        case @trainer_value
+          when nil
+            @trainer_value = nil
+          when 'true'
+            @trainer_value = true
+          when 'false'
+            @trainer_value = false  
+          else
+            @trainer_value = false
+            puts 'Unknown GATLING_TRAINER argument. Please supply true, false or nil. DEFAULTING TO FALSE'       
+        end
+        @trainer_toggle ||= @trainer_value ||= false
       end
 
     end

@@ -36,14 +36,30 @@ describe "Gatling::Configuration" do
     it 'should default to false' do
       Gatling::Configuration.trainer_toggle.should eql(false)
     end
-
+    
     it 'can be toggled to true' do
       Gatling::Configuration.trainer_toggle = true
       Gatling::Configuration.trainer_toggle.should eql(true)
     end
-
-    after(:all) do
+    
+    it 'toggeled using GATLING_TRAINER = false' do
+      ENV['GATLING_TRAINER'] = 'false'
+      Gatling::Configuration.trainer_toggle.should eql(false)
+    end
+    
+    it 'toggeled using GATLING_TRAINER = true' do
+      ENV['GATLING_TRAINER'] = 'true'
+      Gatling::Configuration.trainer_toggle.should eql(true)
+    end
+    
+    it 'toggeled using GATLING_TRAINER = nil' do
+      ENV['GATLING_TRAINER'] = nil
+      Gatling::Configuration.trainer_toggle.should eql(false)
+    end
+   
+    after(:each) do
       Gatling::Configuration.trainer_toggle = false
+      ENV['GATLING_TRAINER'] = nil
     end
 
   end

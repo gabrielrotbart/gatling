@@ -24,6 +24,7 @@ module Gatling
 
         @expected_image = "#{@reference_image_path}/#{@expected}"
         @expected_filename = "#{@expected}".sub(/\.[a-z]*/,'')
+        
       end
 
       def create_diff
@@ -40,7 +41,6 @@ module Gatling
       def save_element_as_candidate(element)
         candidate_path = "#{@reference_image_path}/candidate"
         candidate = @capture_element.save_element(element, @expected_filename, candidate_path)
-        raise "The design reference #{@expected} does not exist, #{candidate} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
       end
 
       def save_element_as_reference(element)
@@ -48,13 +48,14 @@ module Gatling
           puts "Saved #{@expected_image} as reference"
       end
 
-      def matches?
+      def matches?               
         @cropped_element = @capture_element.crop
         if !@trainer_toggle
           if File.exists?(@expected_image)
             self.compare
           else
-            self.save_element_as_candidate(@cropped_element)
+            candidate = self.save_element_as_candidate(@cropped_element)
+            raise "The design reference #{@expected} does not exist, #{candidate} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
           end
         else
           self.save_element_as_reference(@cropped_element)
