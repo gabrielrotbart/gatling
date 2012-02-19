@@ -78,6 +78,18 @@ describe 'Gatling' do
       expect {gatling.matches?}.should_not raise_error
       File.exists?(File.join(@ref_path,'smiley-faceicon.png')).should be_true
     end
+    
+    it 'should alert that the file should be deleted if a reference already exists and not overwrite file' do
+      save_element_for_test
+      Gatling::Configuration.trainer_toggle = true
+      gatling = gatling_for_spec('smiley-faceicon.png')
+      
+      reference_file = File.join(@ref_path,'smiley-faceicon.png')
+      expect {gatling.matches?}.should_not raise_error
+      
+      #checks if file was overwritten
+      File.identical?(reference_file,File.join(@ref_path,'smiley-faceicon.png')).should be_true  
+    end
 
   end
   

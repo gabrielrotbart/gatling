@@ -44,8 +44,12 @@ module Gatling
       end
 
       def save_element_as_reference(element)
-          @capture_element.save_element(element, @expected_filename, @reference_image_path)
-          puts "Saved #{@expected_image} as reference"
+          if File.exists?(@expected_image) == false
+            @capture_element.save_element(element, @expected_filename, @reference_image_path)
+            puts "Saved #{@expected_image} as reference"
+          else
+            puts "#{@expected_image.upcase} ALREADY EXISTS. REFERENCE IMAGE WAS NOT OVERWRITTEN. PLEASE DELETE OLD FILE TO UPDATE USING TRAINER"  
+          end  
       end
 
       def matches?               
