@@ -84,11 +84,12 @@ describe 'Gatling' do
       Gatling::Configuration.trainer_toggle = true
       gatling = gatling_for_spec('smiley-faceicon.png')
       
-      reference_file = File.join(@ref_path,'smiley-faceicon.png')
+      reference_file_ctime = File.ctime(File.join(@ref_path,'smiley-faceicon.png'))
+      sleep(1)
       expect {gatling.matches?}.should_not raise_error
       
-      #checks if file was overwritten
-      File.identical?(reference_file,File.join(@ref_path,'smiley-faceicon.png')).should be_true  
+      #checks if file was overwritten by comparing the time stamps
+      reference_file_ctime.eql?(File.ctime(File.join(@ref_path,'smiley-faceicon.png'))).should be_true
     end
 
   end
