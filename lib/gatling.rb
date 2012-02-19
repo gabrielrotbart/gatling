@@ -59,6 +59,7 @@ module Gatling
           end
         else
           self.save_element_as_reference(@cropped_element)
+          matches = true
         end
       end
 

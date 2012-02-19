@@ -82,20 +82,6 @@ describe 'Gatling' do
   end
   
   
-  describe 'rspec matcher' do
-    
-    it "should initialize and run gatling" do
-      @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
-      save_element_for_test
-      
-      visit('/')
-      @element = page.find(:css, "#smiley")
-      puts @element.inspect
-      @element.should look_like('smiley-faceicon.png')
-    end
-    
-  end
-  
   
   
   # MOCK SELENIUM ELEMENT

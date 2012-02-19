@@ -11,11 +11,13 @@ describe 'rspec matcher' do
     def app
       Sinatra::Application
     end
-
+        
     #expected image to compare with
     @example_good_image = 'smiley-faceicon.png'
 
     @spec_support_root = spec_support_root
+    
+    @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
   end
 
 
@@ -23,14 +25,22 @@ describe 'rspec matcher' do
     remove_refs(@ref_path)
   end
   
-  it "should initialize and run gatling" do
+  it 'should initialize and run gatling' do
 
-    @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
     save_element_for_test
     
     visit('/')
     @element = page.find(:css, "#smiley")
     @element.should look_like('smiley-faceicon.png')
+  end
+  
+  it 'should initialize and run training mode when GATLING_TRAINER is toggled' do
+    ENV['GATLING_TRAINER'] = 'true'
+   
+    visit('/')
+    @element = page.find(:css, "#smiley")
+    @element.should look_like('smiley-faceicon.png')
+    File.exists?(File.join(@ref_path,'smiley-faceicon.png')).should be_true
   end
   
 end
