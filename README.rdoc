@@ -5,15 +5,20 @@ Gatling Comparison allows one to build an Rspec / Capybara custom matcher compar
 -------------------------------------
 
 Usage:
+
 Identify an element to match, for example:
-	@element = page.find(:css, #button)
+
+        @element = page.find(:css, #button)
 	
 Use Gatling's custom matcher and specify the reference image:
-	@element.should look_like('button_ref.png')
+
+        @element.should look_like('button_ref.png')
 	
 Gatling will take care of cropping the element and try and make a targeted match without the noise of the whole page.
 
+
 If the matcher fails, the test will fail, an exception will be raised and both a diff image and a new candidate image will be created.
+
 
 If no reference image exits, the test will fail, an exception will be raised and a candidate will be created which can be used as a reference.
 
@@ -29,11 +34,13 @@ CAUTION: Trainer mode will pass all the test which rely on the Gatling custom ma
 To set trainer mode, prefix rspec with $GATLING_TRAINER = true 
 
 
-Example: $GATLING_TRAINER = true rspec spec/my_spec.rb
+Example:        
+        $GATLING_TRAINER = true rspec spec/my_spec.rb
 
 -------------------------------------
 
-Non-gem dependencies: Imagemagick must be installed: $sudo apt-get install imagemagick
+Non-gem dependencies: Imagemagick must be installed: 
+        $sudo apt-get install imagemagick
 
 -------------------------------------
 
