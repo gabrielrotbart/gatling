@@ -13,7 +13,6 @@ require 'capybara/rspec'
 require 'gatling'
 require 'gatling/matchers/look_like_matcher'
 require 'fileutils'
-require 'gatling/config'
 
 RSpec.configure do |config|
   config.color_enabled = true

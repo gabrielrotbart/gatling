@@ -1,4 +1,4 @@
-module Gatling  
+module Gatling
   class CaptureElement
 
     def initialize element_to_capture
@@ -17,7 +17,8 @@ module Gatling
 
       #captures the uncropped full screen
       begin
-        page.driver.browser.save_screenshot("#{temp_dir}/temp.png")
+
+        Capybara.page.driver.browser.save_screenshot("#{temp_dir}/temp.png")
         temp_screenshot = Magick::Image.read("#{temp_dir}/temp.png").first
       rescue
         raise "Could not save screenshot to #{temp_dir}. Please make sure you have permission"

@@ -8,4 +8,5 @@ group :development, :test, :smoke do
 	gem 'rack-test'
 	gem 'rake'
 	gem 'rspec-instafail'
+	gem 'pry'
 end

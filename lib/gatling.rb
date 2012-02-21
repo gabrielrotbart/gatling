@@ -2,6 +2,7 @@ require 'RMagick'
 require_relative 'gatling/capture_element'
 require 'capybara'
 require 'capybara/dsl'
+require 'gatling/config'
 
 
 module Gatling
@@ -17,14 +18,15 @@ module Gatling
         @expected = expected
         @actual = actual
 
+        puts "actual inspect: " + actual.inspect
         @capture_element = Gatling::CaptureElement.new(@actual)
+
 
         @reference_image_path = Gatling::Configuration.reference_image_path
         @trainer_toggle = Gatling::Configuration.trainer_toggle
 
         @expected_image = "#{@reference_image_path}/#{@expected}"
         @expected_filename = "#{@expected}".sub(/\.[a-z]*/,'')
-        
       end
 
       def create_diff
@@ -48,11 +50,11 @@ module Gatling
             @capture_element.save_element(element, @expected_filename, @reference_image_path)
             puts "Saved #{@expected_image} as reference"
           else
-            puts "#{@expected_image.upcase} ALREADY EXISTS. REFERENCE IMAGE WAS NOT OVERWRITTEN. PLEASE DELETE OLD FILE TO UPDATE USING TRAINER"  
-          end  
+            puts "#{@expected_image.upcase} ALREADY EXISTS. REFERENCE IMAGE WAS NOT OVERWRITTEN. PLEASE DELETE THE OLD FILE TO UPDATE USING TRAINER"
+          end
       end
 
-      def matches?               
+      def matches?
         @cropped_element = @capture_element.crop
         if !@trainer_toggle
           if File.exists?(@expected_image)
