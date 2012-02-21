@@ -4,6 +4,10 @@ Gatling Comparison allows one to build an Rspec / Capybara custom matcher compar
 
 -------------------------------------
 
+Installation:
+
+  gem install gatling
+
 Usage:
 
 Identify an element to match, for example:
