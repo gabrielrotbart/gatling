@@ -1,4 +1,3 @@
-require 'spec_helper'
 require 'gatling'
 
 RSpec::Matchers.define :look_like do |expected|
