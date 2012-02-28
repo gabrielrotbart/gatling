@@ -36,7 +36,7 @@ module Gatling
         @diff_metric.first.write("#{diff_path}/#{@expected_filename}_diff.png")
 
         candidate = save_element_as_candidate(@cropped_element)
-        raise "element did not match #{@expected}. A diff image: #{@expected_filename}_diff.png was created in #{diff_path}. A new reference #{candidate} can be used to fix the test"
+        raise "element did not match #{@expected}. A diff image: #{@expected_filename}_diff.png was created in #{diff_path}/#{@expected_filename}_diff.png. A new reference #{candidate} can be used to fix the test"
       end
 
       def save_element_as_candidate(element)

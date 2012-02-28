@@ -23,8 +23,8 @@ describe 'Gatling' do
   after(:each) do
     remove_refs(@ref_path)
   end
-  
-  
+
+
 
   describe 'creating an initial reference (expected) image' do
 
@@ -58,7 +58,7 @@ describe 'Gatling' do
        #convert -fill none -stroke black -strokewidth 5 smiley-faceicon.png -draw 'arc 155,25 185,45 180' sad-faceicon.png
        convert_element_to_bad_element(File.join(@ref_path,"#{@example_good_image}"))
        gatling = gatling_for_spec('smiley-faceicon.png')
-       expect {gatling.matches?}.should raise_error(RuntimeError, "element did not match #{@example_good_image}. A diff image: smiley-faceicon_diff.png was created in #{@ref_path}/diff. A new reference #{@ref_path}/candidate/#{@example_good_image} can be used to fix the test")
+       expect {gatling.matches?}.should raise_error(RuntimeError, "element did not match #{@example_good_image}. A diff image: smiley-faceicon_diff.png was created in #{@ref_path}/diff/smiley-faceicon_diff.png. A new reference #{@ref_path}/candidate/#{@example_good_image} can be used to fix the test")
        File.exists?(File.join(@ref_path,'diff','smiley-faceicon_diff.png')).should be_true
      end
   end
@@ -78,30 +78,30 @@ describe 'Gatling' do
       expect {gatling.matches?}.should_not raise_error
       File.exists?(File.join(@ref_path,'smiley-faceicon.png')).should be_true
     end
-    
+
     it 'should alert that the file should be deleted if a reference already exists and not overwrite file' do
       save_element_for_test
       Gatling::Configuration.trainer_toggle = true
       gatling = gatling_for_spec('smiley-faceicon.png')
-      
+
       reference_file_ctime = File.ctime(File.join(@ref_path,'smiley-faceicon.png'))
       sleep(1)
       expect {gatling.matches?}.should_not raise_error
-      
+
       #checks if file was overwritten by comparing the time stamps
       reference_file_ctime.eql?(File.ctime(File.join(@ref_path,'smiley-faceicon.png'))).should be_true
     end
 
   end
-  
-  
-  
-  
+
+
+
+
   # MOCK SELENIUM ELEMENT
   # correct size (340px*42px)
   # image magick saves screenshot
   #create diff creates the correct candidate
-  
-  
+
+
 end
 
