@@ -18,7 +18,6 @@ module Gatling
         @expected = expected
         @actual = actual
 
-        puts "actual inspect: " + actual.inspect
         @capture_element = Gatling::CaptureElement.new(@actual)
 
 
