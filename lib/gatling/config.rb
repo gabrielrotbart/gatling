@@ -3,7 +3,7 @@ module Gatling
 
     class << self
 
-      attr_accessor 'reference_image_path', 'trainer_toggle'
+      attr_accessor :reference_image_path, :trainer_toggle
 
       def reference_image_path
         @reference_image_path ||= set_default_path       

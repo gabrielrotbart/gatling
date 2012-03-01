@@ -7,6 +7,8 @@ module Gatling
       @reference_image_path = Gatling::Configuration.reference_image_path
       @element_to_capture = element_to_capture
       @element_to_exclude = element_to_exclude.first
+      @expected_image = "#{@reference_image_path}/#{@expected}"
+      @expected_filename = "#{@expected}".sub(/\.[a-z]*/,'')
     end
 
     def into_image
@@ -49,8 +51,19 @@ module Gatling
       end
     end
 
+    # def save_element_as_candidate(element)
+    #   candidate_path = "#{@reference_image_path}/candidate"
+    #   candidate = @capture_element.save_element(element, @expected_filename, candidate_path)
+    # end
 
-
-
+    # def save_element_as_reference(element)
+    #   if File.exists?(@expected_image) == false
+    #     @capture_element.save_element(element, @expected_filename, @reference_image_path)
+    #     puts "Saved #{@expected_image} as reference"
+    #   else
+    #     puts "#{@expected_image.upcase} ALREADY EXISTS. REFERENCE IMAGE WAS NOT OVERWRITTEN. PLEASE DELETE THE OLD FILE TO UPDATE USING TRAINER"
+    #   end
+    # end
+  
   end
 end
