@@ -9,13 +9,7 @@ describe Gatling::CaptureElement do
     Gatling::CaptureElement.new capybara_node, capybara_node
   end
 
-  it 'should get the position of the css element' do
-    mock_element = mock(Capybara::Node::Element)
-    mock_element.stub!(:location).and_return('1')
-    
-    position = subject.get_element_position(mock_element)
-    position[:x].should eql(1)
-  end
+ 
 
   # it 'should exclude a specified element from capture' do
   #  element_to_capture =  
