@@ -1,3 +1,4 @@
+
 require 'spec_helper'
 include Capybara::DSL
 
@@ -63,7 +64,23 @@ describe 'Gatling' do
      end
   end
 
+  describe 'exclude element from comparison' do
 
+    before do
+      @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
+      @gatling = gatling_for_spec('smiley-faceicon.png')
+      save_element_for_test
+    end
+
+
+
+    it 'should black out an element from the cropped screenshot' do
+      
+    end
+
+  end
+
+  
 
   describe 'trainer toggle' do
 
