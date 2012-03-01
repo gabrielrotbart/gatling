@@ -1,9 +1,18 @@
+require_relative 'image_wrangler'
+
 module Gatling
   class CaptureElement
 
-    def initialize element_to_capture
+    def initialize element_to_capture, *element_to_exclude
       @reference_image_path = Gatling::Configuration.reference_image_path
-      @element = element_to_capture
+      @element_to_capture = element_to_capture
+      @element_to_exclude = element_to_exclude.first
+    end
+
+    def into_image
+      screenshot = self.capture
+      screenshot = exclude(screenshot, @element_to_exclude) if @element_to_exclude 
+      Gatling::ImageWrangler.crop_element(screenshot, @element_to_capture)
     end
 
     def capture
@@ -25,13 +34,6 @@ module Gatling
       end
     end
 
-    def crop
-      element = @element.native
-      location = element.location
-      size = element.size
-      @cropped_element = self.capture.crop(location.x, location.y, size.width, size.height)
-    end
-
     def save_element(element, element_name, path)
       begin
         FileUtils::mkdir_p(path)
@@ -46,6 +48,8 @@ module Gatling
         raise "Could not save #{element_name} to #{path}. Please make sure you have permission"
       end
     end
+
+
 
 
   end

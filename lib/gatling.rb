@@ -20,7 +20,6 @@ module Gatling
 
         @capture_element = Gatling::CaptureElement.new(@actual)
 
-
         @reference_image_path = Gatling::Configuration.reference_image_path
         @trainer_toggle = Gatling::Configuration.trainer_toggle
 
@@ -54,7 +53,7 @@ module Gatling
       end
 
       def matches?
-        @cropped_element = @capture_element.crop
+        @cropped_element = @capture_element.into_image
         if !@trainer_toggle
           if File.exists?(@expected_image)
             self.compare

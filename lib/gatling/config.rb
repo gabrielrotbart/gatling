@@ -6,12 +6,7 @@ module Gatling
       attr_accessor 'reference_image_path', 'trainer_toggle'
 
       def reference_image_path
-        begin
-        @reference_image_path ||= File.join(Rails.root, 'spec/reference_images')
-        rescue
-          @reference_image_path = 'spec/reference_images'
-          raise "Not using Rails? Currently defaulting to #{@reference_image_path}. Overide this by setting Gatling::Configuration.reference_image_path=[refpath]"
-        end
+        @reference_image_path ||= set_default_path       
       end
 
       def trainer_toggle
@@ -31,6 +26,16 @@ module Gatling
         @trainer_toggle ||= @trainer_value ||= false
       end
 
+      private
+      def set_default_path
+        begin
+        @reference_image_path ||= File.join(Rails.root, 'spec/reference_images')
+        rescue
+          @reference_image_path = 'spec/reference_images'
+          puts "Currently defaulting to #{@reference_image_path}. Overide this by setting Gatling::Configuration.reference_image_path=[refpath]"
+        end
+        @reference_image_path
+      end
     end
 
   end

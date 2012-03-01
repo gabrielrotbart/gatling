@@ -26,13 +26,21 @@ describe 'rspec matcher' do
   end
   
   it 'should initialize and run gatling' do
-
     save_element_for_test
     
     visit('/')
     @element = page.find(:css, "#smiley")
     @element.should look_like('smiley-faceicon.png')
   end
+
+  # it 'should exclude a specified child css element' do
+  #   save_element_for_test
+    
+  #   visit('/')
+  #   @element = page.find(:css, "#smiley")
+  #   @element.should look_like('smiley-faceicon.png', :exclude => '#changable').should be_true
+  # end
+
   
   it 'should initialize and run training mode when GATLING_TRAINER is toggled' do
     ENV['GATLING_TRAINER'] = 'true'

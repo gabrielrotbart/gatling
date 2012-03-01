@@ -9,3 +9,5 @@ test*
 .DS_Store
 spec/support/ready_candidate_ref/temp/*
 reports/*
+vendor/*
+
