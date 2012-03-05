@@ -13,16 +13,8 @@ module Gatling
       @paths.each { | key, directory | make_dir directory  }
     end
 
-    def save_image_as_candidate(image, expected_filename)
-      candidate_path = save_image(image, expected_filename, :candidate)
-    end
-
-    def save_image_as_diff (image, expected_filename)
-      diff_path = save_image(image, expected_filename, :diff)
-    end
-
     def save_image(image, image_name, type)
-      path = File.join get_path_from_type(type), "#{image_name}.png"
+      path = File.join path_from_type(type), "#{image_name}.png"
       image.write path 
       path
     end
@@ -38,7 +30,7 @@ module Gatling
       FileUtils::mkdir_p(File.join(path))
     end
     
-    def get_path_from_type type
+    def path_from_type type
       if @paths.keys.include? type
         return @paths[type]
       else

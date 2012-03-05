@@ -37,7 +37,7 @@ module Gatling
         if File.exists?(@expected_image)
           self.compare
         else
-          candidate_image_path = @file_helper.save_image_as_candidate(@cropped_image, @expected_filename)
+          candidate_image_path = @file_helper.save_image(@cropped_image, @expected_filename, :candidate)
           raise "The design reference #{@expected} does not exist, #{candidate_image_path} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
         end
       else
@@ -49,9 +49,9 @@ module Gatling
     def save_diff diff_metric
       #diff = Gatling::Image.new(rmagic_image:diff_metric.first, name:"#{@expected_filename}_diff", type:diff)
       #@file_helper.save_gatling_image diff
-      diff_path = @file_helper.save_image_as_diff(diff_metric.first, "#{@expected_filename}_diff")
+      diff_path = @file_helper.save_image(diff_metric.first, "#{@expected_filename}_diff", :diff)
 
-      candidate_image_path = @file_helper.save_image_as_candidate(@cropped_image, @expected_filename)
+      candidate_image_path = @file_helper.save_image(@cropped_image, @expected_filename, :candidate)
       raise "element did not match #{@expected}. A diff image: #{@expected_filename}_diff.png was created in #{diff_path}. A new reference #{candidate_image_path} can be used to fix the test"
     end
 
