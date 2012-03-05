@@ -14,10 +14,6 @@ module Gatling
       PATHS.each { | key, directory | make_dir directory  }
     end
 
-    def make_dir(path)
-      FileUtils::mkdir_p(File.join(@reference_image_file, path))
-    end
-
     def save_image(image, image_name, type)
       path = File.join @reference_image_file, get_path_from_type(type), "#{image_name}.png"
       image.write path 
@@ -30,6 +26,10 @@ module Gatling
     end
 
     private
+
+    def make_dir(path)
+      FileUtils::mkdir_p(File.join(@reference_image_file, path))
+    end
     
     def get_path_from_type type
       if PATHS.keys.include? type

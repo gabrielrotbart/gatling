@@ -17,12 +17,6 @@ describe Gatling::FileHelper do
       subject.make_required_directories
     end
 
-
-    it 'should call FileUtils with the image reference path combined with the path we want to make' do
-      FileUtils.should_receive(:mkdir_p).with './gatling/my_path'
-      subject.make_dir 'my_path'
-    end
-
     it 'should save an image to the path for the type' do
       image_mock = mock(Magick::Image)
       image_mock.should_receive(:write).with './gatling/candidate/image_file_name.png'
