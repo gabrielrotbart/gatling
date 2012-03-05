@@ -40,12 +40,12 @@ module Gatling
 
       def save_element_as_candidate(image)
         candidate_path = "#{@reference_image_path}/candidate"
-        candidate = @capture_element.save_element(image, @expected_filename, candidate_path)
+        candidate = @file_helper.save_image(image, @expected_filename, candidate_path)
       end
 
       def save_element_as_reference(image)
           if File.exists?(@expected_image) == false
-            @capture_element.save_element(image, @expected_filename, @reference_image_path)
+            @file_helper.save_image(image, @expected_filename, @reference_image_path)
             puts "Saved #{@expected_image} as reference"
           else
             puts "#{@expected_image.upcase} ALREADY EXISTS. REFERENCE IMAGE WAS NOT OVERWRITTEN. PLEASE DELETE THE OLD FILE TO UPDATE USING TRAINER"
@@ -58,11 +58,11 @@ module Gatling
           if File.exists?(@expected_image)
             self.compare
           else
-            candidate = self.save_element_as_candidate(@cropped_element)
+            candidate = save_element_as_candidate(@cropped_element)
             raise "The design reference #{@expected} does not exist, #{candidate} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
           end
         else
-          self.save_element_as_reference(@cropped_element)
+          save_element_as_reference(@cropped_element)
           matches = true
         end
       end

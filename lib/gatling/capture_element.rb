@@ -28,15 +28,5 @@ module Gatling
         raise "Could not save screenshot to #{temp_dir}. Please make sure you have permission"
       end
     end
-
-    def save_element(image, image_name, path)
-      begin
-        image.write("#{path}/#{image_name}.png")
-        image = "#{path}/#{image_name}.png"
-      rescue
-        raise "Could not save #{image_name} to #{path}. Please make sure you have permission"
-      end
-    end
-
   end
 end
