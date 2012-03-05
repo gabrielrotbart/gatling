@@ -34,7 +34,7 @@ module Gatling
 
         @diff_metric.first.write("#{diff_path}/#{@expected_filename}_diff.png")
 
-        candidate = save_element_as_candidate(@cropped_element)
+        candidate = save_element_as_candidate(@cropped_image)
         raise "element did not match #{@expected}. A diff image: #{@expected_filename}_diff.png was created in #{diff_path}/#{@expected_filename}_diff.png. A new reference #{candidate} can be used to fix the test"
       end
 
@@ -53,16 +53,16 @@ module Gatling
       end
 
       def matches?
-        @cropped_element = @capture_element.into_image
+        @cropped_image = @capture_element.into_image
         if !@trainer_toggle
           if File.exists?(@expected_image)
             self.compare
           else
-            candidate = save_element_as_candidate(@cropped_element)
+            candidate = save_element_as_candidate(@cropped_image)
             raise "The design reference #{@expected} does not exist, #{candidate} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
           end
         else
-          save_element_as_reference(@cropped_element)
+          save_element_as_reference(@cropped_image)
           matches = true
         end
       end
@@ -70,7 +70,7 @@ module Gatling
       def compare
         expected_img = Magick::Image.read(@expected_image).first
 
-        @diff_metric = @cropped_element.compare_channel(expected_img, Magick::MeanAbsoluteErrorMetric)
+        @diff_metric = @cropped_image.compare_channel(expected_img, Magick::MeanAbsoluteErrorMetric)
 
         matches = @diff_metric[1] == 0.0
 
