@@ -5,7 +5,6 @@ module Gatling
     def initialize (opts={})
       @image = opts[:rmagic_image]
       @name = opts[:name]
-      @type = opts[:type]
     end
 
   end

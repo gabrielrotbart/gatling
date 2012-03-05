@@ -37,8 +37,8 @@ module Gatling
         if File.exists?(@expected_image)
           self.compare
         else
-          candidate = save_image_as_candidate(@cropped_image)
-          raise "The design reference #{@expected} does not exist, #{candidate} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
+          candidate_image_path = @file_helper.save_image_as_candidate(@cropped_image, @expected_filename)
+          raise "The design reference #{@expected} does not exist, #{candidate_image_path} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
         end
       else
         save_image_as_reference(@cropped_image)
@@ -49,10 +49,10 @@ module Gatling
     def save_diff diff_metric
       #diff = Gatling::Image.new(rmagic_image:diff_metric.first, name:"#{@expected_filename}_diff", type:diff)
       #@file_helper.save_gatling_image diff
-      diff_path = save_image_as_diff diff_metric.first
+      diff_path = @file_helper.save_image_as_diff(diff_metric.first, "#{@expected_filename}_diff")
 
-      candidate = save_image_as_candidate(@cropped_image)
-      raise "element did not match #{@expected}. A diff image: #{@expected_filename}_diff.png was created in #{diff_path}. A new reference #{candidate} can be used to fix the test"
+      candidate_image_path = @file_helper.save_image_as_candidate(@cropped_image, @expected_filename)
+      raise "element did not match #{@expected}. A diff image: #{@expected_filename}_diff.png was created in #{diff_path}. A new reference #{candidate_image_path} can be used to fix the test"
     end
 
     def compare
@@ -68,14 +68,6 @@ module Gatling
     end
 
     private
-
-    def save_image_as_diff (image)
-      @file_helper.save_image(image, "#{@expected_filename}_diff", :diff)
-    end
-
-    def save_image_as_candidate(image)
-      candidate = @file_helper.save_image(image, @expected_filename, :candidate)
-    end
 
     def save_image_as_reference(image)
       if File.exists?(@expected_image) == false
