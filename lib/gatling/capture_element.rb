@@ -11,13 +11,13 @@ module Gatling
       @expected_filename = "#{@expected}".sub(/\.[a-z]*/,'')
     end
 
-    def into_image
-      screenshot = self.capture
+    def capture
+      screenshot = self.take_screenshot
       screenshot = exclude(screenshot, @element_to_exclude) if @element_to_exclude
       Gatling::ImageWrangler.crop_element(screenshot, @element_to_capture)
     end
 
-    def capture
+    def take_screenshot
       temp_dir = "#{@reference_image_path}/temp"
       #captures the uncropped full screen
       begin
