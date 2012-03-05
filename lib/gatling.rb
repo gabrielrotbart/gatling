@@ -25,12 +25,12 @@ module Gatling
 
         @expected_image = "#{@reference_image_path}/#{@expected}"
         @expected_filename = "#{@expected}".sub(/\.[a-z]*/,'')
+        @file_helper = Gatling::FileHelper.new
+        @file_helper.make_required_directories
       end
 
       def create_diff
         diff_path = "#{@reference_image_path}/diff"
-
-        FileUtils::mkdir_p(diff_path)
 
         @diff_metric.first.write("#{diff_path}/#{@expected_filename}_diff.png")
 

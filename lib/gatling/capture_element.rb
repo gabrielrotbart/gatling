@@ -19,13 +19,6 @@ module Gatling
 
     def capture
       temp_dir = "#{@reference_image_path}/temp"
-
-      begin
-        FileUtils::mkdir_p(temp_dir)
-      rescue
-        puts "Could not create directory #{temp_dir}. Please make sure you have permission"
-      end
-
       #captures the uncropped full screen
       begin
 
@@ -37,8 +30,6 @@ module Gatling
     end
 
     def save_element(image, image_name, path)
-      Gatling::FileHelper.new.make_dir
-
       begin
         image.write("#{path}/#{image_name}.png")
         image = "#{path}/#{image_name}.png"
@@ -46,20 +37,6 @@ module Gatling
         raise "Could not save #{image_name} to #{path}. Please make sure you have permission"
       end
     end
-
-    # def save_element_as_candidate(element)
-    #   candidate_path = "#{@reference_image_path}/candidate"
-    #   candidate = @capture_element.save_element(element, @expected_filename, candidate_path)
-    # end
-
-    # def save_element_as_reference(element)
-    #   if File.exists?(@expected_image) == false
-    #     @capture_element.save_element(element, @expected_filename, @reference_image_path)
-    #     puts "Saved #{@expected_image} as reference"
-    #   else
-    #     puts "#{@expected_image.upcase} ALREADY EXISTS. REFERENCE IMAGE WAS NOT OVERWRITTEN. PLEASE DELETE THE OLD FILE TO UPDATE USING TRAINER"
-    #   end
-    # end
 
   end
 end
