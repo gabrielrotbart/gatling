@@ -25,20 +25,19 @@ describe 'Gatling' do
     remove_refs(@ref_path)
   end
 
-
-
   describe 'creating an initial reference (expected) image' do
 
     before(:each) do
       @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
     end
 
-      it "should notify that no reference exists for image and create a candidate" do
-        gatling = gatling_for_spec('smiley-faceicon.png')
-        expect {gatling.matches?}.should raise_error(RuntimeError, "The design reference #{@example_good_image} does not exist, #{@ref_path}/candidate/#{@example_good_image} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference")
-        File.exists?(File.join(@ref_path,'candidate','smiley-faceicon.png')).should be_true
-      end
+    it "should notify that no reference exists for image and create a candidate" do
+      gatling = gatling_for_spec('smiley-faceicon.png')
+
+      expect {gatling.matches?}.should raise_error(RuntimeError, "The design reference #{@example_good_image} does not exist, #{@ref_path}/candidate/#{@example_good_image} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference")
+      File.exists?(File.join(@ref_path,'candidate','smiley-faceicon.png')).should be_true
     end
+  end
 
 
 
@@ -48,23 +47,23 @@ describe 'Gatling' do
      # @ready_ref = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ready_candidate_ref')
      @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
      save_element_for_test
-    end
+   end
 
-    it 'images match' do
-      @gatling = gatling_for_spec('smiley-faceicon.png')
-      @gatling.matches?.should be_true
-    end
+   it 'images match' do
+    @gatling = gatling_for_spec('smiley-faceicon.png')
+    @gatling.matches?.should be_true
+  end
 
-    it 'images do not match and diff created' do
+  it 'images do not match and diff created' do
        #convert -fill none -stroke black -strokewidth 5 smiley-faceicon.png -draw 'arc 155,25 185,45 180' sad-faceicon.png
        convert_element_to_bad_element(File.join(@ref_path,"#{@example_good_image}"))
        gatling = gatling_for_spec('smiley-faceicon.png')
        expect {gatling.matches?}.should raise_error(RuntimeError, "element did not match #{@example_good_image}. A diff image: smiley-faceicon_diff.png was created in #{@ref_path}/diff/smiley-faceicon_diff.png. A new reference #{@ref_path}/candidate/#{@example_good_image} can be used to fix the test")
        File.exists?(File.join(@ref_path,'diff','smiley-faceicon_diff.png')).should be_true
      end
-  end
+   end
 
-  describe 'exclude element from comparison' do
+   describe 'exclude element from comparison' do
 
     before do
       @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
@@ -75,13 +74,10 @@ describe 'Gatling' do
 
 
     it 'should black out an element from the cropped screenshot' do
-      
+
     end
-
   end
-
   
-
   describe 'trainer toggle' do
 
     before(:each) do
@@ -110,9 +106,6 @@ describe 'Gatling' do
     end
 
   end
-
-
-
 
   # MOCK SELENIUM ELEMENT
   # correct size (340px*42px)

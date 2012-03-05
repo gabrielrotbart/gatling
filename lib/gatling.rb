@@ -32,24 +32,10 @@ module Gatling
       def create_diff
         diff_path = "#{@reference_image_path}/diff"
 
-        @diff_metric.first.write("#{diff_path}/#{@expected_filename}_diff.png")
+        save_image_as_diff @diff_metric.first
 
-        candidate = save_element_as_candidate(@cropped_image)
+        candidate = save_image_as_candidate(@cropped_image)
         raise "element did not match #{@expected}. A diff image: #{@expected_filename}_diff.png was created in #{diff_path}/#{@expected_filename}_diff.png. A new reference #{candidate} can be used to fix the test"
-      end
-
-      def save_element_as_candidate(image)
-        candidate_path = "#{@reference_image_path}/candidate"
-        candidate = @file_helper.save_image(image, @expected_filename, candidate_path)
-      end
-
-      def save_element_as_reference(image)
-          if File.exists?(@expected_image) == false
-            @file_helper.save_image(image, @expected_filename, @reference_image_path)
-            puts "Saved #{@expected_image} as reference"
-          else
-            puts "#{@expected_image.upcase} ALREADY EXISTS. REFERENCE IMAGE WAS NOT OVERWRITTEN. PLEASE DELETE THE OLD FILE TO UPDATE USING TRAINER"
-          end
       end
 
       def matches?
@@ -58,11 +44,11 @@ module Gatling
           if File.exists?(@expected_image)
             self.compare
           else
-            candidate = save_element_as_candidate(@cropped_image)
+            candidate = save_image_as_candidate(@cropped_image)
             raise "The design reference #{@expected} does not exist, #{candidate} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
           end
         else
-          save_element_as_reference(@cropped_image)
+          save_image_as_reference(@cropped_image)
           matches = true
         end
       end
@@ -78,6 +64,26 @@ module Gatling
 
         matches
       end
+
+      private
+
+      def save_image_as_diff (image)
+        @file_helper.save_image(image, "#{@expected_filename}_diff", :diff)
+      end
+
+      def save_image_as_candidate(image)
+        candidate = @file_helper.save_image(image, @expected_filename, :candidate)
+      end
+
+      def save_image_as_reference(image)
+          if File.exists?(@expected_image) == false
+            @file_helper.save_image(image, @expected_filename, :reference)
+            puts "Saved #{@expected_image} as reference"
+          else
+            puts "#{@expected_image.upcase} ALREADY EXISTS. REFERENCE IMAGE WAS NOT OVERWRITTEN. PLEASE DELETE THE OLD FILE TO UPDATE USING TRAINER"
+          end
+      end
+
     end
 
 end
