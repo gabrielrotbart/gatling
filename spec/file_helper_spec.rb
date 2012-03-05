@@ -12,7 +12,7 @@ describe Gatling::FileHelper do
     it 'should make required directories' do
       FileUtils.should_receive(:mkdir_p).with './gatling/candidate'
       FileUtils.should_receive(:mkdir_p).with './gatling/diff'
-      FileUtils.should_receive(:mkdir_p).with './gatling/.'
+      FileUtils.should_receive(:mkdir_p).with './gatling'
       FileUtils.should_receive(:mkdir_p).with './gatling/temp'  
       subject.make_required_directories
     end
