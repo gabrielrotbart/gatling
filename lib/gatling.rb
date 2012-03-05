@@ -38,14 +38,14 @@ module Gatling
         raise "element did not match #{@expected}. A diff image: #{@expected_filename}_diff.png was created in #{diff_path}/#{@expected_filename}_diff.png. A new reference #{candidate} can be used to fix the test"
       end
 
-      def save_element_as_candidate(element)
+      def save_element_as_candidate(image)
         candidate_path = "#{@reference_image_path}/candidate"
-        candidate = @capture_element.save_element(element, @expected_filename, candidate_path)
+        candidate = @capture_element.save_element(image, @expected_filename, candidate_path)
       end
 
-      def save_element_as_reference(element)
+      def save_element_as_reference(image)
           if File.exists?(@expected_image) == false
-            @capture_element.save_element(element, @expected_filename, @reference_image_path)
+            @capture_element.save_element(image, @expected_filename, @reference_image_path)
             puts "Saved #{@expected_image} as reference"
           else
             puts "#{@expected_image.upcase} ALREADY EXISTS. REFERENCE IMAGE WAS NOT OVERWRITTEN. PLEASE DELETE THE OLD FILE TO UPDATE USING TRAINER"

@@ -13,7 +13,7 @@ module Gatling
 
     def into_image
       screenshot = self.capture
-      screenshot = exclude(screenshot, @element_to_exclude) if @element_to_exclude 
+      screenshot = exclude(screenshot, @element_to_exclude) if @element_to_exclude
       Gatling::ImageWrangler.crop_element(screenshot, @element_to_capture)
     end
 
@@ -36,18 +36,14 @@ module Gatling
       end
     end
 
-    def save_element(element, element_name, path)
-      begin
-        FileUtils::mkdir_p(path)
-      rescue
-        puts "Could not create directory #{path}. Please make sure you have permission"
-      end
+    def save_element(image, image_name, path)
+      Gatling::FileHelper.new.make_dir
 
       begin
-        element.write("#{path}/#{element_name}.png")
-        element = "#{path}/#{element_name}.png"
+        image.write("#{path}/#{image_name}.png")
+        image = "#{path}/#{image_name}.png"
       rescue
-        raise "Could not save #{element_name} to #{path}. Please make sure you have permission"
+        raise "Could not save #{image_name} to #{path}. Please make sure you have permission"
       end
     end
 
@@ -64,6 +60,6 @@ module Gatling
     #     puts "#{@expected_image.upcase} ALREADY EXISTS. REFERENCE IMAGE WAS NOT OVERWRITTEN. PLEASE DELETE THE OLD FILE TO UPDATE USING TRAINER"
     #   end
     # end
-  
+
   end
 end

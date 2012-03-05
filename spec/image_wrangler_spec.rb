@@ -33,7 +33,6 @@ describe Gatling::ImageWrangler do
     position[:y].should eql(2)
     position[:width].should eql(100)
     position[:height].should eql(200)
-
   end
 
 end
