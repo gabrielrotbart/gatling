@@ -26,23 +26,5 @@ describe Gatling::FileHelper do
       image_mock = mock(Magick::Image)
       expect { Gatling::FileHelper.save_image(image_mock, 'image_file_name', :unknown)}.should raise_error "Unkown image type 'unknown'"
     end
-
-    it 'should check if a file exists, with the file name and type' do
-      File.should_receive(:exists?).with './gatling/image.png'
-      Gatling::FileHelper.exists?('image.png', :reference)
-    end
-
-    it 'should load an image and return it' do
-      File.stub(:exists?).and_return true
-      image_mock = mock(Magick::Image)
-      Magick::Image.should_receive(:read).with('./gatling/temp/image.png').and_return([image_mock])
-      image = Gatling::FileHelper.load('image.png', :temp)
-    end
-
-    it 'should return false trying to load an image that doesnt exist' do
-      File.should_receive(:exists?).and_return false
-      #expect{subject.load('image.png', :temp)}.should raise_error(Magick::ImageMagickError, "unable to open file `./gatling/temp/image.png' @ error/png.c/ReadPNGImage/3633")
-      Gatling::FileHelper.load('image.png', :temp).should eql false
-    end
   end
 end

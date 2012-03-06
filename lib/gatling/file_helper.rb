@@ -16,13 +16,6 @@ module Gatling
         File.exists?(File.join(path_from_type(type), file))
       end
 
-      def load(file, type)
-        if exists?(file, type)
-          return Magick::Image.read(File.join(path_from_type(type), file)).first
-        end
-        return false
-      end
-
       def path_from_type(type)
         if Gatling::Configuration.paths.keys.include? type
           return Gatling::Configuration.paths[type]

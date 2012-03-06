@@ -21,7 +21,6 @@ module Gatling
       temp_dir = "#{@reference_image_path}/temp"
       #captures the uncropped full screen
       begin
-
         Capybara.page.driver.browser.save_screenshot("#{temp_dir}/temp.png")
         temp_screenshot = Magick::Image.read("#{temp_dir}/temp.png").first
       rescue
