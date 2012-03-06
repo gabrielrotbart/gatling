@@ -45,13 +45,17 @@ module Gatling
     end
 
     def save_diff diff_metric
-      diff_path = Gatling::FileHelper.save_image(diff_metric.first, @image_filename, :diff)
+      @diff = Gatling::Image.new
+      @diff.rmagick_image = diff_metric.first
+      @diff.file_name = @image_filename 
+      diff_path = @diff.save(:as => :diff)
+     
       candidate_image_path = @actual_image.save(:as => :candidate)
       raise "element did not match #{@actual_image.file_name}. A diff image: #{@actual_image.file_name} was created in #{diff_path}. A new reference #{candidate_image_path} can be used to fix the test"
     end
 
     def compare(expected_image, actual_image)    
-      diff_metric = Gatling::ImageWrangler.compare(expected_image.rmagick_image, actual_image.rmagick_image)
+      diff_metric = Gatling::ImageWrangler.compare(expected_image, actual_image)
       matches = diff_metric[1] == 0.0
       save_diff(diff_metric) unless matches
       matches
@@ -60,8 +64,8 @@ module Gatling
     private
 
     def save_image_as_reference(image)
-      if Gatling::FileHelper.exists?(@image_filename, :reference) == false
-        reference_path = @actual_image.save(:as => :reference)
+      if image.exists? == false
+        reference_path = image.save(:as => :reference)
         puts "Saved #{reference_path} as reference"
       else
         puts "#{reference_path} ALREADY EXISTS. REFERENCE IMAGE WAS NOT OVERWRITTEN. PLEASE DELETE THE OLD FILE TO UPDATE USING TRAINER"

@@ -36,17 +36,31 @@ describe Gatling::ImageWrangler do
   end
 
   it 'should return true if images match' do
-    acutal_image_mock = mock(Magick::Image)
+    acutal_image_mock = mock(Magick::Image)  
+    acutal_image = Gatling::Image.new
+    acutal_image.rmagick_image = acutal_image_mock
+    
     expected_image_mock = mock(Magick::Image)
+    expected_image = Gatling::Image.new
+    expected_image.rmagick_image = expected_image_mock
+    
     acutal_image_mock.should_receive(:compare_channel).with(expected_image_mock,Magick::MeanAbsoluteErrorMetric).and_return([nil, 0.0])
-    Gatling::ImageWrangler.compare(expected_image_mock, acutal_image_mock).should eql [nil, 0.0]
+    
+    Gatling::ImageWrangler.compare(expected_image, acutal_image).should eql [nil, 0.0]
   end
 
   it 'should return false if images dont match' do
-    acutal_image_mock = mock(Magick::Image)
-    acutal_image_mock.stub(:compare_channel).and_return([nil, 0.1])
+    acutal_image_mock = mock(Magick::Image)  
+    acutal_image = Gatling::Image.new
+    acutal_image.rmagick_image = acutal_image_mock
+    
     expected_image_mock = mock(Magick::Image)
-    Gatling::ImageWrangler.compare(expected_image_mock, acutal_image_mock).should eql [nil, 0.1]
+    expected_image = Gatling::Image.new
+    expected_image.rmagick_image = expected_image_mock
+    
+    acutal_image_mock.stub(:compare_channel).and_return([nil, 0.1])
+
+    Gatling::ImageWrangler.compare(expected_image, acutal_image).should eql [nil, 0.1]
   end
 
 

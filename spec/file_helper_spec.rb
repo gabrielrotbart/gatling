@@ -15,16 +15,9 @@ describe Gatling::FileHelper do
       Gatling::FileHelper.make_required_directories
     end
 
-    it 'should save an image to the path for the type' do
-      image_mock = mock(Magick::Image)
-      image_mock.should_receive(:write).with './gatling/candidate/image_file_name.png'
-
-      Gatling::FileHelper.save_image(image_mock, 'image_file_name.png', :candidate)
-    end
-
     it 'should thrown an error with an unknown image type' do
       image_mock = mock(Magick::Image)
-      expect { Gatling::FileHelper.save_image(image_mock, 'image_file_name', :unknown)}.should raise_error "Unkown image type 'unknown'"
+      expect { Gatling::FileHelper.path_from_type(:unknown)}.should raise_error "Unkown image type 'unknown'"
     end
   end
 end
