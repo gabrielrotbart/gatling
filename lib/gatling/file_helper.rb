@@ -14,14 +14,22 @@ module Gatling
     end
 
     def save_image(image, image_name, type)
-      path = File.join path_from_type(type), "#{image_name}.png"
+      path = File.join(path_from_type(type), "#{image_name}.png")
       image.write path 
       path
     end
 
     def save_gatling_image(image)
-      path = File.join image.type, "#{image.name}.png"
+      path = File.join(image.type, "#{image.name}.png")
       image.rmagic_image.write path 
+    end
+
+    def exists?(file, type)
+      File.exists?(File.join(path_from_type(type), file))
+    end
+
+    def load(file, type)
+      images = Magick::Image.read(File.join(path_from_type(type), file)).first
     end
 
     private
@@ -30,7 +38,7 @@ module Gatling
       FileUtils::mkdir_p(File.join(path))
     end
     
-    def path_from_type type
+    def path_from_type(type)
       if @paths.keys.include? type
         return @paths[type]
       else

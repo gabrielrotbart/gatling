@@ -20,7 +20,6 @@ describe 'Gatling' do
     @spec_support_root = spec_support_root
   end
 
-
   after(:each) do
     remove_refs(@ref_path)
   end
@@ -38,8 +37,6 @@ describe 'Gatling' do
       File.exists?(File.join(@ref_path,'candidate','smiley-faceicon.png')).should be_true
     end
   end
-
-
 
   describe 'image comparison' do
 

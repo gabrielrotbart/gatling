@@ -34,5 +34,16 @@ describe Gatling::FileHelper do
       image = Gatling::Image.new{rmagic_image:image_mock, name:image_file_name, type:candidate}
     end
 
+    it 'should check if a file exists, with the file name and type' do
+      File.should_receive(:exists?).with './gatling/image.png'
+      subject.exists?('image.png', :reference)
+    end
+
+    it 'should load an image and return it' do
+      image_mock = mock(Magick::Image)
+      Magick::Image.should_receive(:read).with('./gatling/temp/image.png').and_return([image_mock])
+      image = subject.load('image.png', :temp)
+    end
+
   end
 end
