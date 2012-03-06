@@ -21,7 +21,7 @@ describe Gatling::FileHelper do
       image_mock = mock(Magick::Image)
       image_mock.should_receive(:write).with './gatling/candidate/image_file_name.png'
 
-      subject.save_image(image_mock, 'image_file_name', :candidate)
+      subject.save_image(image_mock, 'image_file_name.png', :candidate)
     end
 
     it 'should thrown an error with an unknown image type' do

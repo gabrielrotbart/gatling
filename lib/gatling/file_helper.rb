@@ -14,7 +14,7 @@ module Gatling
     end
 
     def save_image(image, image_name, type)
-      path = File.join(path_from_type(type), "#{image_name}.png")
+      path = File.join(path_from_type(type), "#{image_name}")
       image.write path 
       path
     end

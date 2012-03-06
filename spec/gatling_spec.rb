@@ -55,8 +55,8 @@ describe 'Gatling' do
        #convert -fill none -stroke black -strokewidth 5 smiley-faceicon.png -draw 'arc 155,25 185,45 180' sad-faceicon.png
        convert_element_to_bad_element(File.join(@ref_path,"#{@example_good_image}"))
        gatling = gatling_for_spec('smiley-faceicon.png')
-       expect {gatling.matches?}.should raise_error(RuntimeError, "element did not match #{@example_good_image}. A diff image: smiley-faceicon_diff.png was created in #{@ref_path}/diff/smiley-faceicon_diff.png. A new reference #{@ref_path}/candidate/#{@example_good_image} can be used to fix the test")
-       File.exists?(File.join(@ref_path,'diff','smiley-faceicon_diff.png')).should be_true
+       expect {gatling.matches?}.should raise_error(RuntimeError, "element did not match #{@example_good_image}. A diff image: smiley-faceicon.png was created in #{@ref_path}/diff/smiley-faceicon.png. A new reference #{@ref_path}/candidate/#{@example_good_image} can be used to fix the test")
+       File.exists?(File.join(@ref_path,'diff','smiley-faceicon.png')).should be_true
      end
    end
 
