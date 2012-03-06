@@ -18,6 +18,5 @@ module Gatling
 
     def self.exclude image, element_to_exclude
     end
-
   end
 end
