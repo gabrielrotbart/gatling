@@ -9,6 +9,13 @@ module Gatling
         @reference_image_path ||= set_default_path       
       end
 
+      def paths
+        Hash[reference:reference_image_path,
+        candidate:File.join(reference_image_path, 'candidate'),
+        diff:File.join(reference_image_path, 'diff'),
+        temp:File.join(reference_image_path, 'temp')]
+      end
+
       def trainer_toggle
         @trainer_value = ENV['GATLING_TRAINER']
 

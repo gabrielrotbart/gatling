@@ -43,13 +43,11 @@ module Gatling
 
     def save_diff diff_metric
       diff_path = @file_helper.save_image(diff_metric.first, @expected_filename, :diff)
-
       candidate_image_path = @file_helper.save_image(@actual_image, @expected_filename, :candidate)
       raise "element did not match #{@expected_filename}. A diff image: #{@expected_filename} was created in #{diff_path}. A new reference #{candidate_image_path} can be used to fix the test"
     end
 
-    def compare(expected_image)
-      
+    def compare(expected_image)    
       diff_metric = Gatling::ImageWrangler.compare(expected_image, @actual_image)
       matches = diff_metric[1] == 0.0
       save_diff(diff_metric) unless matches
