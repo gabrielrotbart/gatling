@@ -1,7 +1,7 @@
 module Gatling
   class Image
 
-    attr_accessor :rmagick_image, :file_name
+    attr_accessor :rmagick_image, :file_name, :path
 
     def initialize
       @rmagick_image = :rmagick_image
@@ -9,9 +9,9 @@ module Gatling
     end
     
     def save type
-      path = File.join(Gatling::FileHelper.path_from_type(type[:as]), @file_name)
-      @rmagick_image.write path 
-      path
+      @path = File.join(Gatling::FileHelper.path_from_type(type[:as]), @file_name)
+      @rmagick_image.write @path 
+      @path
     end
 
     def exists?

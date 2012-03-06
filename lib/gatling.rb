@@ -44,12 +44,12 @@ module Gatling
         return true
       end
 
-      if @expected_image.exists?
+      if !@expected_image.exists?
+        @actual_image.save :as => :candidate
+        raise "The design reference #{@actual_image.file_name} does not exist, #{@actual_image.path} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
+      else
         @expected_image.base_on_file @expected_image.file_name
         compare @expected_image, @actual_image
-      else
-        candidate_image_path = @actual_image.save :as => :candidate
-        raise "The design reference #{@actual_image.file_name} does not exist, #{candidate_image_path} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
       end
     end
 
@@ -64,18 +64,18 @@ module Gatling
 
     def save_diff diff_metric
       @diff_image.rmagick_image = diff_metric.first
-      diff_path = @diff_image.save(:as => :diff)
+      @diff_image.save(:as => :diff)
      
-      candidate_image_path = @actual_image.save(:as => :candidate)
-      raise "element did not match #{@actual_image.file_name}. A diff image: #{@actual_image.file_name} was created in #{diff_path}. A new reference #{candidate_image_path} can be used to fix the test"
+      @actual_image.save(:as => :candidate)
+      raise "element did not match #{@diff_image.file_name}. A diff image: #{@diff_image.file_name} was created in #{@diff_image.path}. A new reference #{@actual_image.path} can be used to fix the test"
     end
 
     def save_image_as_reference(image)
       if image.exists? == false
-        reference_path = image.save(:as => :reference)
-        puts "Saved #{reference_path} as reference"
+        image.save(:as => :reference)
+        puts "Saved #{image.path} as reference"
       else
-        puts "#{reference_path} ALREADY EXISTS. REFERENCE IMAGE WAS NOT OVERWRITTEN. PLEASE DELETE THE OLD FILE TO UPDATE USING TRAINER"
+        puts "#{image.path} ALREADY EXISTS. REFERENCE IMAGE WAS NOT OVERWRITTEN. PLEASE DELETE THE OLD FILE TO UPDATE USING TRAINER"
       end
     end
   end

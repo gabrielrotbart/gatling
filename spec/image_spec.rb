@@ -18,16 +18,17 @@ describe Gatling::Image do
 
   it 'should save an image to the path for the type' do
     image_mock = mock(Magick::Image)
-    image_mock.should_receive(:write).with('./image_tests/temp/image_file_name.png').and_return()
+    image_mock.should_receive(:write).with('./image_tests/temp/image.png').and_return()
 
     subject.rmagick_image = image_mock
-    subject.file_name = 'image_file_name.png'
+    subject.file_name = 'image.png'
     subject.save(:as => :temp)
+    subject.path.should == './image_tests/temp/image.png'
   end
 
   it 'should check if a file exists, with the file name and type' do
-    File.should_receive(:exists?).with './image_tests/image_file_name.png'
-    subject.file_name = 'image_file_name.png'
+    File.should_receive(:exists?).with './image_tests/image.png'
+    subject.file_name = 'image.png'
     subject.exists?
   end
 
