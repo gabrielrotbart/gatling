@@ -18,5 +18,9 @@ module Gatling
 
     def self.exclude image, element_to_exclude
     end
+
+    def self.compare(expected_image, actual_image)  
+      diff_metric = actual_image.compare_channel(expected_image, Magick::MeanAbsoluteErrorMetric)
+    end
   end
 end

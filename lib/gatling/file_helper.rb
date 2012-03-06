@@ -29,7 +29,10 @@ module Gatling
     end
 
     def load(file, type)
-      images = Magick::Image.read(File.join(path_from_type(type), file)).first
+      if exists?(file, type)
+        return Magick::Image.read(File.join(path_from_type(type), file)).first
+      end
+      return false
     end
 
     private

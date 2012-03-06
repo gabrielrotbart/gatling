@@ -41,24 +41,19 @@ describe 'Gatling' do
   describe 'image comparison' do
 
     before(:each) do
-     # @ready_ref = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ready_candidate_ref')
-     @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
-     save_element_for_test
-   end
+      # @ready_ref = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ready_candidate_ref')
+      @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
+      save_element_for_test
+    end
 
-   it 'images match' do
-    @gatling = gatling_for_spec('smiley-faceicon.png')
-    @gatling.matches?.should be_true
-  end
-
-  it 'images do not match and diff created' do
+    it 'images do not match and diff created' do
        #convert -fill none -stroke black -strokewidth 5 smiley-faceicon.png -draw 'arc 155,25 185,45 180' sad-faceicon.png
        convert_element_to_bad_element(File.join(@ref_path,"#{@example_good_image}"))
        gatling = gatling_for_spec('smiley-faceicon.png')
        expect {gatling.matches?}.should raise_error(RuntimeError, "element did not match #{@example_good_image}. A diff image: smiley-faceicon.png was created in #{@ref_path}/diff/smiley-faceicon.png. A new reference #{@ref_path}/candidate/#{@example_good_image} can be used to fix the test")
        File.exists?(File.join(@ref_path,'diff','smiley-faceicon.png')).should be_true
-     end
-   end
+    end
+  end
 
    describe 'exclude element from comparison' do
 
@@ -68,10 +63,8 @@ describe 'Gatling' do
       save_element_for_test
     end
 
-
-
     it 'should black out an element from the cropped screenshot' do
-
+      pending
     end
   end
   
