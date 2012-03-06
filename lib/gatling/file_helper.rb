@@ -23,12 +23,6 @@ module Gatling
         return false
       end
 
-      private
-
-      def make_dir(path)
-        FileUtils::mkdir_p(File.join(path))
-      end
-      
       def path_from_type(type)
         if Gatling::Configuration.paths.keys.include? type
           return Gatling::Configuration.paths[type]
@@ -36,6 +30,14 @@ module Gatling
           raise "Unkown image type '#{type}'"
         end
       end 
+
+      private
+
+      def make_dir(path)
+        FileUtils::mkdir_p(File.join(path))
+      end
+      
+
     end
   end
 end
