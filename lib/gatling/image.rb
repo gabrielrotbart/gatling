@@ -9,13 +9,13 @@ module Gatling
     end
     
     def save type
-      @path = File.join(Gatling::FileHelper.path_from_type(type[:as]), @file_name)
+      @path = File.join(Gatling::Configuration.path_from_type(type[:as]), @file_name)
       @rmagick_image.write @path 
       @path
     end
 
     def exists?
-      File.exists?(File.join(Gatling::FileHelper.path_from_type(:reference), @file_name))
+      File.exists?(File.join(Gatling::Configuration.path_from_type(:reference), @file_name))
     end
 
     def base_on_element element
@@ -23,7 +23,7 @@ module Gatling
     end
 
     def base_on_file file_name
-      @rmagick_image = Magick::Image.read(File.join(Gatling::FileHelper.path_from_type(:reference), file_name)).first
+      @rmagick_image = Magick::Image.read(File.join(Gatling::Configuration.path_from_type(:reference), file_name)).first
       @file_name = file_name
     end
 

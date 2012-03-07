@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Gatling::Configuration" do
+describe Gatling::Configuration do
 
   describe "#reference_image_path" do
     before :each do
@@ -70,7 +70,17 @@ describe "Gatling::Configuration" do
       Gatling::Configuration.trainer_toggle = false
       ENV['GATLING_TRAINER'] = nil
     end
-
   end
+
+  describe 'paths' do
+    it 'should return the directory for a type of image' do
+      Gatling::Configuration.reference_image_path = "a_path"
+      Gatling::Configuration.path_from_type(:temp).should == 'a_path/temp' 
+    end
+
+    it 'should thrown an error when you ask for the path of an unknown image type' do
+      expect { Gatling::Configuration.path_from_type(:unknown)}.should raise_error "Unkown image type 'unknown'"
+    end
+  end  
 
 end

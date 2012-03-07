@@ -33,7 +33,16 @@ module Gatling
         @trainer_toggle ||= @trainer_value ||= false
       end
 
+      def path_from_type(type)
+        if paths.keys.include? type
+          return paths[type]
+        else
+          raise "Unkown image type '#{type}'"
+        end
+      end 
+
       private
+
       def set_default_path
         begin
         @reference_image_path ||= File.join(Rails.root, 'spec/reference_images')

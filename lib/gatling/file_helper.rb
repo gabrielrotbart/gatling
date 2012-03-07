@@ -6,14 +6,6 @@ module Gatling
         Gatling::Configuration.paths.each { | key, directory | make_dir directory  }
       end
 
-      def path_from_type(type)
-        if Gatling::Configuration.paths.keys.include? type
-          return Gatling::Configuration.paths[type]
-        else
-          raise "Unkown image type '#{type}'"
-        end
-      end 
-
       private
 
       def make_dir(path)
