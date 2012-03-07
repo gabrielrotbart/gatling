@@ -24,7 +24,7 @@ module Gatling
     def initialize expected_filename, actual_element  
       Gatling::FileHelper.make_required_directories 
 
-      #Image taken from the web element
+      #image taken from the web element
       @actual_image = Gatling::Image.new
       @actual_image.base_on_element(actual_element)
       @actual_image.file_name = expected_filename
@@ -32,10 +32,6 @@ module Gatling
       #reference image that may exist on the file system
       @expected_image = Gatling::Image.new
       @expected_image.file_name = expected_filename
-
-      #an image of diferences between compared images
-      @diff_image = Gatling::Image.new
-      @diff_image.file_name = expected_filename
     end
 
     def matches?
@@ -53,29 +49,32 @@ module Gatling
       end
     end
 
-    def compare(expected_image, actual_image)    
+    def compare(expected_image, actual_image)         
       diff_metric = Gatling::ImageWrangler.compare(expected_image, actual_image)
+
       matches = diff_metric[1] == 0.0
-      save_diff(diff_metric) unless matches
-      matches
+
+      if !matches
+        diff_image = Gatling::Image.new
+        diff_image.file_name = actual_image.file_name
+        diff_image.rmagick_image = diff_metric.first
+        diff_image.save(:as => :diff)
+
+        actual_image.save(:as => :candidate) 
+        raise "element did not match #{actual_image.file_name}. A diff image: #{diff_image.file_name} was created in #{diff_image.path}. A new reference #{actual_image.path} can be used to fix the test"
+      
+      end
+      matches   
     end
 
     private
 
-    def save_diff diff_metric
-      @diff_image.rmagick_image = diff_metric.first
-      @diff_image.save(:as => :diff)
-     
-      @actual_image.save(:as => :candidate)
-      raise "element did not match #{@diff_image.file_name}. A diff image: #{@diff_image.file_name} was created in #{@diff_image.path}. A new reference #{@actual_image.path} can be used to fix the test"
-    end
-
     def save_image_as_reference(image)
-      if image.exists? == false
-        image.save(:as => :reference)
-        puts "Saved #{image.path} as reference"
+      if image.exists?
+        puts "#{image.path} already exists. reference image was not overwritten. please delete the old file to update using trainer"
       else
-        puts "#{image.path} ALREADY EXISTS. REFERENCE IMAGE WAS NOT OVERWRITTEN. PLEASE DELETE THE OLD FILE TO UPDATE USING TRAINER"
+        image.save(:as => :reference)
+        puts "Saved #{image.path} as reference"     
       end
     end
   end
