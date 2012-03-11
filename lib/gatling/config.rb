@@ -5,8 +5,10 @@ module Gatling
 
       attr_accessor :reference_image_path, :trainer_toggle
 
+      attr_reader :paths
+
       def reference_image_path
-        @reference_image_path ||= set_default_path       
+        @reference_image_path ||= set_default_path
       end
 
       def paths
@@ -39,7 +41,7 @@ module Gatling
         else
           raise "Unkown image type '#{type}'"
         end
-      end 
+      end
 
       private
 

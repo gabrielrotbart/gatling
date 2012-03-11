@@ -14,7 +14,7 @@ describe Gatling::Image do
         Magick::Image.should_receive(:read).with('./image_tests/image.png').and_return([image_mock])
 
         subject = Gatling::Image.new(:from_file, 'image.png')
-        subject.should == image_mock
+        subject.image.should == image_mock
         subject.file_name.should == 'image.png'
     end
 

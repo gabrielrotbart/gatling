@@ -37,7 +37,7 @@ def gatling_for_spec(expected)
   visit('/')
   @element = page.find(:css, "#smiley")
 
-  @gatling = Gatling::Comparison.new(expected, @element)
+  @gatling = Gatling::Fire.new(expected, @element)
 end
 
 def spec_support_root
