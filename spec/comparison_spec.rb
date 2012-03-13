@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe Gatling::Comparison do
-  before do
 
+  before do
     apple = Magick::Image.new(100,100) { self.background_color = "green" }
     orange = Magick::Image.new(100,100) { self.background_color = "orange" }
     @apple = Gatling::Image.new(:from_diff, 'apple.png', apple)
@@ -20,6 +20,7 @@ describe Gatling::Comparison do
       subject.compare(@apple, @orange)
       subject.match.should == false
     end
+
   end
 
   describe 'Diff images' do
@@ -28,6 +29,7 @@ describe Gatling::Comparison do
       subject.compare(@apple, @orange)
       subject.diff_image.class.should == Gatling::Image
     end
+
   end
 
 end
