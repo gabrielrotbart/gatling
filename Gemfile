@@ -4,9 +4,7 @@ source "http://rubygems.org"
 gemspec
 
 group :development, :test, :smoke do
-	gem 'sinatra' 	,'1.3.1'
-	gem 'rack-test'
-	gem 'rake'
-	gem 'rspec-instafail'
-	gem 'pry'
+  gem 'rake'
+  gem 'rspec-instafail'
+  gem 'pry'
 end
