@@ -1,5 +1,3 @@
-require  File.join(File.dirname(__FILE__), '/support/assets/smiley_app')
-
 require 'rubygems'
 require 'capybara'
 require 'capybara/dsl'
