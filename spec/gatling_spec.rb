@@ -30,9 +30,9 @@ describe 'Gatling' do
     end
 
     it "should notify that no reference exists for image and create a candidate" do
-      gatling = gatling_for_spec(@example_good_image)
+      element = element_for_spec
 
-      expect {gatling.matches?}.should raise_error(RuntimeError, "The design reference #{@example_good_image} does not exist, #{@ref_path}/candidate/#{@example_good_image} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference")
+      expect {Gatling.matches?('orange.png', element)}.should raise_error(RuntimeError, "The design reference #{@example_good_image} does not exist, #{@ref_path}/candidate/#{@example_good_image} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference")
       File.exists?(File.join(@ref_path,'candidate',@example_good_image)).should be_true
     end
   end
@@ -81,20 +81,20 @@ describe 'Gatling' do
 
     it 'should save a reference file to the nominated folder without raising an exception' do
       Gatling::Configuration.trainer_toggle = true
-      gatling = gatling_for_spec('orange.png')
+      element = element_for_spec
 
-      expect {gatling.matches?}.should_not raise_error
+      expect {Gatling.matches?('orange.png', element)}.should_not raise_error
       File.exists?(File.join(@ref_path,'orange.png')).should be_true
     end
 
     it 'should alert that the file should be deleted if a reference already exists and not overwrite file' do
       create_reference_for_tests(@ref_path)
       Gatling::Configuration.trainer_toggle = true
-      gatling = gatling_for_spec('orange.png')
+      element = element_for_spec
 
       reference_file_ctime = File.ctime(File.join(@ref_path,'orange.png'))
       sleep(1)
-      expect {gatling.matches?}.should_not raise_error
+      expect {Gatling.matches?('orange.png', element)}.should_not raise_error
 
       #checks if file was overwritten by comparing the time stamps
       reference_file_ctime.eql?(File.ctime(File.join(@ref_path,'orange.png'))).should be_true
