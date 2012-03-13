@@ -65,10 +65,10 @@ end
 
 
 def convert_element_to_bad_element(image_file)
-  #convert -fill none -stroke black -strokewidth 5 smiley-faceicon.png -draw 'arc 155,25 185,45 180' sad-faceicon.png
+  #convert -fill none -stroke black -strokewidth 5 orange.png -draw 'arc 155,25 185,45 180' sad-faceicon.png
   image = Magick::Image.read(image_file).first
   frown = Magick::Draw.new
-  frown.stroke('black')
+  frown.stroke('red')
   frown.stroke_width(5)
   frown.fill_opacity(0)
   frown.stroke_opacity(10)

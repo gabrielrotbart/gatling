@@ -13,7 +13,7 @@ describe 'rspec matcher' do
     end
         
     #expected image to compare with
-    @example_good_image = 'smiley-faceicon.png'
+    @example_good_image = 'orange.png'
 
     @spec_support_root = spec_support_root
     
@@ -26,19 +26,19 @@ describe 'rspec matcher' do
   end
   
   it 'should initialize and run gatling' do
-    save_element_for_test
+    create_reference_for_tests(@ref_path)
     
     visit('/')
     @element = page.find(:css, "#smiley")
-    @element.should look_like('smiley-faceicon.png')
+    @element.should look_like('orange.png')
   end
 
   # it 'should exclude a specified child css element' do
-  #   save_element_for_test
+  #   create_reference_for_tests(@ref_path)
     
   #   visit('/')
   #   @element = page.find(:css, "#smiley")
-  #   @element.should look_like('smiley-faceicon.png', :exclude => '#changable').should be_true
+  #   @element.should look_like('orange.png', :exclude => '#changable').should be_true
   # end
 
   
@@ -47,8 +47,8 @@ describe 'rspec matcher' do
    
     visit('/')
     @element = page.find(:css, "#smiley")
-    @element.should look_like('smiley-faceicon.png')
-    File.exists?(File.join(@ref_path,'smiley-faceicon.png')).should be_true
+    @element.should look_like('orange.png')
+    File.exists?(File.join(@ref_path,'orange.png')).should be_true
   end
   
 end
