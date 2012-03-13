@@ -15,8 +15,8 @@ describe 'Gatling' do
 
     #expected image to compare with
     @example_good_image = 'orange.png'
-
     @spec_support_root = spec_support_root
+    create_reference_for_tests(File.join('spec','support','assets'))
   end
 
   after(:each) do
@@ -30,16 +30,16 @@ describe 'Gatling' do
     end
 
     it "should notify that no reference exists for image and create a candidate" do
-      gatling = gatling_for_spec('orange.png')
+      gatling = gatling_for_spec(@example_good_image)
 
       expect {gatling.matches?}.should raise_error(RuntimeError, "The design reference #{@example_good_image} does not exist, #{@ref_path}/candidate/#{@example_good_image} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference")
-      File.exists?(File.join(@ref_path,'candidate','orange.png')).should be_true
+      File.exists?(File.join(@ref_path,'candidate',@example_good_image)).should be_true
     end
   end
 
   describe 'image comparison' do
 
-    before(:all) do
+    before(:each) do
       # @ready_ref = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ready_candidate_ref')
       @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
       create_reference_for_tests(@ref_path)
