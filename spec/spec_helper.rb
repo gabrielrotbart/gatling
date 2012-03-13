@@ -1,12 +1,6 @@
 require  File.join(File.dirname(__FILE__), '/support/assets/smiley_app')
 
 require 'rubygems'
-# require 'sinatra'
-# Sinatra::Application.environment = :test
-# require 'rack/test'
-# require 'spec'
-# require 'spec/autorun'
-# require 'spec/interop/test'
 require 'capybara'
 require 'capybara/dsl'
 require 'capybara/rspec'
@@ -23,33 +17,22 @@ Capybara.app_host = "file://#{File.expand_path(File.dirname(__FILE__))}/support/
 Capybara.default_driver = :selenium
 Capybara.run_server = false
 
-# def app
-#   @app ||= Sinatra::Application
-# end
-
-# set :run, false
-# set :environment, :test
 
 def remove_refs(dir)
- FileUtils.rm_rf dir.to_s
+  FileUtils.rm_rf dir.to_s
 end
 
 def gatling_for_spec(expected)
-
   visit('/fruit_app.html')
-
   @element = page.find(:css, "#orange")
-
   @gatling = Gatling::Fire.new(expected, @element)
 end
 
 def spec_support_root
-   File.join(File.dirname(__FILE__), 'support')
+  File.join(File.dirname(__FILE__), 'support')
 end
 
 def create_reference_for_tests(ref_path)
-  #TODO: ImageMagick reference
-
   FileUtils::mkdir_p(ref_path)
 
   reference_file = Magick::Image.new(100,100) { self.background_color = 'white' }
@@ -78,5 +61,3 @@ def convert_element_to_bad_element(image_file)
 end
 
 #todo: spec folders clean up method
-
-
