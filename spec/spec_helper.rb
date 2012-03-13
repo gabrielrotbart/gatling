@@ -51,13 +51,13 @@ def create_reference_for_tests(ref_path)
   #TODO: ImageMagick reference
 
   FileUtils::mkdir_p(ref_path)
+
   reference_file = Magick::Image.new(100,100) { self.background_color = 'white' }
-  circle = Magick::Draw.new
-  circle.stroke('tomato')
-  circle.fill_opacity(100)
-  circle.fill_color('orange')
-  circle.circle(50,50, 25,50)
-  circle.draw(reference_file)
+  square = Magick::Draw.new
+  square.fill_opacity(100)
+  square.fill_color('black')
+  square.rectangle(10,10, 90,90)
+  square.draw(reference_file)
 
   reference_file.write(File.join(ref_path,'orange.png'))
   reference_file
