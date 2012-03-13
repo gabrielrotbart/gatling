@@ -15,32 +15,37 @@ Capybara.app_host = "file://#{File.expand_path(File.dirname(__FILE__))}/support/
 Capybara.default_driver = :selenium
 Capybara.run_server = false
 
-
 def remove_refs(dir)
   FileUtils.rm_rf dir.to_s
 end
 
-def gatling_for_spec(expected)
+def gatling_for_spec(expected_image, css)
   visit('/fruit_app.html')
-  @element = page.find(:css, "#orange")
-  @gatling = Gatling::Fire.new(expected, @element)
+  @element = page.find(:css, css)
+  @gatling = Gatling::Fire.new(expected_image, @element)
 end
 
 def spec_support_root
   File.join(File.dirname(__FILE__), 'support')
 end
 
-def create_reference_for_tests(ref_path)
-  FileUtils::mkdir_p(ref_path)
+def create_images_for_web_page
+  asset_path = File.join(spec_support_root, 'assets')
+  create_square_image(asset_path, 'black')
+  create_square_image(asset_path, 'red')
+end
+
+def create_square_image(path, color)
+  FileUtils::mkdir_p(path)
 
   reference_file = Magick::Image.new(100,100) { self.background_color = 'white' }
   square = Magick::Draw.new
   square.fill_opacity(100)
-  square.fill_color('black')
+  square.fill_color(color)
   square.rectangle(10,10, 90,90)
   square.draw(reference_file)
 
-  reference_file.write(File.join(ref_path,'orange.png'))
+  reference_file.write(File.join(path, "#{color}.png"))
   reference_file
 end
 

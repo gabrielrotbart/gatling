@@ -6,34 +6,26 @@ describe 'Gatling' do
 
 
   before(:all) do
-
-    # include Rack::Test::Methods
-    #
-    #     def app
-    #       Sinatra::Application
-    #     end
-
-    #expected image to compare with
-    @example_good_image = 'orange.png'
-    @spec_support_root = spec_support_root
-    create_reference_for_tests(File.join('spec','support','assets'))
+    @black_box = 'black.png'
+    @white_box = 'white.png'
+    create_images_for_web_page
   end
 
   after(:each) do
     remove_refs(@ref_path)
   end
 
-  describe 'creating an initial reference (expected) image' do
+  describe 'Galing, when no reference image exists' do
 
     before(:each) do
-      @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
+      @ref_path = Gatling::Configuration.reference_image_path = File.join(spec_support_root, 'ref_path')
     end
 
-    it "should notify that no reference exists for image and create a candidate" do
-      gatling = gatling_for_spec(@example_good_image)
+    it "will notify that no reference image exists and create a candidate image" do
+      gatling = gatling_for_spec(@black_box, '#black')
 
-      expect {gatling.matches?}.should raise_error(RuntimeError, "The design reference #{@example_good_image} does not exist, #{@ref_path}/candidate/#{@example_good_image} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference")
-      File.exists?(File.join(@ref_path,'candidate',@example_good_image)).should be_true
+      expect {gatling.matches?}.should raise_error(RuntimeError, "The design reference #{@black_box} does not exist, #{@ref_path}/candidate/#{@black_box} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference")
+      File.exists?(File.join(@ref_path, 'candidate', @black_box)).should be_true
     end
   end
 
@@ -59,19 +51,6 @@ describe 'Gatling' do
        File.exists?(File.join(@ref_path,'diff','orange.png')).should be_true
     end
   end
-
-   # describe 'exclude element from comparison' do
-   #
-   #    before do
-   #      @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
-   #      @gatling = gatling_for_spec('orange.png')
-   #      create_reference_for_tests(@ref_path)
-   #    end
-   #
-   #    it 'should black out an element from the cropped screenshot' do
-   #      pending
-   #    end
-   #  end
 
   describe 'trainer toggle' do
 
