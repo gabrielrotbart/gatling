@@ -1,4 +1,3 @@
-
 require 'spec_helper'
 include Capybara::DSL
 
@@ -8,11 +7,11 @@ describe 'Gatling' do
 
   before(:all) do
 
-    include Rack::Test::Methods
-
-    def app
-      Sinatra::Application
-    end
+    # include Rack::Test::Methods
+    #
+    #     def app
+    #       Sinatra::Application
+    #     end
 
     #expected image to compare with
     @example_good_image = 'smiley-faceicon.png'
@@ -21,7 +20,7 @@ describe 'Gatling' do
   end
 
   after(:each) do
-    remove_refs(@ref_path)
+    # remove_refs(@ref_path)
   end
 
   describe 'creating an initial reference (expected) image' do
@@ -43,12 +42,13 @@ describe 'Gatling' do
     before(:each) do
       # @ready_ref = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ready_candidate_ref')
       @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
-      save_element_for_test
+      create_reference_for_tests(@ref_path)
     end
 
     it 'images match' do
-     gatling = gatling_for_spec('smiley-faceicon.png')
-     expect {gatling.matches?}.should.should be_true
+     gatling = gatling_for_spec('orange.png')
+
+     gatling.matches?.should be_true
     end
 
     it 'creates a diff images and saves it if the images are different' do

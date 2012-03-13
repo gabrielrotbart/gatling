@@ -41,9 +41,9 @@ module Gatling
       end
 
       if !File.exists?(@expected_reference_file)
-
         @actual_image.save :as => :candidate
         raise "The design reference #{@actual_image.file_name} does not exist, #{@actual_image.path} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
+        return false
       else
         @expected_image = Gatling::Image.new(:from_file, @expected_reference_filename)
         comparison = Gatling::Comparison.new

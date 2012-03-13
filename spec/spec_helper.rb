@@ -1,9 +1,9 @@
 require  File.join(File.dirname(__FILE__), '/support/assets/smiley_app')
 
 require 'rubygems'
-require 'sinatra'
-Sinatra::Application.environment = :test
-require 'rack/test'
+# require 'sinatra'
+# Sinatra::Application.environment = :test
+# require 'rack/test'
 # require 'spec'
 # require 'spec/autorun'
 # require 'spec/interop/test'
@@ -19,23 +19,26 @@ RSpec.configure do |config|
   config.formatter     = 'documentation'
 end
 
-Capybara.app = Sinatra::Application
+Capybara.app_host = "file://#{File.expand_path(File.dirname(__FILE__))}/support/assets"
 Capybara.default_driver = :selenium
+Capybara.run_server = false
 
-def app
-  @app ||= Sinatra::Application
-end
+# def app
+#   @app ||= Sinatra::Application
+# end
 
-set :run, false
-set :environment, :test
+# set :run, false
+# set :environment, :test
 
 def remove_refs(dir)
  FileUtils.rm_rf dir.to_s
 end
 
 def gatling_for_spec(expected)
-  visit('/')
-  @element = page.find(:css, "#smiley")
+
+  visit('/fruit_app.html')
+
+  @element = page.find(:css, "#orange")
 
   @gatling = Gatling::Fire.new(expected, @element)
 end
@@ -44,12 +47,22 @@ def spec_support_root
    File.join(File.dirname(__FILE__), 'support')
 end
 
-def save_element_for_test
+def create_reference_for_tests(ref_path)
   #TODO: ImageMagick reference
-  Gatling::Configuration.trainer_toggle = true
-  gatling_for_spec('smiley-faceicon.png').matches?
-  Gatling::Configuration.trainer_toggle = false
+
+  FileUtils::mkdir_p(ref_path)
+  reference_file = Magick::Image.new(100,100) { self.background_color = 'white' }
+  circle = Magick::Draw.new
+  circle.stroke('tomato')
+  circle.fill_opacity(100)
+  circle.fill_color('orange')
+  circle.circle(50,50, 25,50)
+  circle.draw(reference_file)
+
+  reference_file.write(File.join(ref_path,'orange.png'))
+  reference_file
 end
+
 
 def convert_element_to_bad_element(image_file)
   #convert -fill none -stroke black -strokewidth 5 smiley-faceicon.png -draw 'arc 155,25 185,45 180' sad-faceicon.png
