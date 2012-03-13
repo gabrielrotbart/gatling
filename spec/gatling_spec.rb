@@ -46,7 +46,12 @@ describe 'Gatling' do
       save_element_for_test
     end
 
-    it 'images do not match and diff created' do
+    it 'images match' do
+     gatling = gatling_for_spec('smiley-faceicon.png')
+     expect {gatling.matches?}.should.should be_true
+    end
+
+    it 'creates a diff images and saves it if the images are different' do
        #convert -fill none -stroke black -strokewidth 5 smiley-faceicon.png -draw 'arc 155,25 185,45 180' sad-faceicon.png
        convert_element_to_bad_element(File.join(@ref_path,"#{@example_good_image}"))
        gatling = gatling_for_spec('smiley-faceicon.png')
@@ -67,7 +72,7 @@ describe 'Gatling' do
       pending
     end
   end
-  
+
   describe 'trainer toggle' do
 
     before(:each) do

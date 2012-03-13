@@ -45,6 +45,7 @@ def spec_support_root
 end
 
 def save_element_for_test
+  #TODO: ImageMagick reference
   Gatling::Configuration.trainer_toggle = true
   gatling_for_spec('smiley-faceicon.png').matches?
   Gatling::Configuration.trainer_toggle = false

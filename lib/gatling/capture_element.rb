@@ -7,11 +7,11 @@ module Gatling
       @reference_image_path = Gatling::Configuration.reference_image_path
       @element_to_capture = element_to_capture
       @element_to_exclude = element_to_exclude.first
-      @expected_image = "#{@reference_image_path}/#{@expected}"
-      @expected_filename = "#{@expected}".sub(/\.[a-z]*/,'')
+
     end
 
     def capture
+
       screenshot = self.take_screenshot
       screenshot = exclude(screenshot, @element_to_exclude) if @element_to_exclude
       Gatling::ImageWrangler.crop_element(screenshot, @element_to_capture)

@@ -19,42 +19,44 @@ describe Gatling::Image do
     end
 
     it 'web element type' do
-      pending
+      mock_element = mock(Capybara::Node::Element)
+      mock_capture_element = mock(Gatling::CaptureElement)
+      mock_image = mock(Magick::Image)
+
+      Gatling::CaptureElement.should_receive(:new).and_return mock_capture_element
+      mock_capture_element.should_receive(:capture).and_return mock_image
+      subject = Gatling::Image.new(:from_element, 'image.png', mock_element)
+      subject.image.should == mock_image
+      subject.file_name.should == 'image.png'
+    end
+
+    it 'diff image' do
+       mock_image = mock(Magick::Image)
+       subject = Gatling::Image.new(:from_diff, 'image.png', mock_image)
+       subject.image.should == mock_image
+       subject.file_name.should == 'image.png'
     end
   end
 
-  it 'should base itself on a file' do
-    File.stub(:exists?).and_return true
-    image_mock = mock(Magick::Image)
-    Magick::Image.should_receive(:read).with('./image_tests/image.png').and_return([image_mock])
-
-    subject.base_on_file('image.png')
-    subject.rmagick_image.should == image_mock
-    subject.file_name.should == 'image.png'
+  it 'should be ok with nil' do
+    pending
   end
 
   it 'should save an image to the path for the type' do
-    image_mock = mock(Magick::Image)
-    image_mock.should_receive(:write).with('./image_tests/temp/image.png').and_return()
-
-    subject.rmagick_image = image_mock
+    mock_image = mock(Magick::Image)
+    mock_image.should_receive(:write).with('./image_tests/temp/image.png').and_return()
+    subject = Gatling::Image.new(:from_diff, 'image.png', mock_image)
+    subject.image = mock_image
     subject.file_name = 'image.png'
     subject.save(:as => :temp)
     subject.path.should == './image_tests/temp/image.png'
   end
 
   it 'should check if a file exists, with the file name and type' do
+    mock_image = mock(Magick::Image)
     File.should_receive(:exists?).with './image_tests/image.png'
+    subject = Gatling::Image.new(:from_diff, 'image.png', mock_image)
     subject.file_name = 'image.png'
     subject.exists?
   end
-
-  it 'should base itself on a web element' do
-    mock_element = mock(Capybara::Node::Element)
-    mock_capture_element = mock(Gatling::CaptureElement)
-    Gatling::CaptureElement.should_receive(:new).and_return mock_capture_element
-    mock_capture_element.should_receive(:capture)
-    subject.base_on_element(mock_element)
-  end
-
 end
