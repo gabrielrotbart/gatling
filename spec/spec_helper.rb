@@ -22,10 +22,9 @@ def remove_refs(dir)
   FileUtils.rm_rf dir.to_s
 end
 
-def gatling_for_spec(expected)
+def element_for_spec
   visit('/fruit_app.html')
   @element = page.find(:css, "#orange")
-  @gatling = Gatling::Fire.new(expected, @element)
 end
 
 def spec_support_root

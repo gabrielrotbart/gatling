@@ -1,3 +1,5 @@
+Dir["/gatling/*.rb"].each {|file| require file}
+
 require 'RMagick'
 require_relative 'gatling/capture_element'
 require 'capybara'
@@ -16,24 +18,16 @@ require 'gatling/comparison'
 #TODO: rename Gatling::Image to something more meaningful
 #TODO: Make directories as needed
 
-
-Dir["/gatling/*.rb"].each {|file| require file}
-
 module Gatling
-  class Fire
 
-    def initialize expected_reference_filename, actual_element
+  class << self
+
+    def matches?(expected_reference_filename, actual_element)
+
       Gatling::FileHelper.make_required_directories
 
-      @expected_reference_filename = expected_reference_filename
-      @actual_element = actual_element
-
-    end
-
-    def matches?
-
-      @expected_reference_file = (File.join(Gatling::Configuration.paths[:reference], @expected_reference_filename))
-      @actual_image = Gatling::Image.new(:from_element, @expected_reference_filename, @actual_element)
+      @expected_reference_file = (File.join(Gatling::Configuration.paths[:reference], expected_reference_filename))
+      @actual_image = Gatling::Image.new(:from_element, expected_reference_filename, actual_element)
 
       if Gatling::Configuration.trainer_toggle
         save_image_as_reference(@actual_image)
@@ -45,7 +39,7 @@ module Gatling
         raise "The design reference #{@actual_image.file_name} does not exist, #{@actual_image.path} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
         return false
       else
-        @expected_image = Gatling::Image.new(:from_file, @expected_reference_filename)
+        @expected_image = Gatling::Image.new(:from_file, expected_reference_filename)
         comparison = Gatling::Comparison.new
         comparison.compare(@expected_image,@actual_image)
         unless comparison.matches?

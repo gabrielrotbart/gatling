@@ -46,9 +46,9 @@ describe 'Gatling' do
     end
 
     it 'images match' do
-     gatling = gatling_for_spec('orange.png')
+     element = element_for_spec
 
-     gatling.matches?.should be_true
+     Gatling.matches?('orange.png', element).should be_true
     end
 
     it 'creates a diff images and saves it if the images are different' do
