@@ -1,5 +1,6 @@
 module Gatling
   class Comparison
+
     attr_accessor :match, :diff_image
 
     def initialize(actual_image, expected_image)
