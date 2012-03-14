@@ -10,7 +10,6 @@ describe 'Gatling' do
     @black_box = 'black.png'
     @red_box = 'red.png'
     create_images_for_web_page
-
   end
 
   before(:each) do
