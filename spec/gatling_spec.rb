@@ -23,8 +23,8 @@ describe 'Gatling' do
     it "will notify that no reference image exists and create a candidate image" do
       black_element = element_for_spec
       expected_error = "The design reference #{@black_box} does not exist, #{@ref_path}/candidate/#{@black_box} " +
-      "is now available to be used as a reference. " +
-      "Copy candidate to root reference_image_path to use as reference"
+                       "is now available to be used as a reference. " +
+                       "Copy candidate to root reference_image_path to use as reference"
 
       expect {Gatling.matches?(@black_box, black_element)}.should raise_error(RuntimeError, expected_error)
 
@@ -47,8 +47,8 @@ describe 'Gatling' do
     it 'will return false, creates new diff and candidate images if the images are different' do
       red_element = element_for_spec('#red')
       expected_error = "element did not match #{@black_box}. " +
-      "A diff image: #{@black_box} was created in #{@ref_path}/diff/#{@black_box}. " +
-      "A new reference #{@ref_path}/candidate/#{@black_box} can be used to fix the test"
+                       "A diff image: #{@black_box} was created in #{@ref_path}/diff/#{@black_box}. " +
+                       "A new reference #{@ref_path}/candidate/#{@black_box} can be used to fix the test"
 
       expect {Gatling.matches?(@black_box, red_element)}.should raise_error(RuntimeError, expected_error)
 
@@ -74,7 +74,7 @@ describe 'Gatling' do
       create_square_image(@ref_path, 'black')
       Gatling::Configuration.trainer_toggle = true
       expected_message = " already exists. reference image was not overwritten. " +
-      "please delete the old file to update using trainer"
+                         "please delete the old file to update using trainer"
       black_element = element_for_spec
       reference_file_ctime = File.ctime(File.join(@ref_path,@black_box))
 

@@ -35,8 +35,7 @@ module Gatling
         return false
       else
         expected_image = Gatling::Image.new(:from_file, expected_reference_filename)
-        comparison = Gatling::Comparison.new
-        comparison.compare(expected_image, actual_image)
+        comparison = Gatling::Comparison.new(expected_image, actual_image)
         unless comparison.matches?
           actual_image.save(:as => :candidate)
           save_image_as_diff(comparison.diff_image)
