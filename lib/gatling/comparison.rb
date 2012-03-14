@@ -1,8 +1,6 @@
 module Gatling
   module Comparison
 
-    include Capybara::DSL
-
     attr_accessor :diff_image
 
     def initialize(actual_image, expected_image)
