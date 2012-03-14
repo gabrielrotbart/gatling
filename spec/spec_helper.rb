@@ -19,7 +19,7 @@ def remove_refs(dir)
   FileUtils.rm_rf dir.to_s
 end
 
-def gatling_for_spec(expected_image, css)
+def gatling_for_spec(expected_image, css = '#black')
   visit('/fruit_app.html')
   @element = page.find(:css, css)
   @gatling = Gatling::Fire.new(expected_image, @element)

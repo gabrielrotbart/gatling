@@ -7,8 +7,13 @@ describe 'Gatling' do
 
   before(:all) do
     @black_box = 'black.png'
-    @white_box = 'white.png'
+    @red_box = 'red.png'
     create_images_for_web_page
+
+  end
+
+  before(:each) do
+    @ref_path = Gatling::Configuration.reference_image_path = File.join(spec_support_root, 'ref_path')
   end
 
   after(:each) do
@@ -17,66 +22,67 @@ describe 'Gatling' do
 
   describe 'Galing, when no reference image exists' do
 
-    before(:each) do
-      @ref_path = Gatling::Configuration.reference_image_path = File.join(spec_support_root, 'ref_path')
-    end
-
     it "will notify that no reference image exists and create a candidate image" do
       gatling = gatling_for_spec(@black_box, '#black')
+      expected_error = "The design reference #{@black_box} does not exist, #{@ref_path}/candidate/#{@black_box} " +
+                       "is now available to be used as a reference. " +
+                       "Copy candidate to root reference_image_path to use as reference"
 
-      expect {gatling.matches?}.should raise_error(RuntimeError, "The design reference #{@black_box} does not exist, #{@ref_path}/candidate/#{@black_box} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference")
+      expect {gatling.matches?}.should raise_error(RuntimeError, expected_error)
       File.exists?(File.join(@ref_path, 'candidate', @black_box)).should be_true
     end
   end
 
-  describe 'image comparison' do
+  describe 'Gatling image comparison' do
 
     before(:each) do
-      # @ready_ref = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ready_candidate_ref')
-      @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
-      create_reference_for_tests(@ref_path)
+      create_square_image(@ref_path, 'black')
     end
 
-    it 'images match' do
-     gatling = gatling_for_spec('orange.png')
-
+    it 'will return true if the images are identical' do
+     gatling = gatling_for_spec(@black_box, '#black')
      gatling.matches?.should be_true
     end
 
-    it 'creates a diff images and saves it if the images are different' do
-       #convert -fill none -stroke black -strokewidth 5 orange.png -draw 'arc 155,25 185,45 180' sad-faceicon.png
-       convert_element_to_bad_element(File.join(@ref_path,"#{@example_good_image}"))
-       gatling = gatling_for_spec('orange.png')
-       expect {gatling.matches?}.should raise_error(RuntimeError, "element did not match #{@example_good_image}. A diff image: orange.png was created in #{@ref_path}/diff/orange.png. A new reference #{@ref_path}/candidate/#{@example_good_image} can be used to fix the test")
-       File.exists?(File.join(@ref_path,'diff','orange.png')).should be_true
+    it 'will return false, creates new diff and candidate images if the images are different' do
+       gatling = gatling_for_spec(@black_box, '#red')
+       expected_error = "element did not match #{@black_box}. " +
+                        "A diff image: #{@black_box} was created in #{@ref_path}/diff/#{@black_box}. " +
+                        "A new reference #{@ref_path}/candidate/#{@black_box} can be used to fix the test"
+
+       expect {gatling.matches?}.should raise_error(RuntimeError, expected_error)
+       File.exists?(File.join(@ref_path,'diff', @black_box)).should be_true
+       File.exists?(File.join(@ref_path,'candidate', @black_box)).should be_true
     end
   end
 
-  describe 'trainer toggle' do
+  describe 'Gatling trainer toggle' do
 
-    before(:each) do
-      @ref_path = Gatling::Configuration.reference_image_path = File.join(@spec_support_root, 'ref_path')
-    end
-
-    it 'should save a reference file to the nominated folder without raising an exception' do
+    it 'will save a reference file if no reference file already exists' do
       Gatling::Configuration.trainer_toggle = true
-      gatling = gatling_for_spec('orange.png')
+      $stdout.should_receive(:puts).with "Saved #{@ref_path}/#{@black_box} as reference"
+      File.exists?(File.join(@ref_path, @black_box)).should be_false
+      gatling = gatling_for_spec(@black_box)
 
       expect {gatling.matches?}.should_not raise_error
-      File.exists?(File.join(@ref_path,'orange.png')).should be_true
+      File.exists?(File.join(@ref_path, @black_box)).should be_true
     end
 
-    it 'should alert that the file should be deleted if a reference already exists and not overwrite file' do
-      create_reference_for_tests(@ref_path)
+    it 'will warn if a reference already exists and not overwrite it' do
+      create_square_image(@ref_path, 'black')
       Gatling::Configuration.trainer_toggle = true
-      gatling = gatling_for_spec('orange.png')
+      expected_message = " already exists. reference image was not overwritten. " +
+                          "please delete the old file to update using trainer"
 
-      reference_file_ctime = File.ctime(File.join(@ref_path,'orange.png'))
+      $stdout.should_receive(:puts).with expected_message
+      gatling = gatling_for_spec(@black_box)
+
+      reference_file_ctime = File.ctime(File.join(@ref_path, @black_box))
       sleep(1)
       expect {gatling.matches?}.should_not raise_error
 
       #checks if file was overwritten by comparing the time stamps
-      reference_file_ctime.eql?(File.ctime(File.join(@ref_path,'orange.png'))).should be_true
+      reference_file_ctime.eql?(File.ctime(File.join(@ref_path, @black_box))).should be_true
     end
 
   end
