@@ -5,6 +5,7 @@ require 'capybara/rspec'
 require 'gatling'
 require 'gatling/matchers/look_like_matcher'
 require 'fileutils'
+require 'pry'
 
 RSpec.configure do |config|
   config.color_enabled = true
@@ -20,10 +21,9 @@ def remove_refs(dir)
   FileUtils.rm_rf dir.to_s
 end
 
-def gatling_for_spec(expected_image, css)
+def element_for_spec(css)
   visit('/fruit_app.html')
   @element = page.find(:css, css)
-  @gatling = Gatling::Fire.new(expected_image, @element)
 end
 
 def spec_support_root
