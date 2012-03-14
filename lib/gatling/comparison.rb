@@ -11,9 +11,8 @@ module Gatling
       unless @match
         diff_image = diff_metric.first
         @diff_image = Gatling::Image.new(:from_diff, actual_image.file_name, diff_image)
-        @diff_image.save(:as => :diff)
-        actual_image.save(:as => :candidate)
       end
+      @match
     end
 
     def matches?

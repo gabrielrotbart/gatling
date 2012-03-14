@@ -35,24 +35,34 @@ module Gatling
       end
 
       if !File.exists?(@expected_reference_file)
-        @actual_image.save :as => :candidate
-        raise "The design reference #{@actual_image.file_name} does not exist, #{@actual_image.path} " +
-        "is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
+        save_image_as_candidate(@actual_image)
         return false
       else
         @expected_image = Gatling::Image.new(:from_file, expected_reference_filename)
         comparison = Gatling::Comparison.new
         comparison.compare(@expected_image,@actual_image)
         unless comparison.matches?
-          raise "element did not match #{@expected_image.file_name}. A diff image: #{@actual_image.file_name} was created in " +
-          "#{File.join(Gatling::Configuration.paths[:diff],@actual_image.file_name)}. " +
-          "A new reference #{File.join(Gatling::Configuration.paths[:candidate],@actual_image.file_name)} can be used to fix the test"
+          @actual_image.save(:as => :candidate)
+          save_image_as_diff(comparison.diff_image)
         end
         comparison.matches?
       end
     end
 
     private
+
+    def save_image_as_diff(image)
+      image.save(:as => :diff)
+      raise "element did not match #{image.file_name}. A diff image: #{image.file_name} was created in " +
+      "#{File.join(Gatling::Configuration.paths[:diff],image.file_name)}. " +
+      "A new reference #{File.join(Gatling::Configuration.paths[:candidate],image.file_name)} can be used to fix the test"
+    end
+
+    def save_image_as_candidate(image)
+      image.save :as => :candidate
+      raise "The design reference #{image.file_name} does not exist, #{image.path} " +
+      "is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
+    end
 
     def save_image_as_reference(image)
       if image.exists?
