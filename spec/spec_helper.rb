@@ -38,6 +38,8 @@ def create_images_for_web_page
 end
 
 def create_square_image(path, color)
+  # We make the images, rather then check them in because otherwise the comparison tests
+  # become very flakey depending on the graphics set up on the computer running them
   FileUtils::mkdir_p(path)
 
   reference_file = Magick::Image.new(100,100) { self.background_color = 'white' }

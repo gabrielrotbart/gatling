@@ -20,7 +20,6 @@ describe Gatling::Comparison do
       subject.compare(@apple, @orange)
       subject.match.should == false
     end
-
   end
 
   describe 'Diff images' do
@@ -29,7 +28,5 @@ describe Gatling::Comparison do
       subject.compare(@apple, @orange)
       subject.diff_image.class.should == Gatling::Image
     end
-
   end
-
 end

@@ -1,9 +1,7 @@
 require 'spec_helper'
 include Capybara::DSL
 
-
 describe 'Gatling' do
-
 
   before(:all) do
     @spec_support_root = spec_support_root
@@ -29,6 +27,7 @@ describe 'Gatling' do
       "Copy candidate to root reference_image_path to use as reference"
 
       expect {Gatling.matches?(@black_box, black_element)}.should raise_error(RuntimeError, expected_error)
+
       File.exists?(File.join(@ref_path, 'candidate', @black_box)).should be_true
     end
   end
@@ -41,6 +40,7 @@ describe 'Gatling' do
 
     it 'will return true if the images are identical' do
       black_element = element_for_spec('#black')
+
       Gatling.matches?(@black_box, black_element).should be_true
     end
 
@@ -84,13 +84,5 @@ describe 'Gatling' do
       sleep(1)
       reference_file_ctime.eql?(File.ctime(File.join(@ref_path, @black_box))).should be_true
     end
-
   end
-
-  # MOCK SELENIUM ELEMENT
-  # correct size (340px*42px)
-  # image magick saves screenshot
-  #create diff creates the correct candidate
-
-
 end
