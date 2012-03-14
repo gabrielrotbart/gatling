@@ -10,8 +10,6 @@ require 'gatling/image'
 require 'gatling/comparison'
 require 'gatling/capture_element'
 
-
-
 # include Gatling::Comparison
 
 #TODO: Fuzz matches
@@ -21,8 +19,6 @@ require 'gatling/capture_element'
 module Gatling
 
   class << self
-
-    include Gatling::Comparison
 
     def matches?(expected_reference_filename, actual_element)
 
@@ -41,12 +37,12 @@ module Gatling
         return false
       else
         expected_image = Gatling::Image.new(:from_file, expected_reference_filename)
-        matches = compare(expected_image, actual_image)
-        unless matches
+        comparison = Gatling::Comparison.new(expected_image, actual_image)
+        unless comparison.match
           actual_image.save(:as => :candidate)
-          save_image_as_diff(diff_image)
+          save_image_as_diff(comparison.diff_image)
         end
-        matches
+        comparison.match
       end
     end
 

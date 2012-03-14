@@ -1,9 +1,6 @@
 module Gatling
-  module Comparison
-
-    include Capybara::DSL
-
-    attr_accessor :diff_image
+  class Comparison
+    attr_accessor :match, :diff_image
 
     def initialize(actual_image, expected_image)
       compare(actual_image, expected_image)
@@ -19,10 +16,9 @@ module Gatling
       @match
     end
 
-    def self.diff_image
+    def diff_image
       @diff_image
     end
-
 
   end
 end
