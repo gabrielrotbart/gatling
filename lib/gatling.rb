@@ -23,9 +23,8 @@ module Gatling
   class << self
 
     def matches?(expected_reference_filename, actual_element)
-      
+
       Gatling::FileHelper.make_required_directories
-      
 
       @expected_reference_file = (File.join(Gatling::Configuration.paths[:reference], expected_reference_filename))
       @actual_image = Gatling::Image.new(:from_element, expected_reference_filename, actual_element)
@@ -37,20 +36,21 @@ module Gatling
 
       if !File.exists?(@expected_reference_file)
         @actual_image.save :as => :candidate
-        raise "The design reference #{@actual_image.file_name} does not exist, #{@actual_image.path} is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
+        raise "The design reference #{@actual_image.file_name} does not exist, #{@actual_image.path} " +
+        "is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
         return false
       else
         @expected_image = Gatling::Image.new(:from_file, expected_reference_filename)
         comparison = Gatling::Comparison.new
         comparison.compare(@expected_image,@actual_image)
         unless comparison.matches?
-          raise "element did not match #{@expected_image.file_name}. A diff image: #{@actual_image.file_name} was created in #{File.join(Gatling::Configuration.paths[:diff],@actual_image.file_name)}. A new reference #{File.join(Gatling::Configuration.paths[:candidate],@actual_image.file_name)} can be used to fix the test"
+          raise "element did not match #{@expected_image.file_name}. A diff image: #{@actual_image.file_name} was created in " +
+          "#{File.join(Gatling::Configuration.paths[:diff],@actual_image.file_name)}. " +
+          "A new reference #{File.join(Gatling::Configuration.paths[:candidate],@actual_image.file_name)} can be used to fix the test"
         end
         comparison.matches?
       end
     end
-
-
 
     private
 
@@ -65,7 +65,3 @@ module Gatling
 
   end
 end
-
-
-
-
