@@ -10,6 +10,10 @@ require 'gatling/image'
 require 'gatling/comparison'
 require 'gatling/capture_element'
 
+
+
+# include Gatling::Comparison
+
 #TODO: Fuzz matches
 #TODO: Helpers for cucumber
 #TODO: Make directories as needed
@@ -17,6 +21,8 @@ require 'gatling/capture_element'
 module Gatling
 
   class << self
+
+    include Gatling::Comparison
 
     def matches?(expected_reference_filename, actual_element)
 
@@ -35,13 +41,12 @@ module Gatling
         return false
       else
         expected_image = Gatling::Image.new(:from_file, expected_reference_filename)
-        comparison = Gatling::Comparison.new
-        comparison.compare(expected_image, actual_image)
-        unless comparison.matches?
+        Gatling::Comparison.compare(expected_image, actual_image)
+        unless Gatling::Comparison.matches
           actual_image.save(:as => :candidate)
-          save_image_as_diff(comparison.diff_image)
+          save_image_as_diff(Gatling::Comparison.diff_image)
         end
-        comparison.matches?
+        Gatling::Comparison.matches
       end
     end
 
