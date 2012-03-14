@@ -16,6 +16,7 @@ describe 'Gatling' do
 
   after(:each) do
     remove_refs(@ref_path)
+    Gatling::Configuration.trainer_toggle = false
   end
 
   describe 'Gatling, when no reference image exists' do

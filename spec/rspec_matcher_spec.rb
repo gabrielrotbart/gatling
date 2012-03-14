@@ -10,7 +10,7 @@ describe 'rspec matcher' do
   end
 
   after(:each) do
-    ENV['GATLING_TRAINER'] = 'false'
+    Gatling::Configuration.trainer_toggle = false
     remove_refs(@ref_path)
   end
 
@@ -28,10 +28,11 @@ describe 'rspec matcher' do
       expect{red_element.should look_like(@black_box)}.should raise_error
     end
 
-    it 'will return true if it makes a new image in trainer mode' do
-      ENV['GATLING_TRAINER'] = 'true'
+    it 'will return true if it makes a new reference image in trainer mode' do
+      Gatling::Configuration.trainer_toggle =  true
       black_element = element_for_spec("#black")
       black_element.should look_like(@black_box)
+      File.exists?(File.join(@ref_path, @black_box)).should be_true
     end
 
   end
