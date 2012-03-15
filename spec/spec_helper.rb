@@ -19,7 +19,7 @@ Capybara.default_driver = :selenium
 Capybara.run_server = false
 
 def remove_refs(dir)
-  FileUtils.rm_rf dir.to_s
+  Dir.glob("#{dir}/**/*.png").each {|image| FileUtils.rm image}
 end
 
 def element_for_spec(css = '#black')
