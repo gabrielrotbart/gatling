@@ -5,7 +5,7 @@ require "gatling/version"
 Gem::Specification.new do |s|
   s.name        = "gatling"
   s.version     = Gatling::VERSION
-  s.authors     = ["Gabriel Rotbart, Amanda Koh"]
+  s.authors     = ["Gabriel Rotbart, Amanda Koh, Mike Bain"]
   s.email       = ["grotbart@gmail.com"]
   s.homepage    = "http://github.com/GabrielRotbart/gatling"
   s.summary     = %q{Automated visual testing}
@@ -18,8 +18,12 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "rmagick"
-  s.add_dependency "rspec-core"
-  s.add_dependency "rspec"
-  s.add_dependency "capybara"
+  s.add_runtime_dependency('rmagick', ['>=2.13.1'])
+  s.add_runtime_dependency('rspec-core',['>=2.8.0'])
+  s.add_runtime_dependency('rspec',['>=2.8.0'])
+  s.add_runtime_dependency('capybara',['>=1.1.2'])
+
+  s.add_development_dependency('rake',['>=0.9.2'])
+  s.add_development_dependency('rspec-instafail',['>=0.1.8'])
+  s.add_development_dependency('pry',['>=0.9.8.2'])
 end
