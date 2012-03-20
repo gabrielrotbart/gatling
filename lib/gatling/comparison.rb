@@ -12,7 +12,7 @@ module Gatling
       @match = diff_metric[1] == 0.0
       unless @match
         diff_image = diff_metric.first
-        @diff_image = Gatling::Image.new(:from_diff, actual_image.file_name, diff_image)
+        @diff_image = Gatling::Image.new(:from_diff, diff_image)
       end
       @match
     end

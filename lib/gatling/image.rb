@@ -5,13 +5,13 @@ module Gatling
 
     attr_reader :type
 
-    def initialize(type, file_name, element_or_image = nil)
+    def initialize(type, element_or_image = nil)
 
-      @file_name = file_name
+      @file_name = Gatling.reference_file_name
 
       case type
       when :from_file
-        @image = image_from_file(file_name)
+        @image = image_from_file(@file_name)
       when :from_element
         @image = image_from_element(element_or_image)
       when :from_diff
@@ -41,7 +41,7 @@ module Gatling
     end
 
     def image_from_file file_name
-      Magick::Image.read(File.join(Gatling::Configuration.path_from_type(:reference), file_name)).first
+      Magick::Image.read(File.join(Gatling::Configuration.path_from_type(:reference), @file_name)).first
     end
 
 

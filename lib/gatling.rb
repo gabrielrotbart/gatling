@@ -19,10 +19,14 @@ module Gatling
 
   class << self
 
+    attr_accessor :reference_file_name
+
     def matches?(expected_reference_filename, actual_element)
 
+      @reference_file_name = expected_reference_filename
+
       expected_reference_file = (File.join(Gatling::Configuration.paths[:reference], expected_reference_filename))
-      actual_image = Gatling::Image.new(:from_element, expected_reference_filename, actual_element)
+      actual_image = Gatling::Image.new(:from_element, actual_element)
 
       if Gatling::Configuration.trainer_toggle
         save_image_as_reference(actual_image)
@@ -33,7 +37,7 @@ module Gatling
         save_image_as_candidate(actual_image)
         return false
       else
-        expected_image = Gatling::Image.new(:from_file, expected_reference_filename)
+        expected_image = Gatling::Image.new(:from_file)
         comparison = Gatling::Comparison.new(expected_image, actual_image)
         unless comparison.match
           actual_image.save(:as => :candidate)
