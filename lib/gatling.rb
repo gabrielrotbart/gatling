@@ -5,7 +5,6 @@ require 'capybara'
 require 'capybara/dsl'
 
 require 'gatling/config'
-require 'gatling/file_helper'
 require 'gatling/image'
 require 'gatling/comparison'
 require 'gatling/capture_element'
@@ -21,8 +20,6 @@ module Gatling
   class << self
 
     def matches?(expected_reference_filename, actual_element)
-
-      Gatling::FileHelper.make_required_directories
 
       expected_reference_file = (File.join(Gatling::Configuration.paths[:reference], expected_reference_filename))
       actual_image = Gatling::Image.new(:from_element, expected_reference_filename, actual_element)
