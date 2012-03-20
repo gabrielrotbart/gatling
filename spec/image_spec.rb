@@ -5,8 +5,8 @@ describe Gatling::Image do
   before :all do
     ref_path = './image_tests'
     Gatling::Configuration.reference_image_path = ref_path
-    @expected_path = "#{ref_path}/temp"
-    @expected_full_path = "#{@expected_path}/image.png"
+    @expected_path = File.join ref_path, 'temp'
+    @expected_full_path = File.join @expected_path, 'image.png'
   end
 
   describe 'should initialize from' do
