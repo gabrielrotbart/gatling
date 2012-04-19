@@ -1,5 +1,5 @@
 module Gatling
- module Configuration
+  module Configuration
 
     class << self
 
@@ -11,31 +11,11 @@ module Gatling
         @reference_image_path ||= set_default_path
       end
 
-      def paths
-        Hash[reference:reference_image_path,
-        candidate:File.join(reference_image_path, 'candidate'),
-        diff:File.join(reference_image_path, 'diff'),
-        temp:File.join(reference_image_path, 'temp')]
-      end
-
-      def trainer_toggle
-        @trainer_value = ENV['GATLING_TRAINER']
-
-        case @trainer_value
-          when nil
-            @trainer_value = nil
-          when 'true'
-            @trainer_value = true
-          when 'false'
-            @trainer_value = false
-          else
-            @trainer_value = false
-            puts 'Unknown GATLING_TRAINER argument. Please supply true, false or nil. DEFAULTING TO FALSE'
-        end
-        @trainer_toggle ||= @trainer_value ||= false
-      end
-
-      def path_from_type(type)
+      def path(type)
+        paths = Hash[:reference => reference_image_path,
+                     :candidate => File.join(reference_image_path, 'candidate'),
+                     :diff => File.join(reference_image_path, 'diff'),
+                     :temp => File.join(reference_image_path, 'temp')]
         if paths.keys.include? type
           return paths[type]
         else
@@ -43,11 +23,33 @@ module Gatling
         end
       end
 
-      private
+      def trainer_toggle
+        @trainer_value = ENV['GATLING_TRAINER']
+
+        case @trainer_value
+        when nil
+          @trainer_value = nil
+        when 'true'
+          @trainer_value = true
+        when 'false'
+          @trainer_value = false
+        else
+          @trainer_value = false
+          puts 'Unknown GATLING_TRAINER argument. Please supply true, false or nil. DEFAULTING TO FALSE'
+        end
+        @trainer_toggle ||= @trainer_value ||= false
+      end
+
+      # def path_from_type(type)
+      #
+      #       end
+
+
 
       def set_default_path
+        private
         begin
-        @reference_image_path ||= File.join(Rails.root, 'spec/reference_images')
+          @reference_image_path ||= File.join(Rails.root, 'spec/reference_images')
         rescue
           @reference_image_path = 'spec/reference_images'
           puts "Currently defaulting to #{@reference_image_path}. Overide this by setting Gatling::Configuration.reference_image_path=[refpath]"

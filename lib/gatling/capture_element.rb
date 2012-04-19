@@ -3,6 +3,8 @@ require_relative 'image_wrangler'
 module Gatling
   class CaptureElement
 
+  include ImageWrangler
+
     def initialize element_to_capture, *element_to_exclude
       @reference_image_path = Gatling::Configuration.reference_image_path
       @element_to_capture = element_to_capture
@@ -11,7 +13,6 @@ module Gatling
     end
 
     def capture
-
       screenshot = self.take_screenshot
       screenshot = exclude(screenshot, @element_to_exclude) if @element_to_exclude
       Gatling::ImageWrangler.crop_element(screenshot, @element_to_capture)

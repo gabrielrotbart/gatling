@@ -1,8 +1,7 @@
 module Gatling
-  class ImageWrangler
+  module ImageWrangler
 
     def self.get_element_position element
-
       element = element.native
       position = Hash.new{}
       position[:x] = element.location.x
@@ -17,8 +16,7 @@ module Gatling
       @cropped_element = image.crop(position[:x], position[:y], position[:width], position[:height])
     end
 
-    def self.exclude image, element_to_exclude
-    end
+
 
 
   end

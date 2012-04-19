@@ -25,7 +25,8 @@ module Gatling
 
       @reference_file_name = expected_reference_filename
 
-      expected_reference_file = (File.join(Gatling::Configuration.paths[:reference], expected_reference_filename))
+      expected_reference_file = (File.join(Gatling::Configuration.path(:reference), expected_reference_filename))
+
       actual_image = Gatling::Image.new(:from_element, actual_element)
 
       if Gatling::Configuration.trainer_toggle
@@ -47,13 +48,11 @@ module Gatling
       end
     end
 
-    private
-
     def save_image_as_diff(image)
       image.save(:as => :diff)
       raise "element did not match #{image.file_name}. A diff image: #{image.file_name} was created in " +
-      "#{File.join(Gatling::Configuration.paths[:diff],image.file_name)}. " +
-      "A new reference #{File.join(Gatling::Configuration.paths[:candidate],image.file_name)} can be used to fix the test"
+      "#{File.join(Gatling::Configuration.path(:diff),image.file_name)}. " +
+      "A new reference #{File.join(Gatling::Configuration.path(:candidate),image.file_name)} can be used to fix the test"
     end
 
     def save_image_as_candidate(image)

@@ -10,4 +10,4 @@ test*
 spec/support/ready_candidate_ref/temp/*
 reports/*
 vendor/*
-
+*.rbenv-version*

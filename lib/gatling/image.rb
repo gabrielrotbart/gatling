@@ -17,13 +17,13 @@ module Gatling
       when :from_diff
         @image = element_or_image
       else
-        raise 'WRONG IMAGE TYPE'
+        raise 'NO SUCH IMAGE TYPE'
       end
 
     end
 
     def save type
-      path = Gatling::Configuration.path_from_type(type[:as])
+      path = Gatling::Configuration.path(type[:as])
       FileUtils::mkdir_p(path) unless File.exists?(path)
       @path = File.join(path, @file_name)
       @image.write @path
@@ -31,19 +31,18 @@ module Gatling
     end
 
     def exists?
-      File.exists?(File.join(Gatling::Configuration.path_from_type(:reference), @file_name))
+      File.exists?(File.join(Gatling::Configuration.path(:reference), @file_name))
     end
 
-    private
+
 
     def image_from_element element
       Gatling::CaptureElement.new(element).capture
     end
 
     def image_from_file file_name
-      Magick::Image.read(File.join(Gatling::Configuration.path_from_type(:reference), @file_name)).first
+      Magick::Image.read(File.join(Gatling::Configuration.path(:reference), @file_name)).first
     end
-
 
   end
 
