@@ -16,13 +16,13 @@ describe 'rspec matcher' do
 
   describe 'initializing and runnin gatling' do
 
-    it 'will pass if images matches refernce' do
+    it 'will pass if images matches reference' do
       create_square_image(@ref_path, 'black')
       black_element = element_for_spec("#black")
       black_element.should look_like(@black_box)
     end
 
-    it 'will fail if images dosent matches refernce' do
+    it 'will fail if images dosent matches reference' do
       create_square_image(@ref_path, 'black')
       red_element = element_for_spec("#red")
       expect{red_element.should look_like(@black_box)}.should raise_error
