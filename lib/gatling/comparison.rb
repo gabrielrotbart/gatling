@@ -9,8 +9,15 @@ module Gatling
     end
 
     def matches?
-      diff_metric = @actual_image.image.compare_channel(@expected_image.image, Magick::MeanAbsoluteErrorMetric)
-      @match = diff_metric[1] == 0.0
+      times = 5
+      try = 1
+      @match = false
+      while @match = false || try < times+1
+        diff_metric = @actual_image.image.compare_channel(@expected_image.image, Magick::MeanAbsoluteErrorMetric)
+        puts "Tried to match #{try}"
+        try+=1
+        return @match = diff_metric[1] == 0.0
+      end
     end
 
     def diff_image

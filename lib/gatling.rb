@@ -42,13 +42,15 @@ module Gatling
         comparison = Gatling::Comparison.new(expected_image, actual_image)
         matches = comparison.matches?
         unless matches
-
+          
           actual_image.save(:as => :candidate)
           save_image_as_diff(comparison.diff_image)
         end
         matches
       end
     end
+    
+    
 
     def save_image_as_diff(image)
       image.save(:as => :diff)
