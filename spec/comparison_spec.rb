@@ -16,11 +16,11 @@ describe Gatling::Comparison do
   describe 'will compare two images' do
 
     it 'will return true if the images are identical' do
-      Gatling::Comparison.new(@apple, @apple).compare.should == true
+      Gatling::Comparison.new(@apple, @apple).matches?.should == true
     end
 
     it 'will return false if the images are different' do
-      Gatling::Comparison.new(@orange, @apple).compare.should == false
+      Gatling::Comparison.new(@orange, @apple).matches?.should == false
     end
   end
 
