@@ -41,16 +41,16 @@ module Gatling
         expected_image = Gatling::Image.new(:from_file)
         comparison = Gatling::Comparison.new(expected_image, actual_image)
         matches = comparison.matches?
-        unless matches
-          
+        if !matches
           actual_image.save(:as => :candidate)
           save_image_as_diff(comparison.diff_image)
         end
         matches
       end
     end
-    
-    
+
+    def try_until_mat
+    end
 
     def save_image_as_diff(image)
       image.save(:as => :diff)
