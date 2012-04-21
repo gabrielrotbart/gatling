@@ -1,3 +1,4 @@
+require 'fileutils'
 require_relative 'image_wrangler'
 
 module Gatling
@@ -20,6 +21,7 @@ module Gatling
 
     def take_screenshot
       temp_dir = "#{@reference_image_path}/temp"
+      FileUtils.mkdir_p(temp_dir) unless File.exists?(temp_dir)
       #captures the uncropped full screen
       begin
         Capybara.page.driver.browser.save_screenshot("#{temp_dir}/temp.png")
@@ -30,3 +32,4 @@ module Gatling
     end
   end
 end
+
