@@ -24,8 +24,9 @@ module Gatling
       FileUtils.mkdir_p(temp_dir) unless File.exists?(temp_dir)
       #captures the uncropped full screen
       begin
-        Capybara.page.driver.browser.save_screenshot("#{temp_dir}/temp.png")
-        temp_screenshot = Magick::Image.read("#{temp_dir}/temp.png").first
+        temp_screenshot_filename = File.join(temp_dir, "temp-#{Process.pid}.png")
+        Capybara.page.driver.browser.save_screenshot(temp_screenshot_filename)
+        temp_screenshot = Magick::Image.read(temp_screenshot_filename).first
       rescue
         raise "Could not save screenshot to #{temp_dir}. Please make sure you have permission"
       end
