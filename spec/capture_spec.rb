@@ -17,6 +17,17 @@ describe Gatling::CaptureElement do
       @expected_temp_screenshot_file_pattern = /.*\/temp\/temp-\d+.png/
     end
 
+    it 'should create temp directory when it does not exist' do
+      @webdriver.stub!(:save_screenshot)
+      Magick::Image.stub!(:read).and_return([])
+
+      File.stub!(:'exists?').and_return(false)
+      FileUtils.should_receive(:mkdir_p).with('./temp')
+
+      @capture_element.take_screenshot
+    end
+
+
     it 'should work when Gatling is called concurrently from multiple processes' do
       @webdriver.should_receive(:save_screenshot).with(@expected_temp_screenshot_file_pattern)
       Magick::Image.should_receive(:read).with(@expected_temp_screenshot_file_pattern).and_return([])

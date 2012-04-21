@@ -20,7 +20,7 @@ module Gatling
     end
 
     def take_screenshot
-      temp_dir = "#{@reference_image_path}/temp"
+      temp_dir = File.join(@reference_image_path, 'temp')
       FileUtils.mkdir_p(temp_dir) unless File.exists?(temp_dir)
       #captures the uncropped full screen
       begin
