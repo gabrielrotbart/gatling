@@ -5,9 +5,9 @@ module Gatling
 
     attr_reader :type
 
-    def initialize(type, element_or_image = nil)
+    def initialize(type, element_or_image = nil, file_name = Gatling.reference_file_name)
 
-      @file_name = Gatling.reference_file_name
+      @file_name = file_name
 
       case type
       when :from_file
@@ -47,5 +47,4 @@ module Gatling
   end
 
 end
-
 

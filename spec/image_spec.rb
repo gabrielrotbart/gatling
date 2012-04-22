@@ -70,7 +70,7 @@ describe Gatling::Image do
       subject.path.should == @expected_full_path
     end
 
-    it 'will save and image if directory exista' do
+    it 'will save an image if directory exist' do
       mock_image = stub(Magick::Image)
       mock_image.should_receive(:write).with(@expected_full_path).and_return()
 
@@ -91,3 +91,4 @@ describe Gatling::Image do
     end
   end
 end
+
