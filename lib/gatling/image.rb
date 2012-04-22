@@ -24,8 +24,8 @@ module Gatling
 
     def save type
       path = Gatling::Configuration.path(type[:as])
-      FileUtils::mkdir_p(path) unless File.exists?(path)
       @path = File.join(path, @file_name)
+      FileUtils::mkdir_p(File.dirname(@path)) unless File.exists?(@path)
       @image.write @path
       @path
     end

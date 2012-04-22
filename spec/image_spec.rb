@@ -58,23 +58,26 @@ describe Gatling::Image do
     end
 
     it 'will create directory, then save and image if directory doesnt exist' do
+      image_path = 'path/to/image/in/sub/directory/image.png'
+      expected_full_path = File.join(Gatling::Configuration.path(:temp), image_path)
+      expected_image_dir = File.dirname(expected_full_path)
 
       mock_image = stub(Magick::Image)
-      mock_image.should_receive(:write).with(@expected_full_path).and_return()
+      mock_image.should_receive(:write).with(expected_full_path).and_return()
 
-      File.should_receive(:exists?).with(@expected_path).and_return(false)
-      FileUtils.should_receive(:mkdir_p).with(@expected_path)
-      subject = Gatling::Image.new(:from_diff, mock_image)
+      File.should_receive(:exists?).with(expected_full_path).and_return(false)
+      FileUtils.should_receive(:mkdir_p).with(expected_image_dir)
+      subject = Gatling::Image.new(:from_diff, mock_image, image_path)
 
       subject.save(:as => :temp)
-      subject.path.should == @expected_full_path
+      subject.path.should == expected_full_path
     end
 
     it 'will save an image if directory exist' do
       mock_image = stub(Magick::Image)
       mock_image.should_receive(:write).with(@expected_full_path).and_return()
 
-      File.should_receive(:exists?).with(@expected_path).and_return(true)
+      File.should_receive(:exists?).with(@expected_full_path).and_return(true)
       FileUtils.should_not_receive(:mkdir_p)
       subject = Gatling::Image.new(:from_diff, mock_image)
 
