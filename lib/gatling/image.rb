@@ -34,7 +34,8 @@ module Gatling
 
       @image = Gatling::CaptureElement.new(element).capture
     end
-
+    
+    #TODO: make save a relevant subclass method
   end
 
   class ImageFromFile < Image
@@ -45,7 +46,8 @@ module Gatling
       @image = Magick::Image.read(File.join(Gatling::Configuration.path(:reference), @file_name)).first
     end
 
-
+    #TODO: make save a relevant subclass method
+    
   end
 end
 

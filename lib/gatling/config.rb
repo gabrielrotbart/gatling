@@ -40,10 +40,7 @@ module Gatling
         @trainer_toggle ||= @trainer_value ||= false
       end
 
-      # def path_from_type(type)
-      #
-      #       end
-
+ 
 
 
       def set_default_path

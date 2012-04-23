@@ -39,20 +39,33 @@ module Gatling
         save_image_as_candidate(actual_image)
         return false
       else
-        expected_image = Gatling::ImageFromFile.new(expected_reference_filename)
-        actual_image = Gatling::ImageFromElement.new(actual_element, expected_reference_filename)
-        comparison = Gatling::Comparison.new(expected_image, actual_image)
+        comparison = compare_until_match(actual_element, expected_reference_filename, 5)
         matches = comparison.matches?
         if !matches
-          actual_image.save(:as => :candidate)
+          comparison.actual_image.save(:as => :candidate)
           save_image_as_diff(comparison.diff_image)
         end
         matches
       end
     end
 
-    def try_until_match
-
+    def compare_until_match actual_element, expected_reference_filename, max_no_tries
+      tries = max_no_tries
+      try = 0
+      match = false
+      expected_image = Gatling::ImageFromFile.new(expected_reference_filename)
+      comparison = nil
+      while !match && try < tries
+        actual_image = Gatling::ImageFromElement.new(actual_element, expected_reference_filename)
+        comparison = Gatling::Comparison.new(expected_image, actual_image)
+        match = comparison.matches?
+        if !match
+          sleep 0.5
+          try += 1
+          puts "Tried to match #{try} times"
+        end
+      end
+      comparison
     end
 
     def save_image_as_diff(image)
