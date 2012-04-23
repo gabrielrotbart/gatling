@@ -5,8 +5,8 @@ describe Gatling::Comparison do
   before do
     apple = Magick::Image.new(100,100) { self.background_color = "green" }
     orange = Magick::Image.new(100,100) { self.background_color = "orange" }
-    @apple = Gatling::Image.new(:from_diff, apple)
-    @orange = Gatling::Image.new(:from_diff, orange)
+    @apple = Gatling::Image.new(apple, "apple.png")
+    @orange = Gatling::Image.new(orange, "orange.png")
   end
 
   describe 'will make images from ' do

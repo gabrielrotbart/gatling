@@ -17,7 +17,7 @@ describe Gatling::Image do
       image_mock = mock(Magick::Image)
       Magick::Image.should_receive(:read).with('./image_tests/image.png').and_return([image_mock])
 
-      subject = Gatling::Image.new(:from_file)
+      subject = Gatling::ImageFromFile.new("image.png")
       subject.image.should == image_mock
       subject.file_name.should == 'image.png'
     end
@@ -29,14 +29,14 @@ describe Gatling::Image do
 
       Gatling::CaptureElement.should_receive(:new).and_return mock_capture_element
       mock_capture_element.should_receive(:capture).and_return mock_image
-      subject = Gatling::Image.new(:from_element, mock_element)
+      subject = Gatling::ImageFromElement.new(mock_element, "image.png")
       subject.image.should == mock_image
       subject.file_name.should == 'image.png'
     end
 
     it 'diff image' do
       mock_image = mock(Magick::Image)
-      subject = Gatling::Image.new(:from_diff, mock_image)
+      subject = Gatling::Image.new(mock_image, 'image.png')
       subject.image.should == mock_image
       subject.file_name.should == 'image.png'
     end
@@ -51,7 +51,7 @@ describe Gatling::Image do
     it 'will save an image to the correct path for the type' do
       mock_image = mock(Magick::Image)
       mock_image.should_receive(:write).with('./image_tests/temp/image.png').and_return()
-      subject = Gatling::Image.new(:from_diff, mock_image)
+      subject = Gatling::Image.new(mock_image, 'image.png')
       subject.image = mock_image
       subject.file_name = 'image.png'
       subject.save(:as => :temp)
@@ -64,7 +64,7 @@ describe Gatling::Image do
 
       File.should_receive(:exists?).with(@expected_path).and_return(false)
       FileUtils.should_receive(:mkdir_p).with(@expected_path)
-      subject = Gatling::Image.new(:from_diff, mock_image)
+      subject = Gatling::Image.new(mock_image, 'image.png')
 
       subject.save(:as => :temp)
       subject.path.should == @expected_full_path
@@ -76,7 +76,7 @@ describe Gatling::Image do
 
       File.should_receive(:exists?).with(@expected_path).and_return(true)
       FileUtils.should_not_receive(:mkdir_p)
-      subject = Gatling::Image.new(:from_diff, mock_image)
+      subject = Gatling::Image.new(mock_image, 'image.png')
 
       subject.save(:as => :temp)
       subject.path.should == @expected_full_path
@@ -85,9 +85,13 @@ describe Gatling::Image do
     it 'should check if a file exists, with the file name and type' do
       mock_image = mock(Magick::Image)
       File.should_receive(:exists?).with './image_tests/image.png'
-      subject = Gatling::Image.new(:from_diff, mock_image)
+      subject = Gatling::Image.new(mock_image, 'image.png')
       subject.file_name = 'image.png'
       subject.exists?
     end
   end
+
+
 end
+
+describe Gatling::ImageFromElement

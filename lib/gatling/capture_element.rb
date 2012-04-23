@@ -8,7 +8,7 @@ module Gatling
     def initialize element_to_capture, *element_to_exclude
       @reference_image_path = Gatling::Configuration.reference_image_path
       @element_to_capture = element_to_capture
-      @element_to_exclude = element_to_exclude.first
+      # @element_to_exclude = element_to_exclude.first
 
     end
 

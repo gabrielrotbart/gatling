@@ -27,18 +27,20 @@ module Gatling
 
       expected_reference_file = (File.join(Gatling::Configuration.path(:reference), expected_reference_filename))
 
-      actual_image = Gatling::Image.new(:from_element, actual_element)
 
       if Gatling::Configuration.trainer_toggle
+        actual_image = Gatling::ImageFromElement.new(actual_element, expected_reference_filename)
         save_image_as_reference(actual_image)
         return true
       end
 
       if !File.exists?(expected_reference_file)
+        actual_image = Gatling::ImageFromElement.new(actual_element, expected_reference_filename)
         save_image_as_candidate(actual_image)
         return false
       else
-        expected_image = Gatling::Image.new(:from_file)
+        expected_image = Gatling::ImageFromFile.new(expected_reference_filename)
+        actual_image = Gatling::ImageFromElement.new(actual_element, expected_reference_filename)
         comparison = Gatling::Comparison.new(expected_image, actual_image)
         matches = comparison.matches?
         if !matches
@@ -49,7 +51,8 @@ module Gatling
       end
     end
 
-    def try_until_mat
+    def try_until_match
+
     end
 
     def save_image_as_diff(image)

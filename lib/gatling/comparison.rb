@@ -15,7 +15,7 @@ module Gatling
 
     def diff_image
       diff_image = @actual_image.image.compare_channel(@expected_image.image, Magick::MeanAbsoluteErrorMetric).first
-      Gatling::Image.new(:from_diff, diff_image)
+      Gatling::Image.new(diff_image, @expected_image.file_name)
     end
 
   end

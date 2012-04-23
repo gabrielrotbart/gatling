@@ -55,5 +55,22 @@ describe Gatling do
       end
 
     end
+
+    describe "#try_until_match" do
+
+      before :each do
+        pending
+      end
+
+      it "should try match for a specified amount of times" do
+        pending
+      end
+
+      it "should pass after a few tries if match is found" do
+        pending
+      end
+
+    end
+
   end
 end

@@ -19,7 +19,7 @@ describe 'rspec matcher' do
     it 'will pass if images matches reference' do
       create_square_image(@ref_path, 'black')
       black_element = element_for_spec("#black")
-      black_element.should look_like(@black_box)
+      black_element.should look_like("black.png")
     end
 
     it 'will fail if images dosent matches reference' do

@@ -5,20 +5,11 @@ module Gatling
 
     attr_reader :type
 
-    def initialize(type, element_or_image = nil)
+    def initialize image, file_name
 
-      @file_name = Gatling.reference_file_name
+      @file_name = file_name
 
-      case type
-      when :from_file
-        @image = image_from_file(@file_name)
-      when :from_element
-        @image = image_from_element(element_or_image)
-      when :from_diff
-        @image = element_or_image
-      else
-        raise 'NO SUCH IMAGE TYPE'
-      end
+      @image = image
 
     end
 
@@ -34,18 +25,28 @@ module Gatling
       File.exists?(File.join(Gatling::Configuration.path(:reference), @file_name))
     end
 
+  end
 
+  class ImageFromElement < Image
 
-    def image_from_element element
-      Gatling::CaptureElement.new(element).capture
-    end
+    def initialize element, file_name
+      super(image, file_name)
 
-    def image_from_file file_name
-      Magick::Image.read(File.join(Gatling::Configuration.path(:reference), @file_name)).first
+      @image = Gatling::CaptureElement.new(element).capture
     end
 
   end
 
+  class ImageFromFile < Image
+
+    def initialize file_name
+      super(image, file_name)
+
+      @image = Magick::Image.read(File.join(Gatling::Configuration.path(:reference), @file_name)).first
+    end
+
+
+  end
 end
 
 
