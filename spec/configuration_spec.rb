@@ -95,18 +95,24 @@ describe Gatling::Configuration do
       end
   end
 
-    describe "#sleep_between_tries" do
+  describe "#sleep_between_tries" do
 
-      it "should default to 0.5" do
-        Gatling::Configuration.sleep_between_tries.should == 0.5
-      end
-
-      it "should be settable" do
-        Gatling::Configuration.sleep_between_tries = 55
-        Gatling::Configuration.sleep_between_tries.should eql 55
-      end
+    it "should default to 0.5" do
+      Gatling::Configuration.sleep_between_tries.should == 0.5
     end
 
+    it "should be settable" do
+      Gatling::Configuration.sleep_between_tries = 55
+      Gatling::Configuration.sleep_between_tries.should eql 55
+    end
+  end
 
+  describe "settings" do
+
+    it "should accept a block of settings and parse them correctly" do
+      pending
+    end
+
+  end
 
 end
