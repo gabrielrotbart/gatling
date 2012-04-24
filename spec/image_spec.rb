@@ -7,7 +7,6 @@ describe Gatling::Image do
     Gatling::Configuration.reference_image_path = ref_path
     @expected_path = File.join ref_path, 'temp'
     @expected_full_path = File.join @expected_path, 'image.png'
-    Gatling.reference_file_name = 'image.png'
   end
 
   describe 'should initialize from' do

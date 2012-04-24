@@ -9,9 +9,6 @@ require 'gatling/image'
 require 'gatling/comparison'
 require 'gatling/capture_element'
 
-# include Gatling::Comparison
-
-#TODO: Fuzz matches
 #TODO: Helpers for cucumber
 #TODO: Make directories as needed
 
@@ -19,11 +16,7 @@ module Gatling
 
   class << self
 
-    attr_accessor :reference_file_name
-
     def matches?(expected_reference_filename, actual_element)
-
-      @reference_file_name = expected_reference_filename
 
       expected_reference_file = (File.join(Gatling::Configuration.path(:reference), expected_reference_filename))
 
