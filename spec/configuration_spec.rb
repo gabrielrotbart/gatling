@@ -5,12 +5,12 @@ describe Gatling::Configuration do
   describe "#reference_image_path" do
     before :each do
       Gatling::Configuration.reference_image_path = nil
-    end 
+    end
 
     describe "Without Rails" do
       it "should default to './spec/reference_images' when not in a rails environment" do
         Gatling::Configuration.reference_image_path.should eql("spec/reference_images")
-      end    
+      end
     end
 
     describe "with rails" do
@@ -38,7 +38,7 @@ describe Gatling::Configuration do
       end
 
     end
-  end  
+  end
 
   describe '#trainer_toggle' do
 
@@ -75,12 +75,38 @@ describe Gatling::Configuration do
   describe 'paths' do
     it 'should return the directory for a type of image' do
       Gatling::Configuration.reference_image_path = "a_path"
-      Gatling::Configuration.path(:temp).should == 'a_path/temp' 
+      Gatling::Configuration.path(:temp).should == 'a_path/temp'
     end
 
     it 'should thrown an error when you ask for the path of an unknown image type' do
       expect { Gatling::Configuration.path(:unknown)}.should raise_error "Unkown image type 'unknown'"
     end
-  end  
+  end
+
+  describe "#match_tries" do
+
+      it "should default to 5" do
+        Gatling::Configuration.match_tries.should == 5
+      end
+
+      it "should be settable" do
+        Gatling::Configuration.match_tries = 1
+        Gatling::Configuration.match_tries.should == 1
+      end
+  end
+
+    describe "#sleep_between_tries" do
+
+      it "should default to 0.5" do
+        Gatling::Configuration.sleep_between_tries.should == 0.5
+      end
+
+      it "should be settable" do
+        Gatling::Configuration.sleep_between_tries = 55
+        Gatling::Configuration.sleep_between_tries.should eql 55
+      end
+    end
+
+
 
 end

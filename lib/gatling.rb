@@ -32,7 +32,7 @@ module Gatling
         save_image_as_candidate(actual_image)
         return false
       else
-        comparison = compare_until_match(actual_element, expected_reference_filename, 5)
+        comparison = compare_until_match(actual_element, expected_reference_filename, Gatling::Configuration.match_tries)
         matches = comparison.matches?
         if !matches
           comparison.actual_image.save(:as => :candidate)
