@@ -8,15 +8,15 @@ module Gatling
       attr_reader :paths
 
       def reference_image_path
-        @reference_image_path ||= set_default_path
+        Gatling.reference_image_path || @reference_image_path ||= set_default_path
       end
 
       def match_tries
-        @match_tries ||= 5
+        Gatling.match_tries || @match_tries ||= 5
       end
 
       def sleep_between_tries
-        @sleep_between_tries ||= 0.5
+        Gatling.sleep_between_tries || @sleep_between_tries ||= 0.5
       end
 
       def path(type)
@@ -47,8 +47,6 @@ module Gatling
         end
         @trainer_toggle ||= @trainer_value ||= false
       end
-
-
 
 
       def set_default_path

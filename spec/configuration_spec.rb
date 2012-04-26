@@ -2,10 +2,13 @@ require 'spec_helper'
 
 describe Gatling::Configuration do
 
-  describe "#reference_image_path" do
-    before :each do
+  after :each do
       Gatling::Configuration.reference_image_path = nil
-    end
+      Gatling.reference_image_path = nil
+  end
+
+  describe "#reference_image_path" do
+
 
     describe "Without Rails" do
       it "should default to './spec/reference_images' when not in a rails environment" do
@@ -43,27 +46,27 @@ describe Gatling::Configuration do
   describe '#trainer_toggle' do
 
     it 'should default to false' do
-      Gatling::Configuration.trainer_toggle.should eql(false)
+      subject.trainer_toggle.should eql(false)
     end
 
     it 'can be toggled to true' do
       Gatling::Configuration.trainer_toggle = true
-      Gatling::Configuration.trainer_toggle.should eql(true)
+      subject.trainer_toggle.should eql(true)
     end
 
     it 'toggeled using GATLING_TRAINER = false' do
       ENV['GATLING_TRAINER'] = 'false'
-      Gatling::Configuration.trainer_toggle.should eql(false)
+      subject.trainer_toggle.should eql(false)
     end
 
     it 'toggeled using GATLING_TRAINER = true' do
       ENV['GATLING_TRAINER'] = 'true'
-      Gatling::Configuration.trainer_toggle.should eql(true)
+      subject.trainer_toggle.should eql(true)
     end
 
     it 'toggeled using GATLING_TRAINER = nil' do
       ENV['GATLING_TRAINER'] = nil
-      Gatling::Configuration.trainer_toggle.should eql(false)
+      subject.trainer_toggle.should eql(false)
     end
 
     after(:each) do
@@ -75,7 +78,7 @@ describe Gatling::Configuration do
   describe 'paths' do
     it 'should return the directory for a type of image' do
       Gatling::Configuration.reference_image_path = "a_path"
-      Gatling::Configuration.path(:temp).should == 'a_path/temp'
+      subject.path(:temp).should == 'a_path/temp'
     end
 
     it 'should thrown an error when you ask for the path of an unknown image type' do
@@ -86,31 +89,38 @@ describe Gatling::Configuration do
   describe "#match_tries" do
 
       it "should default to 5" do
-        Gatling::Configuration.match_tries.should == 5
+        subject.match_tries.should == 5
       end
 
       it "should be settable" do
         Gatling::Configuration.match_tries = 1
-        Gatling::Configuration.match_tries.should == 1
+        subject.match_tries.should == 1
       end
   end
 
   describe "#sleep_between_tries" do
 
     it "should default to 0.5" do
-      Gatling::Configuration.sleep_between_tries.should == 0.5
+      subject.sleep_between_tries.should == 0.5
     end
 
     it "should be settable" do
       Gatling::Configuration.sleep_between_tries = 55
-      Gatling::Configuration.sleep_between_tries.should eql 55
+      subject.sleep_between_tries.should eql 55
     end
   end
 
   describe "settings" do
 
     it "should accept a block of settings and parse them correctly" do
-      pending
+      Gatling.config do |setting|
+        Gatling.reference_image_path = 'custom_path'
+        Gatling.match_tries = 3
+        Gatling.sleep_between_tries = 0.7
+      end
+      subject.reference_image_path.should eql 'custom_path'
+      subject.match_tries.should eql 3
+      subject.sleep_between_tries.should eql 0.7
     end
 
   end

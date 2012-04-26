@@ -1,5 +1,3 @@
-#Dir["/gatling/*.rb"].each {|file| require file}
-
 require 'RMagick'
 require 'capybara'
 require 'capybara/dsl'
@@ -15,6 +13,8 @@ require 'gatling/capture_element'
 module Gatling
 
   class << self
+
+    attr_accessor :reference_image_path, :match_tries, :sleep_between_tries
 
     def matches?(expected_reference_filename, actual_element)
 
@@ -81,6 +81,10 @@ module Gatling
         image.save(:as => :reference)
         puts "Saved #{image.path} as reference"
       end
+    end
+
+    def config
+      yield
     end
 
   end
