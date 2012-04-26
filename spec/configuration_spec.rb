@@ -86,15 +86,15 @@ describe Gatling::Configuration do
     end
   end
 
-  describe "#match_tries" do
+  describe "#max_no_tries" do
 
       it "should default to 5" do
-        subject.match_tries.should == 5
+        subject.max_no_tries.should == 5
       end
 
       it "should be settable" do
-        Gatling::Configuration.match_tries = 1
-        subject.match_tries.should == 1
+        Gatling::Configuration.max_no_tries = 1
+        subject.max_no_tries.should == 1
       end
   end
 
@@ -115,11 +115,11 @@ describe Gatling::Configuration do
     it "should accept a block of settings and parse them correctly" do
       Gatling.config do |setting|
         Gatling.reference_image_path = 'custom_path'
-        Gatling.match_tries = 3
+        Gatling.max_no_tries = 3
         Gatling.sleep_between_tries = 0.7
       end
       subject.reference_image_path.should eql 'custom_path'
-      subject.match_tries.should eql 3
+      subject.max_no_tries.should eql 3
       subject.sleep_between_tries.should eql 0.7
     end
 
