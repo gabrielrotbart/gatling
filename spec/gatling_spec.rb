@@ -22,7 +22,16 @@ describe Gatling do
     end
 
     it 'will return true if the images are identical' do
-      pending
+        @apple = mock("Gatling::Image")
+        @orange = mock("Gatling::Image")
+        @element  = mock("Gatling::CaptureElement")
+        @comparison = mock("Gatling::Comparison")
+        Gatling::ImageFromFile.stub!(:new).and_return(@orange)
+        Gatling::ImageFromElement.stub!(:new).and_return(@orange)
+        Gatling::Comparison.stub!(:new).and_return(@comparison)
+        @comparison.stub!(:matches?).and_return(true)
+        File.stub!(:exists?).and_return(true)
+        subject.matches?("orange.png", @element).should be_true
     end
 
     it "#save_image_as_diff" do
@@ -56,21 +65,30 @@ describe Gatling do
 
     end
 
-    describe "#try_until_match" do
 
-      before :each do
-        pending
-      end
-
-      it "should try match for a specified amount of times" do
-        pending
-      end
-
-      it "should pass after a few tries if match is found" do
-        pending
-      end
 
     end
 
+describe "#compare_until_match" do
+
+      before do
+        @apple = mock("Gatling::Image")
+        @orange = mock("Gatling::Image")
+        @element  = mock(Gatling::CaptureElement)
+        @comparison = mock("Gatling::Comparison")
+        Gatling::ImageFromFile.stub!(:new).and_return(@orange)
+        Gatling::ImageFromElement.stub!(:new).and_return(@orange)
+        Gatling::Comparison.stub!(:new).and_return(@comparison)
+      end
+
+      it "should try match for a specified amount of times" do
+        @comparison.should_receive(:matches?).exactly(3).times
+        Gatling.compare_until_match(@element, "orange.png", 3)
+      end
+
+      it "should pass after a few tries if match is found" do
+        @comparison.should_receive(:matches?).exactly(1).times.and_return(true)
+        Gatling.compare_until_match(@element, "orange.png", 3)
+      end
   end
 end
