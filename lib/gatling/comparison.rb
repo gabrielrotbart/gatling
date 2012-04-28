@@ -22,27 +22,38 @@ module Gatling
     end
 
     def compare_images_with_same_size
-      @actual_image.image.compare_channel(@expected_image.image, Magick::MeanAbsoluteErrorMetric)
+      images_to_compare = prep_images_for_comparison
+      images_to_compare.first.compare_channel(images_to_compare.last, Magick::MeanAbsoluteErrorMetric)
     end
 
     def compare_images_with_different_size
       row = [@actual_image.image.rows, @expected_image.image.rows].max
       column = [@actual_image.image.columns, @expected_image.image.columns].max
 
-      images_to_compare = [
-          @actual_image,
-          @expected_image,
-      ].collect do |gatling_image|
-        image = gatling_image.image.extent(column, row)
-        image.background_color = 'white'
-        image
+      images_to_compare = prep_images_for_comparison do |image|
+        expanded_image = image.extent(column, row)
+        expanded_image.background_color = 'white'
+        expanded_image
       end
-
       images_to_compare.first.compare_channel(images_to_compare.last, Magick::MeanAbsoluteErrorMetric)
     end
 
     def compare_images_with_same_size?
       @actual_image.image.rows == @expected_image.image.rows && @actual_image.image.columns == @expected_image.image.columns
+    end
+
+    def prep_images_for_comparison
+      [
+          @actual_image,
+          @expected_image,
+      ].collect do |gatling_image|
+        image = gatling_image.image.clone
+        image = yield image if block_given?
+
+        # Important: ensure the image 0,0 is reset to the top-left of the image before comparison
+        image.offset = 0
+        image
+      end
     end
 
   end
