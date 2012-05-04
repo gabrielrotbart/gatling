@@ -7,6 +7,7 @@ require 'gatling/image'
 require 'gatling/comparison'
 require 'gatling/capture_element'
 
+
 #TODO: Helpers for cucumber
 #TODO: Make directories as needed
 
@@ -19,7 +20,6 @@ module Gatling
     def matches?(expected_reference_filename, actual_element)
 
       expected_reference_file = (File.join(Gatling::Configuration.path(:reference), expected_reference_filename))
-
 
       if Gatling::Configuration.trainer_toggle
         actual_image = Gatling::ImageFromElement.new(actual_element, expected_reference_filename)
@@ -55,6 +55,7 @@ module Gatling
         if !match
           sleep 0.5
           try += 1
+          #TODO: Send to logger instead of puts
           puts "Tried to match #{try} times"
         end
       end
@@ -64,7 +65,7 @@ module Gatling
     def save_image_as_diff(image)
       image.save(:as => :diff)
       raise "element did not match #{image.file_name}. A diff image: #{image.file_name} was created in " +
-      "#{File.join(Gatling::Configuration.path(:diff),image.file_name)}. " +
+      "#{File.join(Gatling::Configuration.path(:diff),image.file_name)} " +
       "A new reference #{File.join(Gatling::Configuration.path(:candidate),image.file_name)} can be used to fix the test"
     end
 
@@ -86,6 +87,7 @@ module Gatling
     def config
       yield
     end
+
 
   end
 end

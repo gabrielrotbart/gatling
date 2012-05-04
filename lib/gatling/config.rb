@@ -1,3 +1,5 @@
+require 'logger'
+
 module Gatling
   module Configuration
 
@@ -59,6 +61,7 @@ module Gatling
         end
         @reference_image_path
       end
+
     end
 
   end

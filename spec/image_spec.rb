@@ -3,10 +3,10 @@ require 'spec_helper'
 describe Gatling::Image do
 
   before :all do
-    ref_path = './image_tests'
-    Gatling::Configuration.reference_image_path = ref_path
-    @expected_path = File.join ref_path, 'temp'
-    @expected_full_path = File.join @expected_path, 'image.png'
+    @ref_path = './image_tests'
+    Gatling::Configuration.reference_image_path = @ref_path
+    @expected_temp_path = File.join @ref_path, 'temp'
+    @expected_temp_image_path = File.join @expected_temp_path, 'image.png'
   end
 
   describe 'should initialize from' do
@@ -43,9 +43,6 @@ describe Gatling::Image do
 
   describe "Images file handling" do
 
-    before :each do
-
-    end
 
     it 'will save an image to the correct path for the type' do
       mock_image = mock(Magick::Image)
@@ -59,26 +56,26 @@ describe Gatling::Image do
     it 'will create directory, then save and image if directory doesnt exist' do
 
       mock_image = stub(Magick::Image)
-      mock_image.should_receive(:write).with(@expected_full_path).and_return()
+      mock_image.should_receive(:write).with(@expected_temp_image_path).and_return()
 
-      File.should_receive(:exists?).with(@expected_path).and_return(false)
-      FileUtils.should_receive(:mkdir_p).with(@expected_path)
+      File.should_receive(:exists?).with(@expected_temp_path).and_return(false)
+      FileUtils.should_receive(:mkdir_p).with(@expected_temp_path)
       subject = Gatling::Image.new(mock_image, 'image.png')
 
       subject.save(:as => :temp)
-      subject.path.should == @expected_full_path
+      subject.path.should == @expected_temp_path
     end
 
-    it 'will save and image if directory exista' do
+    it 'will save and image if directory exists' do
       mock_image = stub(Magick::Image)
-      mock_image.should_receive(:write).with(@expected_full_path).and_return()
+      mock_image.should_receive(:write).with(@expected_temp_image_path).and_return()
 
-      File.should_receive(:exists?).with(@expected_path).and_return(true)
+      File.should_receive(:exists?).with(@expected_temp_path).and_return(true)
       FileUtils.should_not_receive(:mkdir_p)
       subject = Gatling::Image.new(mock_image, 'image.png')
 
       subject.save(:as => :temp)
-      subject.path.should == @expected_full_path
+      subject.path.should == @expected_temp_path
     end
 
     it 'should check if a file exists, with the file name and type' do
@@ -87,6 +84,12 @@ describe Gatling::Image do
       subject = Gatling::Image.new(mock_image, 'image.png')
       subject.file_name = 'image.png'
       subject.exists?
+    end
+
+    it 'image object should default to reference type' do
+      mock_image = mock(Magick::Image)
+      subject = Gatling::Image.new(mock_image, 'image.png')
+      subject.path.should == @ref_path
     end
   end
 

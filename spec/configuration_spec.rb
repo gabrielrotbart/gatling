@@ -123,6 +123,9 @@ describe Gatling::Configuration do
       subject.sleep_between_tries.should eql 0.7
     end
 
+
   end
+
+
 
 end

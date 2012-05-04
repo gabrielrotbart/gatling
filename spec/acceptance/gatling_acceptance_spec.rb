@@ -45,7 +45,7 @@ describe 'Gatling' do
     it 'will return false, creates new diff and candidate images if the images are different' do
       red_element = element_for_spec('#red')
       expected_error = "element did not match #{"black.png"}. " +
-                       "A diff image: #{"black.png"} was created in #{@ref_path}/diff/#{"black.png"}. " +
+                       "A diff image: #{"black.png"} was created in #{@ref_path}/diff/#{"black.png"} " +
                        "A new reference #{@ref_path}/candidate/#{"black.png"} can be used to fix the test"
 
       expect {Gatling.matches?("black.png", red_element)}.should raise_error(RuntimeError, expected_error)
@@ -79,7 +79,7 @@ describe 'Gatling' do
     it 'will warn if a reference already exists and not overwrite it' do
       create_square_image(@ref_path, 'black')
       Gatling::Configuration.trainer_toggle = true
-      expected_message = " already exists. reference image was not overwritten. " +
+      expected_message = "#{File.join(@ref_path,"black.png")} already exists. reference image was not overwritten. " +
                          "please delete the old file to update using trainer"
       black_element = element_for_spec
       reference_file_ctime = File.ctime(File.join(@ref_path,"black.png"))

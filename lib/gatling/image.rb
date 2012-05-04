@@ -14,15 +14,19 @@ module Gatling
     end
 
     def save type
-      path = Gatling::Configuration.path(type[:as])
-      FileUtils::mkdir_p(path) unless File.exists?(path)
-      @path = File.join(path, @file_name)
-      @image.write @path
+      @path = path(type)
+      FileUtils::mkdir_p(@path) unless File.exists?(@path)
+      save_path = File.join(@path, @file_name)
+      @image.write save_path
       @path
     end
 
     def exists?
-      File.exists?(File.join(Gatling::Configuration.path(:reference), @file_name))
+      File.exists?(path)
+    end
+
+    def path type={:as => :reference}
+      @path = @path || File.join(Gatling::Configuration.path(type[:as]), @file_name)
     end
 
   end
@@ -34,7 +38,7 @@ module Gatling
 
       @image = Gatling::CaptureElement.new(element).capture
     end
-    
+
     #TODO: make save a relevant subclass method
   end
 
@@ -47,7 +51,7 @@ module Gatling
     end
 
     #TODO: make save a relevant subclass method
-    
+
   end
 end
 
