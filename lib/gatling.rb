@@ -64,14 +64,15 @@ module Gatling
 
     def save_image_as_diff(image)
       image.save(:as => :diff)
+      image.save(:as => :candidate)
       raise "element did not match #{image.file_name}. A diff image: #{image.file_name} was created in " +
-      "#{File.join(Gatling::Configuration.path(:diff),image.file_name)} " +
-      "A new reference #{File.join(Gatling::Configuration.path(:candidate),image.file_name)} can be used to fix the test"
+      "#{image.path(:as => :diff)} " +
+      "A new reference #{image.path(:as => :candidate)} can be used to fix the test"
     end
 
     def save_image_as_candidate(image)
       image.save :as => :candidate
-      raise "The design reference #{image.file_name} does not exist, #{image.path} " +
+      raise "The design reference #{image.file_name} does not exist, #{image.path(:as => :candidate)} " +
       "is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
     end
 

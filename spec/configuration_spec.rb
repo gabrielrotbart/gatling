@@ -2,6 +2,11 @@ require 'spec_helper'
 
 describe Gatling::Configuration do
 
+  before :each do
+      Gatling::Configuration.reference_image_path = nil
+      Gatling.reference_image_path = nil
+  end
+
   after :each do
       Gatling::Configuration.reference_image_path = nil
       Gatling.reference_image_path = nil
@@ -10,7 +15,7 @@ describe Gatling::Configuration do
   describe "#reference_image_path" do
 
 
-    describe "Without Rails" do
+    describe "without Rails" do
       it "should default to './spec/reference_images' when not in a rails environment" do
         Gatling::Configuration.reference_image_path.should eql("spec/reference_images")
       end

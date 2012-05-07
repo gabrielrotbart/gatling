@@ -25,7 +25,7 @@ module Gatling
     end
 
     def path type={:as => :reference}
-      @path = @path || File.join(Gatling::Configuration.path(type[:as]), @file_name)
+      @path = File.join(Gatling::Configuration.path(type[:as]), @file_name)
     end
 
   end
@@ -45,13 +45,11 @@ module Gatling
 
     def initialize file_name
       super(image, file_name)
-
-      @image = Magick::Image.read(File.join(Gatling::Configuration.path(:reference), @file_name)).first
+      @image = Magick::Image.read(path).first
     end
 
     #TODO: make save a relevant subclass method
 
   end
 end
-
 

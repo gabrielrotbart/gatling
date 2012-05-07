@@ -54,28 +54,31 @@ describe Gatling::Image do
     end
 
     it 'will create directory, then save and image if directory doesnt exist' do
+      image_path = 'path/to/image/in/sub/directory/image.png'
+      expected_full_path = File.join(Gatling::Configuration.path(:temp), image_path)
+      expected_image_dir = File.dirname(expected_full_path)
 
       mock_image = stub(Magick::Image)
-      mock_image.should_receive(:write).with(@expected_temp_image_path).and_return()
+      mock_image.should_receive(:write).with(expected_full_path).and_return()
 
-      File.should_receive(:exists?).with(@expected_temp_path).and_return(false)
-      FileUtils.should_receive(:mkdir_p).with(@expected_temp_path)
-      subject = Gatling::Image.new(mock_image, 'image.png')
+      File.should_receive(:exists?).with(expected_full_path).and_return(false)
+      FileUtils.should_receive(:mkdir_p).with(expected_image_dir)
+      subject = Gatling::Image.new(mock_image, image_path)
 
       subject.save(:as => :temp)
-      subject.path.should == @expected_temp_path
+      subject.path(:as => :temp).should == expected_full_path
     end
 
-    it 'will save and image if directory exists' do
+    it 'will save an image if directory exist' do
       mock_image = stub(Magick::Image)
       mock_image.should_receive(:write).with(@expected_temp_image_path).and_return()
 
-      File.should_receive(:exists?).with(@expected_temp_path).and_return(true)
+      File.should_receive(:exists?).with(@expected_temp_image_path).and_return(true)
       FileUtils.should_not_receive(:mkdir_p)
       subject = Gatling::Image.new(mock_image, 'image.png')
 
       subject.save(:as => :temp)
-      subject.path.should == @expected_temp_path
+      subject.path(:as => :temp).should == @expected_temp_image_path
     end
 
     it 'should check if a file exists, with the file name and type' do
@@ -89,10 +92,32 @@ describe Gatling::Image do
     it 'image object should default to reference type' do
       mock_image = mock(Magick::Image)
       subject = Gatling::Image.new(mock_image, 'image.png')
-      subject.path.should == @ref_path
+      subject.path.should == File.join(@ref_path,'image.png')
     end
   end
 
+  describe "it creates a path from path types" do
+
+    before :each do
+      Gatling::Configuration.reference_image_path = '/some/path'
+      mock_image = mock(Magick::Image)
+      @subject = Gatling::Image.new(mock_image, 'image.png')
+    end
+
+    it "from reference" do
+      # expected_path = '/some/path/reference'
+      @subject.path.should == '/some/path/image.png'
+    end
+
+    it "from diff" do
+      @subject.path({:as => :diff}).should == '/some/path/diff/image.png'
+    end
+
+    it "from candidate" do
+      @subject.path({:as => :candidate}).should == '/some/path/candidate/image.png'
+    end
+
+  end
 
 end
 

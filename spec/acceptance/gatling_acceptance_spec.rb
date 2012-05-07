@@ -49,17 +49,9 @@ describe 'Gatling' do
                        "A new reference #{@ref_path}/candidate/#{"black.png"} can be used to fix the test"
 
       expect {Gatling.matches?("black.png", red_element)}.should raise_error(RuntimeError, expected_error)
-
       File.exists?(File.join(@ref_path,'diff', "black.png")).should be_true
       File.exists?(File.join(@ref_path,'candidate', "black.png")).should be_true
     end
-
-    # it 'will try to match a specified amount of time before failing' do
-    #      red_element = element_for_spec('#red')
-    #      Gatling.should_receive(:matches?).and_return(false)
-    #      Gatling.should_receive(:try_until_match)
-    #      Gatling.matches?("black.png", red_element)
-    #    end
 
   end
 

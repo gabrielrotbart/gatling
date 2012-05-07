@@ -54,7 +54,7 @@ module Gatling
       def set_default_path
         private
         begin
-          @reference_image_path ||= File.join(Rails.root, 'spec/reference_images')
+          @reference_image_path = File.join(Rails.root, 'spec/reference_images')
         rescue
           @reference_image_path = 'spec/reference_images'
           puts "Currently defaulting to #{@reference_image_path}. Overide this by setting Gatling::Configuration.reference_image_path=[refpath]"
