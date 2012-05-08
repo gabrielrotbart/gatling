@@ -24,8 +24,8 @@ module Gatling
       File.exists?(path)
     end
 
-    def path type={:as => :reference}
-      @path = File.join(Gatling::Configuration.path(type[:as]), @file_name)
+    def path type = :reference
+      @path = File.join(Gatling::Configuration.path(type), @file_name)
     end
 
   end

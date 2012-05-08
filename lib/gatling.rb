@@ -35,7 +35,7 @@ module Gatling
         comparison = compare_until_match(actual_element, expected_reference_filename, Gatling::Configuration.max_no_tries)
         matches = comparison.matches?
         if !matches
-          comparison.actual_image.save(:as => :candidate)
+          comparison.actual_image.save(:candidate)
           save_image_as_diff(comparison.diff_image)
         end
         matches
@@ -63,16 +63,16 @@ module Gatling
     end
 
     def save_image_as_diff(image)
-      image.save(:as => :diff)
-      image.save(:as => :candidate)
+      image.save(:diff)
+      image.save(:candidate)
       raise "element did not match #{image.file_name}. A diff image: #{image.file_name} was created in " +
-      "#{image.path(:as => :diff)} " +
-      "A new reference #{image.path(:as => :candidate)} can be used to fix the test"
+      "#{image.path(:diff)} " +
+      "A new reference #{image.path(:candidate)} can be used to fix the test"
     end
 
     def save_image_as_candidate(image)
-      image.save :as => :candidate
-      raise "The design reference #{image.file_name} does not exist, #{image.path(:as => :candidate)} " +
+      image.save(:candidate)
+      raise "The design reference #{image.file_name} does not exist, #{image.path(:candidate)} " +
       "is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
     end
 
@@ -80,7 +80,7 @@ module Gatling
       if image.exists?
         puts "#{image.path} already exists. reference image was not overwritten. please delete the old file to update using trainer"
       else
-        image.save(:as => :reference)
+        image.save(:reference)
         puts "Saved #{image.path} as reference"
       end
     end

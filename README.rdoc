@@ -8,7 +8,7 @@ An integrated visual RSpec matcher which makes real visual testing easy.
 
   gem install gatling
 
-In spec_helper.rb :
+In spec_helper.rb:
 
   #main app
   require 'gatling'
@@ -33,7 +33,7 @@ Also created are subfolders:
 === Sleep_between_tries - sets the sleep time (in seconds) between match tries (requires max_no_tries > 1). Defaults to 0.5
 
 === Configuration settings are set with the following:
-  
+
   Gatling.config do |setting|
     Gatling.reference_image_path = 'my_custom_path'
     Gatling.max_no_tries = 3

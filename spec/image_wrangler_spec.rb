@@ -12,7 +12,7 @@ describe Gatling::ImageWrangler do
 
   it 'should get the position of the css element' do
 
-    #Overiding the stupid public method :y of YAML module
+    #Overiding the stupid public method:y of YAML module
 
     location = Point.new
     location.x = 1

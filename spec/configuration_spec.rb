@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe Gatling::Configuration do
 
-  before :each do
+  before:each do
       Gatling::Configuration.reference_image_path = nil
       Gatling.reference_image_path = nil
   end
 
-  after :each do
+  after:each do
       Gatling::Configuration.reference_image_path = nil
       Gatling.reference_image_path = nil
   end

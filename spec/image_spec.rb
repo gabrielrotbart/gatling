@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Gatling::Image do
 
-  before :all do
+  before:all do
     @ref_path = './image_tests'
     Gatling::Configuration.reference_image_path = @ref_path
     @expected_temp_path = File.join @ref_path, 'temp'
@@ -50,7 +50,7 @@ describe Gatling::Image do
       subject = Gatling::Image.new(mock_image, 'image.png')
       subject.image = mock_image
       subject.file_name = 'image.png'
-      subject.save(:as => :temp)
+      subject.save(:temp)
     end
 
     it 'will create directory, then save and image if directory doesnt exist' do
@@ -65,8 +65,8 @@ describe Gatling::Image do
       FileUtils.should_receive(:mkdir_p).with(expected_image_dir)
       subject = Gatling::Image.new(mock_image, image_path)
 
-      subject.save(:as => :temp)
-      subject.path(:as => :temp).should == expected_full_path
+      subject.save(:temp)
+      subject.path(:temp).should == expected_full_path
     end
 
     it 'will save an image if directory exist' do
@@ -77,8 +77,8 @@ describe Gatling::Image do
       FileUtils.should_not_receive(:mkdir_p)
       subject = Gatling::Image.new(mock_image, 'image.png')
 
-      subject.save(:as => :temp)
-      subject.path(:as => :temp).should == @expected_temp_image_path
+      subject.save(:temp)
+      subject.path(:temp).should == @expected_temp_image_path
     end
 
     it 'should check if a file exists, with the file name and type' do
@@ -98,7 +98,7 @@ describe Gatling::Image do
 
   describe "it creates a path from path types" do
 
-    before :each do
+    before:each do
       Gatling::Configuration.reference_image_path = '/some/path'
       mock_image = mock(Magick::Image)
       @subject = Gatling::Image.new(mock_image, 'image.png')
@@ -110,15 +110,13 @@ describe Gatling::Image do
     end
 
     it "from diff" do
-      @subject.path({:as => :diff}).should == '/some/path/diff/image.png'
+      @subject.path(:diff).should == '/some/path/diff/image.png'
     end
 
     it "from candidate" do
-      @subject.path({:as => :candidate}).should == '/some/path/candidate/image.png'
+      @subject.path(:candidate).should == '/some/path/candidate/image.png'
     end
 
   end
 
 end
-
-describe Gatling::ImageFromElement

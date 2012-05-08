@@ -7,7 +7,7 @@ require File.expand_path('spec/spec_helper.rb')
 task :default => :full_build
 
 desc "full build, run all the tests"
-task :full_build => [:unit, :acceptance]
+task :full_build => [:unit,:acceptance]
 
 desc "Run unit tests"
 RSpec::Core::RakeTask.new(:unit) do |t|
