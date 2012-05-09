@@ -15,7 +15,7 @@ module Gatling
 
   class << self
 
-    attr_accessor :reference_image_path, :max_no_tries, :sleep_between_tries
+    attr_accessor :reference_image_path, :max_no_tries, :sleep_between_tries, :browser_ref_paths_toggle
 
     def matches?(expected_reference_filename, actual_element)
 
@@ -88,7 +88,6 @@ module Gatling
     def config
       yield
     end
-
 
   end
 end

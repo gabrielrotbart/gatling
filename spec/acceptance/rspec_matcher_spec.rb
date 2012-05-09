@@ -5,7 +5,7 @@ describe 'rspec matcher' do
 
   before(:all) do
     @black_box = 'black.png'
-    @ref_path = Gatling::Configuration.reference_image_path = File.join(spec_support_root, 'ref_path')
+    @ref_path = Gatling.reference_image_path = File.join(spec_support_root, 'ref_path')
     create_images_for_web_page
   end
 

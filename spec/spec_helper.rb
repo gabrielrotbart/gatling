@@ -32,9 +32,9 @@ def spec_support_root
 end
 
 def create_images_for_web_page
-  asset_path = File.join(spec_support_root, 'assets')
-  create_square_image(asset_path, 'black')
-  create_square_image(asset_path, 'red')
+  asset_reference_path = File.join(spec_support_root, 'assets')
+  create_square_image(asset_reference_path, 'black')
+  create_square_image(asset_reference_path, 'red')
 end
 
 def create_square_image(path, color)

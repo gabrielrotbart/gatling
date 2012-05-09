@@ -2,21 +2,13 @@ require 'spec_helper'
 
 describe Gatling::Configuration do
 
-  before:each do
-      Gatling::Configuration.reference_image_path = nil
-      Gatling.reference_image_path = nil
-  end
-
-  after:each do
-      Gatling::Configuration.reference_image_path = nil
-      Gatling.reference_image_path = nil
-  end
 
   describe "#reference_image_path" do
 
 
     describe "without Rails" do
       it "should default to './spec/reference_images' when not in a rails environment" do
+        Gatling::Configuration.reference_image_path = nil
         Gatling::Configuration.reference_image_path.should eql("spec/reference_images")
       end
     end
@@ -37,11 +29,13 @@ describe Gatling::Configuration do
       end
 
       it "should default to <Rails.root>/spec/reference_images in a rails environment" do
+        Gatling::Configuration.reference_image_path = nil
+        Gatling.reference_image_path = nil
         Gatling::Configuration.reference_image_path.should eql("fake_rails_root/spec/reference_images")
       end
 
       it "should be overrideable in a rails environment" do
-        Gatling::Configuration.reference_image_path = "my custom path"
+        subject.reference_image_path = "my custom path"
         Gatling::Configuration.reference_image_path.should eql("my custom path")
       end
 
@@ -127,10 +121,36 @@ describe Gatling::Configuration do
       subject.max_no_tries.should eql 3
       subject.sleep_between_tries.should eql 0.7
     end
-
-
   end
 
+  describe "creating custom reference folders" do
+
+    before :each do
+      Gatling.reference_image_path = nil
+      subject.reference_image_path = '/some/ref/path'
+    end
+
+    it "should default to custom folders off" do
+      subject.browser_ref_paths_toggle.should == false
+    end
+
+    it "should allow setting custom folders off" do
+      Gatling::Configuration.browser_ref_paths_toggle = false
+      subject.browser_ref_paths_toggle.should == false
+    end
+
+    it "should create custom folder for each browser according to ENV" do
+      pending
+    end
+
+    it "should set the image reference path for each browser according to selenium driver if no ENV is set" do
+      subject.browser_ref_paths_toggle = true
+      subject.stub!(:browser).and_return('chrome')
+      subject.reference_image_path.should == '/some/ref/path/chrome'
+      subject.browser_ref_paths_toggle = false
+    end
+
+  end
 
 
 end

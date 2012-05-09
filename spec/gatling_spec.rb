@@ -9,6 +9,7 @@ describe Gatling do
     @black_box = 'black.png'
     @red_box = 'red.png'
     @ref_path = Gatling::Configuration.reference_image_path = './ref_path'
+    Gatling.browser_ref_paths_toggle = false
   end
 
   after :each  do
