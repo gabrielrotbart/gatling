@@ -11,3 +11,7 @@ spec/support/ready_candidate_ref/temp/*
 reports/*
 vendor/*
 /.rbenv*
+.rakeTasks
+*.iml
+*.ipr
+*.iws
