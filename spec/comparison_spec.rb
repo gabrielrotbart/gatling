@@ -33,10 +33,11 @@ describe Gatling::Comparison do
 
     describe 'for two images with different sizes' do
       before do
-        apple = Magick::Image.new(30,300) { self.background_color = "green" }
-        orange = Magick::Image.new(80,100) { self.background_color = "orange" }
-        @apple = Gatling::Image.new(apple, "apple.png")
-        @orange = Gatling::Image.new(orange, "orange.png")
+        @apple_image = Magick::Image.new(30,300) { self.background_color = "green" }
+        @orange_image = Magick::Image.new(80,100) { self.background_color = "orange" }
+
+        @apple = Gatling::Image.new(@apple_image, "apple.png")
+        @orange = Gatling::Image.new(@orange_image, "orange.png")
 
         @diff_image = Gatling::Comparison.new(@apple, @orange).diff_image
       end
@@ -49,6 +50,21 @@ describe Gatling::Comparison do
         @diff_image.image.columns.should eql 80
         @diff_image.image.rows.should eql 300
       end
+
+      describe 'with two different offset' do
+        before do
+          @apple_image.offset = 50
+          @orange_image.offset = 2
+
+          @diff_image = Gatling::Comparison.new(@apple, @orange).diff_image
+        end
+
+        it 'will remove image offset from the diff image' do
+          @diff_image.image.offset.should eql 0
+        end
+
+      end
+
     end
   end
 end
