@@ -5,13 +5,16 @@ module Gatling
 
     class << self
 
-      attr_accessor :reference_image_path, :trainer_toggle, :max_no_tries, :sleep_between_tries
+      attr_accessor :reference_image_path, :trainer_toggle, :max_no_tries, :sleep_between_tries, :browser_ref_paths_toggle
 
       attr_reader :paths
 
       def reference_image_path
-        Gatling.reference_image_path || @reference_image_path ||= set_default_path
+        ref_path = Gatling.reference_image_path || @reference_image_path ||= set_default_path
+        browser_ref_paths_toggle ? @reference_image_path = File.join(ref_path, browser) : ref_path
       end
+
+
 
       def max_no_tries
         Gatling.max_no_tries || @max_no_tries ||= 5
@@ -23,9 +26,9 @@ module Gatling
 
       def path(type)
         paths = Hash[:reference => reference_image_path,
-                     :candidate => File.join(reference_image_path, 'candidate'),
-                     :diff => File.join(reference_image_path, 'diff'),
-                     :temp => File.join(reference_image_path, 'temp')]
+                    :candidate => File.join(reference_image_path, 'candidate'),
+                    :diff => File.join(reference_image_path, 'diff'),
+                    :temp => File.join(reference_image_path, 'temp')]
         if paths.keys.include? type
           return paths[type]
         else
@@ -53,13 +56,31 @@ module Gatling
 
       def set_default_path
         private
+          if Gatling.reference_image_path
+            @reference_image_path = Gatling.reference_image_path
+          else
+            begin
+              @reference_image_path = File.join(Rails.root, 'spec/reference_images')
+            rescue
+              @reference_image_path = 'spec/reference_images'
+              puts "Currently defaulting to #{@reference_image_path}. Overide this by setting Gatling::Configuration.reference_image_path=[refpath]"
+            end
+          end
+          @reference_image_path
+      end
+
+      def browser_ref_paths_toggle
+        Gatling.browser_ref_paths_toggle || @browser_ref_paths_toggle ||= false
+      end
+
+      def browser
         begin
-          @reference_image_path = File.join(Rails.root, 'spec/reference_images')
+          browser = Capybara.page.driver.browser.browser
         rescue
-          @reference_image_path = 'spec/reference_images'
-          puts "Currently defaulting to #{@reference_image_path}. Overide this by setting Gatling::Configuration.reference_image_path=[refpath]"
+          puts "Could not find browser!! Please turn browser folders off"
+         browser = nil
         end
-        @reference_image_path
+        browser.to_s
       end
 
     end

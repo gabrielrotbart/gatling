@@ -103,4 +103,16 @@ describe 'Gatling' do
       reference_file_ctime.eql?(File.ctime(File.join(@ref_path, "black.png"))).should be_true
     end
   end
+
+  describe 'Gatling browser folders' do
+
+    it 'should set image path according to the driver\'s browser' do
+      Gatling.browser_ref_paths_toggle = true
+      Gatling.reference_image_path = '/some/random/path'
+      Gatling::Configuration.reference_image_path.should == '/some/random/path/firefox'
+      Gatling.browser_ref_paths_toggle = false
+    end
+  end
+
+
 end
