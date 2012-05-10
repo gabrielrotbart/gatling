@@ -42,18 +42,17 @@ module Gatling
       end
     end
 
-    def compare_until_match actual_element, expected_reference_filename, max_no_tries
-      tries = max_no_tries
+    def compare_until_match actual_element, expected_reference_filename, max_no_tries = Gatling::Configuration.max_no_tries, sleep_time = Gatling::Configuration.sleep_between_tries
       try = 0
       match = false
       expected_image = Gatling::ImageFromFile.new(expected_reference_filename)
       comparison = nil
-      while !match && try < tries
+      while !match && try < max_no_tries
         actual_image = Gatling::ImageFromElement.new(actual_element, expected_reference_filename)
         comparison = Gatling::Comparison.new(expected_image, actual_image)
         match = comparison.matches?
         if !match
-          sleep 0.5
+          sleep sleep_time
           try += 1
           #TODO: Send to logger instead of puts
           puts "Tried to match #{try} times"
