@@ -8,9 +8,7 @@ module Gatling
       @expected_image = expected_image
       @comparison = compare_image
       @match = @comparison[1] == 0.0
-      if !@matches
-         @diff_image =Gatling::Image.new(@comparison.first, @expected_image.file_name)
-      end
+      @diff_image =Gatling::Image.new(@comparison.first, @expected_image.file_name) unless @matches
     end
 
     def matches?
