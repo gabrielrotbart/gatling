@@ -13,8 +13,6 @@ module Gatling
         @reference_image_path ||= construct_path
       end
 
-
-
       def max_no_tries
         Gatling.max_no_tries || @max_no_tries ||= 5
       end
