@@ -2,20 +2,23 @@ require 'spec_helper'
 
 describe Gatling::Image do
 
-  before:all do
+  before :all do
     @ref_path = './image_tests'
-    Gatling::Configuration.reference_image_path = @ref_path
     @expected_temp_path = File.join @ref_path, 'temp'
     @expected_temp_image_path = File.join @expected_temp_path, 'image.png'
+  end
+
+  after :each do
+    config_clean_up
   end
 
   describe 'should initialize from' do
 
     it 'image file type' do
-      File.stub(:exists?).and_return true
+      File.stub(:exists?).and_return(true)
       image_mock = mock(Magick::Image)
+      Gatling::Configuration.should_receive(:reference_image_path).any_number_of_times.and_return(@ref_path)
       Magick::Image.should_receive(:read).with('./image_tests/image.png').and_return([image_mock])
-
       subject = Gatling::ImageFromFile.new("image.png")
       subject.image.should == image_mock
       subject.file_name.should == 'image.png'
@@ -43,6 +46,9 @@ describe Gatling::Image do
 
   describe "Images file handling" do
 
+    before :each do
+      Gatling::Configuration.should_receive(:reference_image_path).any_number_of_times.and_return(@ref_path)
+    end
 
     it 'will save an image to the correct path for the type' do
       mock_image = mock(Magick::Image)
@@ -98,8 +104,8 @@ describe Gatling::Image do
 
   describe "it creates a path from path types" do
 
-    before:each do
-      Gatling::Configuration.reference_image_path = '/some/path'
+    before :each do
+      Gatling::Configuration.should_receive(:reference_image_path).any_number_of_times.and_return('/some/path')
       mock_image = mock(Magick::Image)
       @subject = Gatling::Image.new(mock_image, 'image.png')
     end

@@ -18,6 +18,12 @@ Capybara.app_host = "file://#{File.expand_path(File.dirname(__FILE__))}/support/
 Capybara.default_driver = :selenium
 Capybara.run_server = false
 
+def config_clean_up
+  Gatling::Configuration.trainer_toggle = false
+  Gatling::Configuration.reference_image_path = nil
+  Gatling::Configuration.browser_ref_paths_toggle = false
+end
+
 def remove_refs(dir)
   Dir.glob("#{dir}/**/*.png").each {|image| FileUtils.rm image}
 end
