@@ -5,6 +5,10 @@ describe Gatling::Configuration do
 
   describe "#reference_image_path" do
 
+    after :each do
+      Gatling::Configuration.reference_image_path = nil
+      Gatling.reference_image_path = nil
+    end
 
     describe "without Rails" do
       it "should default to './spec/reference_images' when not in a rails environment" do
@@ -38,6 +42,43 @@ describe Gatling::Configuration do
         subject.reference_image_path = "my custom path"
         Gatling::Configuration.reference_image_path.should eql("my custom path")
       end
+
+    end
+
+    describe "creating custom reference folders" do
+
+      before :each do
+        Gatling.reference_image_path = '/some/ref/path'
+      end
+
+      it "should default to custom folders off" do
+        subject.browser_ref_paths_toggle.should == false
+      end
+
+      it "should allow setting custom folders on" do
+        Gatling::Configuration.browser_ref_paths_toggle = true
+        subject.browser_ref_paths_toggle.should == true
+      end
+
+
+      it "should set reference_image_path to default when browser can\'t be found" do
+        subject.browser_ref_paths_toggle = true
+        browser = mock("browser")
+        Capybara.page.driver.browser.should_receive(:browser).and_raise(StandardError.new)
+        subject.reference_image_path.should == '/some/ref/path'
+      end
+
+      it "should create custom folder for each browser according to ENV" do
+        pending
+      end
+
+      it "should set the image reference path for each browser according to selenium driver if no ENV is set" do
+        subject.browser_ref_paths_toggle = true
+        subject.stub!(:browser).and_return('chrome')
+        subject.reference_image_path.should == '/some/ref/path/chrome'
+        subject.browser_ref_paths_toggle = false
+      end
+
 
     end
   end
@@ -75,6 +116,12 @@ describe Gatling::Configuration do
   end
 
   describe 'paths' do
+
+    after :each do
+      Gatling::Configuration.reference_image_path = nil
+      Gatling.reference_image_path = nil
+    end
+
     it 'should return the directory for a type of image' do
       Gatling::Configuration.reference_image_path = "a_path"
       subject.path(:temp).should == 'a_path/temp'
@@ -123,34 +170,7 @@ describe Gatling::Configuration do
     end
   end
 
-  describe "creating custom reference folders" do
 
-    before :each do
-      Gatling.reference_image_path = nil
-      subject.reference_image_path = '/some/ref/path'
-    end
-
-    it "should default to custom folders off" do
-      subject.browser_ref_paths_toggle.should == false
-    end
-
-    it "should allow setting custom folders off" do
-      Gatling::Configuration.browser_ref_paths_toggle = false
-      subject.browser_ref_paths_toggle.should == false
-    end
-
-    it "should create custom folder for each browser according to ENV" do
-      pending
-    end
-
-    it "should set the image reference path for each browser according to selenium driver if no ENV is set" do
-      subject.browser_ref_paths_toggle = true
-      subject.stub!(:browser).and_return('chrome')
-      subject.reference_image_path.should == '/some/ref/path/chrome'
-      subject.browser_ref_paths_toggle = false
-    end
-
-  end
 
 
 end

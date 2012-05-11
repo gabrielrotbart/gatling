@@ -8,12 +8,13 @@ describe 'Gatling' do
   end
 
   before(:each) do
-    @ref_path = Gatling::Configuration.reference_image_path = File.join(spec_support_root, 'ref_path')
+    @ref_path = Gatling.reference_image_path = File.join(spec_support_root, 'ref_path')
   end
 
   after(:each) do
     remove_refs(@ref_path)
     Gatling::Configuration.trainer_toggle = false
+    Gatling::Configuration.reference_image_path = nil
   end
 
   describe 'Gatling, when no reference image exists' do
@@ -88,6 +89,7 @@ describe 'Gatling' do
 
     it 'should set image path according to the driver\'s browser' do
       Gatling.browser_ref_paths_toggle = true
+      Gatling::Configuration.reference_image_path = nil
       Gatling.reference_image_path = '/some/random/path'
       Gatling::Configuration.reference_image_path.should == '/some/random/path/firefox'
       Gatling.browser_ref_paths_toggle = false

@@ -10,8 +10,7 @@ module Gatling
       attr_reader :paths
 
       def reference_image_path
-        ref_path = Gatling.reference_image_path || @reference_image_path ||= set_default_path
-        browser_ref_paths_toggle ? @reference_image_path = File.join(ref_path, browser) : ref_path
+        @reference_image_path ||= construct_path
       end
 
 
@@ -54,19 +53,27 @@ module Gatling
       end
 
 
-      def set_default_path
+      def construct_path
         private
           if Gatling.reference_image_path
-            @reference_image_path = Gatling.reference_image_path
+            reference_image_path = Gatling.reference_image_path
           else
             begin
-              @reference_image_path = File.join(Rails.root, 'spec/reference_images')
+              reference_image_path = File.join(Rails.root, 'spec/reference_images')
             rescue
-              @reference_image_path = 'spec/reference_images'
+              reference_image_path = 'spec/reference_images'
               puts "Currently defaulting to #{@reference_image_path}. Overide this by setting Gatling::Configuration.reference_image_path=[refpath]"
             end
           end
-          @reference_image_path
+          if browser_ref_paths_toggle
+            begin
+              File.join(reference_image_path, browser)
+            rescue
+              reference_image_path
+            end
+           else
+            reference_image_path
+          end
       end
 
       def browser_ref_paths_toggle
@@ -77,8 +84,7 @@ module Gatling
         begin
           browser = Capybara.page.driver.browser.browser
         rescue
-          puts "Could not find browser!! Please turn browser folders off"
-         browser = nil
+          raise "Currently custom folders are only supported by Capybara. ENV variables are coming."
         end
         browser.to_s
       end
