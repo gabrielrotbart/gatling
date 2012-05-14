@@ -53,25 +53,32 @@ module Gatling
 
       def construct_path
         private
-          if Gatling.reference_image_path
-            reference_image_path = Gatling.reference_image_path
-          else
-            begin
-              reference_image_path = File.join(Rails.root, 'spec/reference_images')
-            rescue
-              reference_image_path = 'spec/reference_images'
-              puts "Currently defaulting to #{@reference_image_path}. Overide this by setting Gatling::Configuration.reference_image_path=[refpath]"
-            end
-          end
-          if browser_folders
-            begin
-              File.join(reference_image_path, browser)
-            rescue
-              reference_image_path
-            end
-           else
-            reference_image_path
-          end
+        reference_image_path = user_set_reference_path || default_reference_path
+        reference_image_path = reference_path_with_browser_folders(reference_image_path) if browser_folders
+        reference_image_path
+      end
+
+      def user_set_reference_path
+        Gatling.reference_image_path
+      end
+
+      def default_reference_path
+        begin
+          reference_image_path = File.join(Rails.root, 'spec/reference_images')
+        rescue
+          reference_image_path = 'spec/reference_images'
+          puts "Currently defaulting to #{@reference_image_path}. Overide this by setting Gatling.reference_image_path=[refpath]"
+        end
+        reference_image_path
+      end
+
+      def reference_path_with_browser_folders path
+        begin
+          reference_images_path = File.join(path, browser)
+        rescue
+          reference_images_path = path
+        end
+        reference_images_path
       end
 
       def browser_folders
