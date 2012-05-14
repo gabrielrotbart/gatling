@@ -4,16 +4,9 @@ include Capybara::DSL
 describe Gatling do
 
   before :all do
-    @spec_support_root = spec_support_root
     @box = 'box'
     @black_box = 'black.png'
     @red_box = 'red.png'
-    @ref_path = Gatling::Configuration.reference_image_path = './ref_path'
-    Gatling.browser_ref_paths_toggle = false
-  end
-
-  after :each  do
-    Gatling::Configuration.trainer_toggle = false
   end
 
   describe '#Gatling' do
@@ -75,7 +68,7 @@ describe "#compare_until_match" do
       before do
         @ref_image = mock("Gatling::Image")
         @actual_image = mock("Gatling::Image")
-        @element  = mock(Gatling::CaptureElement)
+        @element  = mock("Gatling::CaptureElement")
         @comparison = mock("Gatling::Comparison")
         Gatling::ImageFromFile.stub!(:new).and_return(@ref_image)
         Gatling::ImageFromElement.stub!(:new).and_return(@actual_image)

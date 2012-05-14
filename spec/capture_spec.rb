@@ -2,11 +2,14 @@ require 'spec_helper'
 
 describe Gatling::CaptureElement do
 
-  before do
-
+  before :each do
     capybara_node = mock (Capybara::Node::Element)
-    Gatling::Configuration.reference_image_path="./"
+    Gatling::Configuration.should_receive(:reference_image_path).and_return("./")
     @capture_element = Gatling::CaptureElement.new capybara_node, capybara_node
+  end
+
+  after :each do
+    config_clean_up
   end
 
   describe 'take_screenshot' do

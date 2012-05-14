@@ -8,12 +8,12 @@ describe 'Gatling' do
   end
 
   before(:each) do
-    @ref_path = Gatling::Configuration.reference_image_path = File.join(spec_support_root, 'ref_path')
+    @ref_path = Gatling.reference_image_path = File.join(spec_support_root, 'ref_path')
   end
 
   after(:each) do
     remove_refs(@ref_path)
-    Gatling::Configuration.trainer_toggle = false
+    config_clean_up
   end
 
   describe 'Gatling, when no reference image exists' do
