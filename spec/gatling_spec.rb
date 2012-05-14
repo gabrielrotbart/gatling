@@ -37,7 +37,6 @@ describe Gatling do
 
     it "#save_image_as_diff" do
       @image_class_mock.should_receive(:save).with(:diff).and_return(@ref_path)
-      @image_class_mock.should_receive(:save).with(:candidate).and_return(@ref_path)
       @image_class_mock.should_receive(:file_name).at_least(:once).and_return("some_name")
       expect {subject.save_image_as_diff(@image_class_mock)}.should raise_error
     end
@@ -74,12 +73,12 @@ describe Gatling do
 describe "#compare_until_match" do
 
       before do
-        @apple = mock("Gatling::Image")
-        @orange = mock("Gatling::Image")
+        @ref_image = mock("Gatling::Image")
+        @actual_image = mock("Gatling::Image")
         @element  = mock(Gatling::CaptureElement)
         @comparison = mock("Gatling::Comparison")
-        Gatling::ImageFromFile.stub!(:new).and_return(@orange)
-        Gatling::ImageFromElement.stub!(:new).and_return(@orange)
+        Gatling::ImageFromFile.stub!(:new).and_return(@ref_image)
+        Gatling::ImageFromElement.stub!(:new).and_return(@actual_image)
         Gatling::Comparison.stub!(:new).and_return(@comparison)
       end
 
@@ -90,6 +89,12 @@ describe "#compare_until_match" do
 
       it "should pass after a few tries if match is found" do
         @comparison.should_receive(:matches?).exactly(1).times.and_return(true)
+        Gatling.compare_until_match(@element, "orange.png", 3)
+      end
+
+      it 'should compare image from the element with image from the file' do
+        @comparison.stub!(:matches?).and_return(true)
+        Gatling::Comparison.should_receive(:new).with(@actual_image, @ref_image).and_return(@comparison)
         Gatling.compare_until_match(@element, "orange.png", 3)
       end
   end

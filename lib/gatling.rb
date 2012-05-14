@@ -49,7 +49,7 @@ module Gatling
       comparison = nil
       while !match && try < max_no_tries
         actual_image = Gatling::ImageFromElement.new(actual_element, expected_reference_filename)
-        comparison = Gatling::Comparison.new(expected_image, actual_image)
+        comparison = Gatling::Comparison.new(actual_image, expected_image)
         match = comparison.matches?
         if !match
           sleep sleep_time
@@ -63,7 +63,6 @@ module Gatling
 
     def save_image_as_diff(image)
       image.save(:diff)
-      image.save(:candidate)
       raise "element did not match #{image.file_name}. A diff image: #{image.file_name} was created in " +
       "#{image.path(:diff)} " +
       "A new reference #{image.path(:candidate)} can be used to fix the test"
