@@ -146,15 +146,36 @@ describe Gatling::Configuration do
 
   describe "settings" do
 
-    it "should accept a block of settings and parse them correctly" do
-      Gatling.config do |setting|
-        Gatling.reference_image_path = 'custom_path'
-        Gatling.max_no_tries = 3
-        Gatling.sleep_between_tries = 0.7
+    describe "should accept a block of settings and parse them correctly" do
+
+      it "for reference_image_path" do
+        Gatling.config do |setting|
+          Gatling.reference_image_path = 'custom_path'
+        end
+        subject.reference_image_path.should eql 'custom_path'
       end
-      subject.reference_image_path.should eql 'custom_path'
-      subject.max_no_tries.should eql 3
-      subject.sleep_between_tries.should eql 0.7
+
+      it "for max_no_tries" do
+        Gatling.config do |setting|
+          Gatling.max_no_tries = 3
+        end
+        subject.max_no_tries.should eql 3
+      end
+
+      it "sleep_between_tries" do
+        Gatling.config do |setting|
+          Gatling.sleep_between_tries = 0.7
+        end
+        subject.sleep_between_tries.should eql 0.7
+      end
+
+      it "browser_folders" do
+        Gatling.config do |setting|
+          Gatling.browser_folders = true
+        end
+        subject.browser_folders.should eql true
+      end
+
     end
   end
 
