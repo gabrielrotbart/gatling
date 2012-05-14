@@ -22,7 +22,7 @@ describe 'rspec matcher' do
       black_element.should look_like("black.png")
     end
 
-    it 'will fail if images dosent matches reference' do
+    it "will fail if images doesn't matches reference" do
       create_square_image(@ref_path, 'black')
       red_element = element_for_spec("#red")
       expect{red_element.should look_like(@black_box)}.should raise_error
