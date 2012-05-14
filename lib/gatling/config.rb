@@ -89,6 +89,8 @@ module Gatling
         begin
           browser = Capybara.page.driver.browser.browser
         rescue
+          browser = Selenium.page.driver.browser.browser
+        rescue
           raise "Currently custom folders are only supported by Capybara. ENV variables are coming."
         end
         browser.to_s

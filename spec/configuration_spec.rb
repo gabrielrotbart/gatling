@@ -68,7 +68,7 @@ describe Gatling::Configuration do
 
       it "should set reference_image_path to default when browser can\'t be found" do
         subject.browser_folders = true
-        Capybara.page.driver.browser.should_receive(:browser).and_raise(StandardError.new)
+        Capybara.page.driver.browser.should_receive(:browser).at_least(:once).and_raise(StandardError.new)
         subject.reference_image_path.should == '/some/ref/path'
       end
 

@@ -32,12 +32,15 @@ Also created are subfolders:
 
 === Sleep_between_tries - sets the sleep time (in seconds) between match tries (requires max_no_tries > 1). Defaults to 0.5
 
+=== browser_folders - *Currently only available with Selenium-Webdriver / Capybara* - create reference folders based on the current Selenium driver's browser. Allows for cross-browser visual testing.
+
 === Configuration settings are set with the following:
 
   Gatling.config do |setting|
     Gatling.reference_image_path = 'my_custom_path'
     Gatling.max_no_tries = 3
     Gatling.sleep_between_tries = 0.7
+    Gatling.browser_folders = true
   end
 
 GATLING::CONFIGURATION will be depreciated in future versions.
