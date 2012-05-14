@@ -57,17 +57,17 @@ describe Gatling::Configuration do
       end
 
       it "should default to custom folders off" do
-        subject.browser_ref_paths_toggle.should == false
+        subject.browser_folders.should == false
       end
 
       it "should allow setting custom folders on" do
-        Gatling::Configuration.browser_ref_paths_toggle = true
-        subject.browser_ref_paths_toggle.should == true
+        Gatling::Configuration.browser_folders = true
+        subject.browser_folders.should == true
       end
 
 
       it "should set reference_image_path to default when browser can\'t be found" do
-        subject.browser_ref_paths_toggle = true
+        subject.browser_folders = true
         Capybara.page.driver.browser.should_receive(:browser).and_raise(StandardError.new)
         subject.reference_image_path.should == '/some/ref/path'
       end
@@ -77,10 +77,10 @@ describe Gatling::Configuration do
       end
 
       it "should set the image reference path for each browser according to selenium driver if no ENV is set" do
-        subject.browser_ref_paths_toggle = true
+        subject.browser_folders = true
         subject.stub!(:browser).and_return('chrome')
         subject.reference_image_path.should == '/some/ref/path/chrome'
-        subject.browser_ref_paths_toggle = false
+        subject.browser_folders = false
       end
 
 

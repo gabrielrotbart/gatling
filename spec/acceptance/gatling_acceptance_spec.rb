@@ -87,10 +87,10 @@ describe 'Gatling' do
   describe 'Gatling browser folders' do
 
     it 'should set image path according to the driver\'s browser' do
-      Gatling.browser_ref_paths_toggle = true
+      Gatling.browser_folders = true
       Gatling.reference_image_path = '/some/random/path'
       Gatling::Configuration.reference_image_path.should == '/some/random/path/firefox'
-      Gatling.browser_ref_paths_toggle = false
+      Gatling.browser_folders = false
     end
   end
 

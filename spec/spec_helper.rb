@@ -21,7 +21,7 @@ Capybara.run_server = false
 def config_clean_up
   Gatling::Configuration.trainer_toggle = false
   Gatling::Configuration.reference_image_path = nil
-  Gatling::Configuration.browser_ref_paths_toggle = false
+  Gatling::Configuration.browser_folders = false
 end
 
 def remove_refs(dir)

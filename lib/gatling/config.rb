@@ -5,7 +5,7 @@ module Gatling
 
     class << self
 
-      attr_accessor :reference_image_path, :trainer_toggle, :max_no_tries, :sleep_between_tries, :browser_ref_paths_toggle
+      attr_accessor :reference_image_path, :trainer_toggle, :max_no_tries, :sleep_between_tries, :browser_folders
 
       attr_reader :paths
 
@@ -63,7 +63,7 @@ module Gatling
               puts "Currently defaulting to #{@reference_image_path}. Overide this by setting Gatling::Configuration.reference_image_path=[refpath]"
             end
           end
-          if browser_ref_paths_toggle
+          if browser_folders
             begin
               File.join(reference_image_path, browser)
             rescue
@@ -74,8 +74,8 @@ module Gatling
           end
       end
 
-      def browser_ref_paths_toggle
-        Gatling.browser_ref_paths_toggle || @browser_ref_paths_toggle ||= false
+      def browser_folders
+        Gatling.browser_folders || @browser_folders ||= false
       end
 
       def browser

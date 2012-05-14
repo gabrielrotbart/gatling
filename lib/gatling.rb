@@ -15,7 +15,7 @@ module Gatling
 
   class << self
 
-    attr_accessor :reference_image_path, :max_no_tries, :sleep_between_tries, :browser_ref_paths_toggle
+    attr_accessor :reference_image_path, :max_no_tries, :sleep_between_tries, :browser_folders
 
     def matches?(expected_reference_filename, actual_element)
 
