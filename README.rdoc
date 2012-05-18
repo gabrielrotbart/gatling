@@ -49,7 +49,7 @@ GATLING::CONFIGURATION will be depreciated in future versions.
 
 Identify an element to match, for example:
 
-        @element = page.find(:css, #button)
+        @element = page.find(:css, '#button')
 
 Use Gatling's custom matcher (conveniently supplied in the gatling gem) and specify the reference image:
 
