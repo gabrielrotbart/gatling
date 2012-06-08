@@ -1,10 +1,7 @@
 require 'fileutils'
-require_relative 'image_wrangler'
 
 module Gatling
   class CaptureElement
-
-  include ImageWrangler
 
     def initialize element_to_capture, *element_to_exclude
       @reference_image_path = Gatling::Configuration.reference_image_path
@@ -14,9 +11,13 @@ module Gatling
     end
 
     def capture
+      # Getting the element position before screenshot because of a side effect
+      # of WebDrivers getLocationOnceScrolledIntoView method which scrolls the page
+      # regardless of whether the object is in view or not
+      element_position = get_element_position @element_to_capture
       screenshot = self.take_screenshot
       screenshot = exclude(screenshot, @element_to_exclude) if @element_to_exclude
-      Gatling::ImageWrangler.crop_element(screenshot, @element_to_capture)
+      crop_element(screenshot, @element_to_capture, element_position)
     end
 
     def take_screenshot
@@ -31,6 +32,21 @@ module Gatling
         raise "Could not save screenshot to #{temp_dir}. Please make sure you have permission"
       end
     end
+
+    def get_element_position element
+      element = element.native
+      position = Hash.new{}
+      position[:x] = element.location.x
+      position[:y] = element.location.y
+      position[:width] = element.size.width
+      position[:height] = element.size.height
+      position
+    end
+
+    def crop_element image, element_to_crop, position
+      @cropped_element = image.crop(position[:x], position[:y], position[:width], position[:height])
+    end
+
   end
 end
 

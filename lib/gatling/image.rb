@@ -34,7 +34,6 @@ module Gatling
 
     def initialize element, file_name
       super(image, file_name)
-
       @image = Gatling::CaptureElement.new(element).capture
     end
 
