@@ -59,12 +59,13 @@ Gatling will take care of cropping the element and try and make a targeted match
 
 If the matcher fails, the test will fail, an exception will be raised and both a diff image and a new candidate image will be created.
 
-If no reference image exits, the test will fail, an exception will be raised and a candidate will be created which can be used as a reference
-(see Training mode below)
+If no reference image exits, the test will still pass and a reference file will be created for future comparisons.
 
 -------------------------------------
 
 === Training mode:
+
+GATLING_TRAINER WILL BE DEPRECIATED. Gatling now saves reference files natively when files do not exists.
 
 Gatling can be run in training mode which will create reference images where ones do not exist.
 
