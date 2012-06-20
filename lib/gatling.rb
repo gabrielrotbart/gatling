@@ -29,8 +29,8 @@ module Gatling
 
       if !File.exists?(expected_reference_file)
         actual_image = Gatling::ImageFromElement.new(actual_element, expected_reference_filename)
-        save_image_as_candidate(actual_image)
-        return false
+        save_image_as_reference(actual_image)
+        return true
       else
         comparison = compare_until_match(actual_element, expected_reference_filename, Gatling::Configuration.max_no_tries)
         matches = comparison.matches?
@@ -76,7 +76,7 @@ module Gatling
 
     def save_image_as_reference(image)
       if image.exists?
-        puts "#{image.path} already exists. reference image was not overwritten. please delete the old file to update using trainer"
+        puts "#{image.path} already exists. reference image was not overwritten. please delete the old file to update reference"
       else
         image.save(:reference)
         puts "Saved #{image.path} as reference"

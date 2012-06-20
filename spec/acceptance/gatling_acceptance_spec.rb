@@ -18,15 +18,13 @@ describe 'Gatling' do
 
   describe 'Gatling, when no reference image exists' do
 
-    it "will notify that no reference image exists and create a candidate image" do
+    it "will create a reference image" do
       black_element = element_for_spec
-      expected_error = "The design reference #{"black.png"} does not exist, #{@ref_path}/candidate/#{"black.png"} " +
-                       "is now available to be used as a reference. " +
-                       "Copy candidate to root reference_image_path to use as reference"
+      $stdout.should_receive(:puts).with "Saved #{@ref_path}/#{"black.png"} as reference"
 
-      expect {Gatling.matches?("black.png", black_element)}.should raise_error(RuntimeError, expected_error)
+      Gatling.matches?("black.png", black_element).should be_true
 
-      File.exists?(File.join(@ref_path, 'candidate', "black.png")).should be_true
+      File.exists?(File.join(@ref_path, "black.png")).should be_true
     end
   end
 
@@ -92,12 +90,12 @@ describe 'Gatling' do
       create_square_image(@ref_path, 'black')
       Gatling::Configuration.trainer_toggle = true
       expected_message = "#{File.join(@ref_path,"black.png")} already exists. reference image was not overwritten. " +
-                         "please delete the old file to update using trainer"
+                         "please delete the old file to update reference"
       black_element = element_for_spec
       reference_file_ctime = File.ctime(File.join(@ref_path,"black.png"))
 
       $stdout.should_receive(:puts).with expected_message
-      expect {Gatling.matches?("black.png", black_element)}.should_not raise_error
+      Gatling.matches?("black.png", black_element).should be_true
 
       sleep(1)
       reference_file_ctime.eql?(File.ctime(File.join(@ref_path, "black.png"))).should be_true
