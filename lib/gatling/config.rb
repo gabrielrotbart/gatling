@@ -5,7 +5,7 @@ module Gatling
 
     class << self
 
-      attr_accessor :reference_image_path, :trainer_toggle, :max_no_tries, :sleep_between_tries, :browser_folders
+      attr_accessor :reference_image_path, :max_no_tries, :sleep_between_tries, :browser_folders
 
       attr_reader :paths
 
@@ -32,24 +32,6 @@ module Gatling
           raise "Unkown image type '#{type}'"
         end
       end
-
-      def trainer_toggle
-        @trainer_value = ENV['GATLING_TRAINER']
-
-        case @trainer_value
-        when nil
-          @trainer_value = nil
-        when 'true'
-          @trainer_value = true
-        when 'false'
-          @trainer_value = false
-        else
-          @trainer_value = false
-          puts 'Unknown GATLING_TRAINER argument. Please supply true, false or nil. DEFAULTING TO FALSE'
-        end
-        @trainer_toggle ||= @trainer_value ||= false
-      end
-
 
       def construct_path
         private

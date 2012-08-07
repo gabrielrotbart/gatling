@@ -73,35 +73,6 @@ describe 'Gatling' do
     end
   end
 
-  describe 'Gatling trainer toggle' do
-
-    it 'will save a reference file if no reference file already exists' do
-      Gatling::Configuration.trainer_toggle = true
-      File.exists?(File.join(@ref_path, "black.png")).should be_false
-      $stdout.should_receive(:puts).with "Saved #{@ref_path}/#{"black.png"} as reference"
-      black_element = element_for_spec
-
-      expect {Gatling.matches?("black.png", black_element)}.should_not raise_error
-
-      File.exists?(File.join(@ref_path, "black.png")).should be_true
-    end
-
-    it 'will warn if a reference already exists and not overwrite it' do
-      create_square_image(@ref_path, 'black')
-      Gatling::Configuration.trainer_toggle = true
-      expected_message = "#{File.join(@ref_path,"black.png")} already exists. reference image was not overwritten. " +
-                         "please delete the old file to update reference"
-      black_element = element_for_spec
-      reference_file_ctime = File.ctime(File.join(@ref_path,"black.png"))
-
-      $stdout.should_receive(:puts).with expected_message
-      Gatling.matches?("black.png", black_element).should be_true
-
-      sleep(1)
-      reference_file_ctime.eql?(File.ctime(File.join(@ref_path, "black.png"))).should be_true
-    end
-  end
-
   describe 'Gatling browser folders' do
 
     it 'should set image path according to the driver\'s browser' do

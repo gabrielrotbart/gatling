@@ -19,7 +19,6 @@ Capybara.default_driver = :selenium
 Capybara.run_server = false
 
 def config_clean_up
-  Gatling::Configuration.trainer_toggle = false
   Gatling::Configuration.reference_image_path = nil
   Gatling::Configuration.browser_folders = false
 end

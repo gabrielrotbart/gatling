@@ -64,23 +64,6 @@ If no reference image exits, the test will fail, an exception will be raised and
 
 -------------------------------------
 
-=== Training mode:
-
-Gatling can be run in training mode which will create reference images where ones do not exist.
-
-<b>CAUTION: Trainer mode will pass all the test which rely on the Gatling custom matcher, this can mean a false green build.
-Please make sure you are saving 'clean' references</b>
-
-Trainer mode will not overwrite existing references. If you are updating, just delete the old reference image.
-
-To set trainer mode, prefix rspec command line with $GATLING_TRAINER = true
-
-
-Example:
-        $GATLING_TRAINER = true rspec spec/my_spec.rb
-
--------------------------------------
-
 ==== Non-gem dependencies:
 
 Imagemagick must be installed:

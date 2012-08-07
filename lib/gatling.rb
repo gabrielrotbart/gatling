@@ -21,11 +21,9 @@ module Gatling
 
       expected_reference_file = (File.join(Gatling::Configuration.path(:reference), expected_reference_filename))
 
-      if Gatling::Configuration.trainer_toggle
-        actual_image = Gatling::ImageFromElement.new(actual_element, expected_reference_filename)
-        save_image_as_reference(actual_image)
-        return true
-      end
+      if ENV['GATLING_TRAINER']
+        raise 'GATLING_TRAINER has been depreciated. Gatling will now create reference files where ones are missing. Delete bad references and re-run Gatling to re-train'
+      end  
 
       if !File.exists?(expected_reference_file)
         actual_image = Gatling::ImageFromElement.new(actual_element, expected_reference_filename)

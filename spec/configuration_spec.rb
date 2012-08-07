@@ -87,39 +87,6 @@ describe Gatling::Configuration do
     end
   end
 
-  describe '#trainer_toggle' do
-
-    it 'should default to false' do
-      subject.trainer_toggle.should eql(false)
-    end
-
-    it 'can be toggled to true' do
-      Gatling::Configuration.trainer_toggle = true
-      subject.trainer_toggle.should eql(true)
-    end
-
-    it 'toggeled using GATLING_TRAINER = false' do
-      ENV['GATLING_TRAINER'] = 'false'
-      subject.trainer_toggle.should eql(false)
-    end
-
-    it 'toggeled using GATLING_TRAINER = true' do
-      ENV['GATLING_TRAINER'] = 'true'
-      subject.trainer_toggle.should eql(true)
-    end
-
-    it 'toggeled using GATLING_TRAINER = nil' do
-      ENV['GATLING_TRAINER'] = nil
-      subject.trainer_toggle.should eql(false)
-    end
-
-    after(:each) do
-      Gatling::Configuration.trainer_toggle = false
-      ENV['GATLING_TRAINER'] = nil
-    end
-  end
-
-
   describe "#max_no_tries" do
 
       it "should default to 5" do
