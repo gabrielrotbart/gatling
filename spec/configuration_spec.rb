@@ -35,12 +35,12 @@ describe Gatling::Configuration do
       end
 
       it "should be overrideable in a rails environment" do
-        subject.reference_image_path = "my custom path"
+        Gatling.reference_image_path = "my custom path"
         Gatling::Configuration.reference_image_path.should eql("my custom path")
       end
 
       it 'should return the directory for a type of image' do
-        Gatling::Configuration.reference_image_path = "a_path"
+        Gatling.reference_image_path = "a_path"
         subject.path(:temp).should == 'a_path/temp'
       end
 

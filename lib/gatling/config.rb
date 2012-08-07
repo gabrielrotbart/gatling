@@ -10,7 +10,7 @@ module Gatling
       attr_reader :paths
 
       def reference_image_path
-        @reference_image_path ||= construct_path
+        construct_path
       end
 
       def max_no_tries
