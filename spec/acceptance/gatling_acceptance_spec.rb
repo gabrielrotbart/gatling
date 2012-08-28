@@ -8,9 +8,7 @@ describe 'Gatling' do
   end
 
   before(:each) do
-    @ref_path = Gatling.reference_image_path = File.join(spec_support_root, 'ref_path')
-    require 'pry'
-    binding.pry
+    @ref_path = Gatling::Configuration.reference_image_path = File.join(spec_support_root, 'ref_path')
   end
 
   after(:each) do
@@ -50,7 +48,7 @@ describe 'Gatling' do
                          "A diff image: #{"black.png"} was created in #{@ref_path}/diff/#{"black.png"} " +
                          "A new reference #{@ref_path}/candidate/#{"black.png"} can be used to fix the test"
 
-        expect {Gatling.matches?("black.png", red_element)}.should raise_error(RuntimeError, expected_error)
+        expect {Gatling.matches?("black.png", red_element)}.to raise_error(RuntimeError, expected_error)
 
         File.exists?(File.join(@ref_path,'diff', "black.png")).should be_true
         File.exists?(File.join(@ref_path,'candidate', "black.png")).should be_true
@@ -66,7 +64,7 @@ describe 'Gatling' do
                          "A diff image: #{"black.png"} was created in #{@ref_path}/diff/#{"black.png"} " +
                          "A new reference #{@ref_path}/candidate/#{"black.png"} can be used to fix the test"
 
-        expect {Gatling.matches?("black.png", red_element)}.should raise_error(RuntimeError, expected_error)
+        expect {Gatling.matches?("black.png", red_element)}.to raise_error(RuntimeError, expected_error)
 
         File.exists?(File.join(@ref_path,'diff', "black.png")).should be_true
         File.exists?(File.join(@ref_path,'candidate', "black.png")).should be_true
@@ -75,15 +73,6 @@ describe 'Gatling' do
     end
   end
 
-  describe 'Gatling browser folders' do
-
-    it 'should set image path according to the driver\'s browser' do
-      Gatling.browser_folders = true
-      Gatling.reference_image_path = '/some/random/path'
-      Gatling::Configuration.reference_image_path.should == '/some/random/path/firefox'
-      Gatling.browser_folders = false
-    end
-  end
 
 
 end

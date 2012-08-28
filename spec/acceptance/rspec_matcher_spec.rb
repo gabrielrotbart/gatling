@@ -5,7 +5,7 @@ describe 'rspec matcher' do
 
   before(:each) do
     @black_box = 'black.png'
-    @ref_path = Gatling.reference_image_path = File.join(spec_support_root, 'ref_path')
+    @ref_path = Gatling::Configuration.reference_image_path = File.join(spec_support_root, 'ref_path')
     create_images_for_web_page
   end
 
@@ -25,7 +25,7 @@ describe 'rspec matcher' do
     it "will fail if images doesn't matches reference" do
       create_square_image(@ref_path, 'black')
       red_element = element_for_spec("#red")
-      expect{red_element.should look_like(@black_box)}.should raise_error
+      expect{red_element.should look_like(@black_box)}.to raise_error
     end
 
   end

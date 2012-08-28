@@ -149,14 +149,14 @@ describe Gatling::Configuration do
     it 'should be able to set a config block' do
       Gatling.config do |c|
         c.reference_image_path = 'some/path'
-        c.max_no_tries = '4'
-        c.sleep_between_tries = '5'
+        c.max_no_tries = 4
+        c.sleep_between_tries = 5
         c.browser_folders = false
       end
 
       subject.reference_image_path.should == 'some/path'
-      subject.max_no_tries.should == '4'
-      subject.sleep_between_tries.should == '5'
+      subject.max_no_tries.should == 4
+      subject.sleep_between_tries.should == 5
       subject.browser_folders.should == false
     end 
 
@@ -164,8 +164,8 @@ describe Gatling::Configuration do
       expect {
         Gatling.config do |c|
           Gatling.reference_image_path = 'some/path'
-          Gatling.max_no_tries = '4'
-          Gatling.sleep_between_tries = '5'
+          Gatling.max_no_tries = 4
+          Gatling.sleep_between_tries = 5
           Gatling.browser_folders = false
       end
       }.to raise_error "Config block has changed. Example: Gatling.config {|c| c.reference_image_path = 'some/path'}. Please see README"

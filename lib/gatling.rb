@@ -28,7 +28,8 @@ module Gatling
         save_image_as_reference(actual_image)
         return true
       else
-        comparison = compare_until_match(actual_element, expected_reference_filename, Gatling::Configuration.max_no_tries)
+        reference_file = Gatling::ImageFromFile.new(expected_reference_filename)
+        comparison = compare_until_match(actual_element, reference_file, Gatling::Configuration.max_no_tries)
         matches = comparison.matches?
         if !matches
           comparison.actual_image.save(:candidate)
@@ -38,13 +39,13 @@ module Gatling
       end
     end
 
-    def compare_until_match actual_element, expected_reference_filename, max_no_tries = Gatling::Configuration.max_no_tries, sleep_time = Gatling::Configuration.sleep_between_tries
+    def compare_until_match actual_element, reference_file, max_no_tries = Gatling::Configuration.max_no_tries, sleep_time = Gatling::Configuration.sleep_between_tries
       try = 0
       match = false
-      expected_image = Gatling::ImageFromFile.new(expected_reference_filename)
+      expected_image = reference_file
       comparison = nil
       while !match && try < max_no_tries
-        actual_image = Gatling::ImageFromElement.new(actual_element, expected_reference_filename)
+        actual_image = Gatling::ImageFromElement.new(actual_element, reference_file.file_name)
         comparison = Gatling::Comparison.new(actual_image, expected_image)
         match = comparison.matches?
         if !match

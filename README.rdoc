@@ -41,8 +41,8 @@ Also created are subfolders:
 
   Gatling.config do |c|
     c.reference_image_path = 'some/path'
-    c.max_no_tries = '4'
-    c.sleep_between_tries = '5'
+    c.max_no_tries = 4
+    c.sleep_between_tries = 5
     c.browser_folders = false
   end
 

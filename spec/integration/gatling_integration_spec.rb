@@ -28,7 +28,7 @@ describe 'Gatling' do
                        "is now available to be used as a reference. " +
                        "Copy candidate to root reference_image_path to use as reference"
 
-      expect {Gatling.matches?(@black_box, mock_element)}.should raise_error(RuntimeError, expected_error)
+      expect {Gatling.matches?(@black_box, mock_element)}.to raise_error(RuntimeError, expected_error)
 
       File.exists?(File.join(@ref_path, 'candidate', @black_box)).should be_true
     end
