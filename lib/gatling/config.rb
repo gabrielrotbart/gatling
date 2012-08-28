@@ -23,15 +23,11 @@ module Gatling
       end
 
       def path(type)
-        paths = Hash[:reference => reference_image_path,
-                    :candidate => File.join(reference_image_path, 'candidate'),
-                    :diff => File.join(reference_image_path, 'diff'),
-                    :temp => File.join(reference_image_path, 'temp')]
-        if paths.keys.include? type
-          return paths[type]
-        else
-          raise "Unknown image type '#{type}'"
-        end
+        paths =  {:reference => reference_image_path,
+                  :candidate => File.join(reference_image_path, 'candidate'),
+                  :diff => File.join(reference_image_path, 'diff'),
+                  :temp => File.join(reference_image_path, 'temp')}
+        paths[type]
       end
 
       def default_reference_path

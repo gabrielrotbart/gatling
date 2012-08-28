@@ -44,10 +44,6 @@ describe Gatling::Configuration do
         subject.path(:temp).should == 'a_path/temp'
       end
 
-      it 'should thrown an error when you ask for the path of an unknown image type' do
-        expect {subject.path(:unknown)}.to raise_error "Unknown image type 'unknown'"
-      end
-
     end
 
     describe "creating custom reference folders" do
