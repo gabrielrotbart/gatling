@@ -9,6 +9,8 @@ describe 'Gatling' do
 
   before(:each) do
     @ref_path = Gatling.reference_image_path = File.join(spec_support_root, 'ref_path')
+    require 'pry'
+    binding.pry
   end
 
   after(:each) do

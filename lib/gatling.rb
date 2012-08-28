@@ -15,8 +15,6 @@ module Gatling
 
   class << self
 
-    attr_accessor :reference_image_path, :max_no_tries, :sleep_between_tries, :browser_folders
-
     def matches?(expected_reference_filename, actual_element)
 
       expected_reference_file = (File.join(Gatling::Configuration.path(:reference), expected_reference_filename))
@@ -81,8 +79,14 @@ module Gatling
       end
     end
 
-    def config
-      yield
+    def config(&block)
+      begin
+        config_class = Gatling::Configuration
+        raise "No block provied" unless block_given?
+        block.call(config_class)
+      rescue
+         raise "Config block has changed. Example: Gatling.config {|c| c.reference_image_path = 'some/path'}. Please see README"  
+      end   
     end
 
   end

@@ -31,21 +31,21 @@ describe Gatling::Configuration do
       end
 
       it "should default to <Rails.root>/spec/reference_images in a rails environment" do
-        Gatling::Configuration.reference_image_path.should eql("fake_rails_root/spec/reference_images")
+        subject.reference_image_path.should  == "fake_rails_root/spec/reference_images"
       end
 
       it "should be overrideable in a rails environment" do
-        Gatling.reference_image_path = "my custom path"
-        Gatling::Configuration.reference_image_path.should eql("my custom path")
+        subject.reference_image_path = "my custom path"
+        subject.reference_image_path.should == "my custom path"
       end
 
       it 'should return the directory for a type of image' do
-        Gatling.reference_image_path = "a_path"
+        subject.reference_image_path = "a_path"
         subject.path(:temp).should == 'a_path/temp'
       end
 
       it 'should thrown an error when you ask for the path of an unknown image type' do
-        expect { Gatling::Configuration.path(:unknown)}.should raise_error "Unkown image type 'unknown'"
+        expect {subject.path(:unknown)}.to raise_error "Unknown image type 'unknown'"
       end
 
     end
@@ -53,7 +53,7 @@ describe Gatling::Configuration do
     describe "creating custom reference folders" do
 
       before :each do
-        Gatling.reference_image_path = '/some/ref/path'
+        subject.reference_image_path = '/some/ref/path'
       end
 
       it "should default to custom folders off" do
@@ -61,7 +61,7 @@ describe Gatling::Configuration do
       end
 
       it "should allow setting custom folders on" do
-        Gatling::Configuration.browser_folders = true
+        subject.browser_folders = true
         subject.browser_folders.should == true
       end
 
@@ -106,8 +106,8 @@ describe Gatling::Configuration do
     end
 
     it "should be settable" do
-      Gatling::Configuration.sleep_between_tries = 55
-      subject.sleep_between_tries.should eql 55
+      subject.sleep_between_tries = 55
+      subject.sleep_between_tries.should == 55
     end
   end
 
@@ -116,34 +116,66 @@ describe Gatling::Configuration do
     describe "should accept a block of settings and parse them correctly" do
 
       it "for reference_image_path" do
-        Gatling.config do |setting|
-          Gatling.reference_image_path = 'custom_path'
+        Gatling.config do |c|
+          c.reference_image_path = 'custom_path'
         end
-        subject.reference_image_path.should eql 'custom_path'
+        subject.reference_image_path.should == 'custom_path'
       end
 
       it "for max_no_tries" do
-        Gatling.config do |setting|
-          Gatling.max_no_tries = 3
+        Gatling.config do |c|
+          c.max_no_tries = 3
         end
-        subject.max_no_tries.should eql 3
+
+        subject.max_no_tries.should == 3
       end
 
       it "sleep_between_tries" do
-        Gatling.config do |setting|
-          Gatling.sleep_between_tries = 0.7
+        Gatling.config do |c|
+          c.sleep_between_tries = 0.7
         end
-        subject.sleep_between_tries.should eql 0.7
+        subject.sleep_between_tries.should == 0.7
       end
 
-      it "browser_folders" do
-        Gatling.config do |setting|
-          Gatling.browser_folders = true
+     it "for browser_folders" do
+        Gatling.config do |c|
+          c.browser_folders = true
         end
-        subject.browser_folders.should eql true
+
+        subject.browser_folders.should == true
       end
 
     end
+  end
+
+  describe "config block" do
+
+    it 'should be able to set a config block' do
+      Gatling.config do |c|
+        c.reference_image_path = 'some/path'
+        c.max_no_tries = '4'
+        c.sleep_between_tries = '5'
+        c.browser_folders = false
+      end
+
+      subject.reference_image_path.should == 'some/path'
+      subject.max_no_tries.should == '4'
+      subject.sleep_between_tries.should == '5'
+      subject.browser_folders.should == false
+    end 
+
+    it 'should raise depreciation alert when calling old block' do
+      expect {
+        Gatling.config do |c|
+          Gatling.reference_image_path = 'some/path'
+          Gatling.max_no_tries = '4'
+          Gatling.sleep_between_tries = '5'
+          Gatling.browser_folders = false
+      end
+      }.to raise_error "Config block has changed. Example: Gatling.config {|c| c.reference_image_path = 'some/path'}. Please see README"
+    end
+
+   
   end
 
 
