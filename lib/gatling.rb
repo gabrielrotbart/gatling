@@ -17,15 +17,17 @@ module Gatling
 
     def matches?(expected_reference_filename, actual_element)
 
-      expected_reference_file = (File.join(Gatling::Configuration.path(:reference), expected_reference_filename))
-
       if ENV['GATLING_TRAINER']
         raise 'GATLING_TRAINER has been depreciated. Gatling will now create reference files where ones are missing. Delete bad references and re-run Gatling to re-train'
       end  
 
-      if !File.exists?(expected_reference_file)
-        actual_image = Gatling::ImageFromElement.new(actual_element, expected_reference_filename)
-        save_image_as_reference(actual_image)
+      @actual_element = actual_element
+      @expected_reference_filename = expected_reference_filename
+      @expected_reference_file = (File.join(Gatling::Configuration.path(:reference), expected_reference_filename))
+
+
+      if !File.exists?(@expected_reference_file)
+        save_reference
         return true
       else
         reference_file = Gatling::ImageFromFile.new(expected_reference_filename)
@@ -71,12 +73,14 @@ module Gatling
       "is now available to be used as a reference. Copy candidate to root reference_image_path to use as reference"
     end
 
-    def save_image_as_reference(image)
-      if image.exists?
-        puts "#{image.path} already exists. reference image was not overwritten. please delete the old file to update reference"
+    def save_reference
+      comparison = compare_until_match(@actual_element, Gatling::ImageFromElement.new(@actual_element, @expected_reference_filename))
+      reference_image = comparison.actual_image
+      reference_image.save(:reference)
+      if comparison.matches?
+        puts "Saved #{reference_image.path} as reference"
       else
-        image.save(:reference)
-        puts "Saved #{image.path} as reference"
+        raise "Saved an unstable reference: #{reference_image.path} . This might be caused by animated elements and can result in unstable tests"
       end
     end
 

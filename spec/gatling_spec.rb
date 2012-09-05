@@ -53,19 +53,32 @@ describe Gatling do
 
     describe "#save_image_as_reference" do
 
-      it "when image.exists? == true" do
-        @image_class_mock.should_receive(:exists?).and_return(true)
-        @image_class_mock.should_receive(:path).and_return(@path)
-        @image_class_mock.should_not_receive(:save)
-        subject.save_image_as_reference(@image_class_mock)
+      let(:image) {mock('image.png')}
+      let(:reference_image) {Gatling::ImageFromElement.stub(:new).and_return(image)}
+      let(:comparison) {mock("comparison")}
+
+      before :each do
+        Gatling.stub!(:compare_until_match).and_return(comparison)
       end
 
-      it "when image_exists? == false" do
-        @image_class_mock.should_receive(:exists?).and_return(false)
-        @image_class_mock.should_receive(:save).with(:reference).and_return(@ref_path)
-        @image_class_mock.should_receive(:path).and_return(@path)
-        subject.save_image_as_reference(@image_class_mock)
+      it "create stable reference" do
+        comparison.should_receive(:matches?).and_return(true)
+        comparison.should_receive(:actual_image).and_return(reference_image)
+        reference_image.should_receive(:path).and_return('/some/path/reference_image.png')
+        reference_image.should_receive(:save)
+
+        Gatling.save_reference
+      end 
+
+      it "create stable reference after trying twice" do
+        comparison.should_receive(:matches?).and_return(false)
+        comparison.should_receive(:actual_image).and_return(reference_image)
+        reference_image.should_receive(:path).and_return('/some/path/reference_image.png')
+        reference_image.should_receive(:save)
+
+        expect {Gatling.save_reference}.to raise_error(/Saved an unstable reference/)
       end
+
     end
   end  
 
@@ -80,12 +93,12 @@ describe Gatling do
 
     it "should try match for a specified amount of times" do
       comparison.should_receive(:matches?).exactly(3).times
-      Gatling.compare_until_match(@element, expected_image, 3)
+      Gatling.compare_until_match(@element, expected_image, 3, 0.1)
     end
 
     it "should pass after a few tries if match is found" do
       comparison.should_receive(:matches?).exactly(1).times.and_return(true)
-      Gatling.compare_until_match(@element, expected_image, 3)
+      Gatling.compare_until_match(@element, expected_image, 3, 0.1)
     end
 
     it 'should compare image from the element with image from the file' do
