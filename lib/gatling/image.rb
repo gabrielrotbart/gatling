@@ -34,7 +34,22 @@ module Gatling
 
     def initialize element, file_name
       super(image, file_name)
-      @image = Gatling::CaptureElement.new(element).capture
+      @element = element
+      @image = Gatling::CaptureElement.capture(element)
+    end
+
+    def verify_and_save
+      comparable = Gatli
+      self.compare
+    end
+
+    private
+    def compare
+
+    end
+
+    def capture_image
+      @image = Gatling::CaptureElement.new(@element).capture
     end
 
     #TODO: make save a relevant subclass method

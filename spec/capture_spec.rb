@@ -2,10 +2,13 @@ require 'spec_helper'
 
 describe Gatling::CaptureElement do
 
+  class SomeClass
+  end
+
   before :each do
-    capybara_node = mock (Capybara::Node::Element)
-    Gatling::Configuration.should_receive(:reference_image_path).and_return("./")
-    @capture_element = Gatling::CaptureElement.new capybara_node, capybara_node
+    capybara_node = mock(Capybara::Node::Element)
+    subject = SomeClass.new
+    subject.extend(Gatling::CaptureElement)
   end
 
   after :each do
@@ -13,8 +16,9 @@ describe Gatling::CaptureElement do
   end
 
   describe 'take_screenshot' do
-    before do
-      @webdriver = double('webdriver')
+    before :each do
+      Gatling::Configuration.should_receive(:path).and_return("./temp")
+      @webdriver = mock('webdriver')
       Capybara.stub_chain(:page, :driver, :browser).and_return(@webdriver)
 
       @expected_temp_screenshot_file_pattern = /.*\/temp\/temp-\d+.png/
@@ -27,7 +31,7 @@ describe Gatling::CaptureElement do
       File.stub!(:'exists?').and_return(false)
       FileUtils.should_receive(:mkdir_p).with('./temp')
 
-      @capture_element.take_screenshot
+      subject.take_screenshot
     end
 
 
@@ -35,43 +39,43 @@ describe Gatling::CaptureElement do
       @webdriver.should_receive(:save_screenshot).with(@expected_temp_screenshot_file_pattern)
       Magick::Image.should_receive(:read).with(@expected_temp_screenshot_file_pattern).and_return([])
 
-      @capture_element.take_screenshot
+      subject.take_screenshot
     end
-
-
-  class Point
-    attr_accessor :x, :y
   end
 
-  class Size
-    attr_accessor :width, :height
-  end
+  describe 'capture' do
 
-  it 'should get the position of the css element' do
+      class Point
+        attr_accessor :x, :y
+      end
 
-    #Overiding the stupid public method:y of YAML module
+      class Size
+        attr_accessor :width, :height
+      end
 
-    location = Point.new
-    location.x = 1
-    location.y = 2
+      it 'should get the position of the css element' do
+        #Overiding the stupid public method:y of YAML module
 
-    size = Size.new
-    size.width = 100
-    size.height = 200
+        location = Point.new
+        location.x = 1
+        location.y = 2
 
-    mock_element = mock
-    mock_element.stub(:native).and_return(mock_element)
-    mock_element.stub(:location).and_return(location)
-    mock_element.stub(:size).and_return(size)
+        size = Size.new
+        size.width = 100
+        size.height = 200
 
-    position = @capture_element.get_element_position mock_element
+        mock_element = mock
+        mock_element.stub(:native).and_return(mock_element)
+        mock_element.stub(:location).and_return(location)
+        mock_element.stub(:size).and_return(size)
 
-    position[:x].should eql(1)
-    position[:y].should eql(2)
-    position[:width].should eql(100)
-    position[:height].should eql(200)
-  end
+        position = subject.get_element_position mock_element
 
+        position[:x].should eql(1)
+        position[:y].should eql(2)
+        position[:width].should eql(100)
+        position[:height].should eql(200)
+      end
   end
 
 

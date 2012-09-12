@@ -29,8 +29,9 @@ describe Gatling::Image do
       mock_capture_element = mock(Gatling::CaptureElement)
       mock_image = mock(Magick::Image)
 
-      Gatling::CaptureElement.should_receive(:new).and_return mock_capture_element
-      mock_capture_element.should_receive(:capture).and_return mock_image
+      Gatling::CaptureElement.should_receive(:new).and_return(mock_capture_element)
+      mock_capture_element.should_receive(:capture).with(mock_element).and_return(mock_image)
+
       subject = Gatling::ImageFromElement.new(mock_element, "image.png")
       subject.image.should == mock_image
       subject.file_name.should == 'image.png'

@@ -12,7 +12,6 @@ require 'gatling/capture_element'
 #TODO: Make directories as needed
 
 module Gatling
-
   class << self
 
     def matches?(expected_reference_filename, actual_element)

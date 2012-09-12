@@ -1,27 +1,22 @@
 require 'fileutils'
+require 'gatling/config'
 
 module Gatling
-  class CaptureElement
+  module CaptureElement
+    extend Gatling::Configuration 
 
-    def initialize element_to_capture, *element_to_exclude
-      @reference_image_path = Gatling::Configuration.reference_image_path
-      @element_to_capture = element_to_capture
-      # @element_to_exclude = element_to_exclude.first
-
-    end
-
-    def capture
+    def self.capture(element)
       # Getting the element position before screenshot because of a side effect
       # of WebDrivers getLocationOnceScrolledIntoView method which scrolls the page
       # regardless of whether the object is in view or not
-      element_position = get_element_position @element_to_capture
-      screenshot = self.take_screenshot
+      element_position = get_element_position(element)
+      screenshot = take_screenshot
       screenshot = exclude(screenshot, @element_to_exclude) if @element_to_exclude
       crop_element(screenshot, @element_to_capture, element_position)
     end
 
-    def take_screenshot
-      temp_dir = File.join(@reference_image_path, 'temp')
+    def self.take_screenshot
+      temp_dir = Gatling::Configuration.path(:temp)
       FileUtils.mkdir_p(temp_dir) unless File.exists?(temp_dir)
       #captures the uncropped full screen
       begin
@@ -33,7 +28,7 @@ module Gatling
       end
     end
 
-    def get_element_position element
+    def self.get_element_position element
       element = element.native
       position = Hash.new{}
       position[:x] = element.location.x
@@ -43,7 +38,7 @@ module Gatling
       position
     end
 
-    def crop_element image, element_to_crop, position
+    def self.crop_element image, element_to_crop, position
       @cropped_element = image.crop(position[:x], position[:y], position[:width], position[:height])
     end
 
