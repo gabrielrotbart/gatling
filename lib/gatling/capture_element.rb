@@ -11,10 +11,11 @@ module Gatling
       # regardless of whether the object is in view or not
       element_position = get_element_position(element)
       screenshot = take_screenshot
-      screenshot = exclude(screenshot, @element_to_exclude) if @element_to_exclude
-      crop_element(screenshot, @element_to_capture, element_position)
+
+      crop_element(screenshot, element, element_position)
     end
 
+    private
     def self.take_screenshot
       temp_dir = Gatling::Configuration.path(:temp)
       FileUtils.mkdir_p(temp_dir) unless File.exists?(temp_dir)
@@ -39,7 +40,7 @@ module Gatling
     end
 
     def self.crop_element image, element_to_crop, position
-      @cropped_element = image.crop(position[:x], position[:y], position[:width], position[:height])
+      cropped_element = image.crop(position[:x], position[:y], position[:width], position[:height])
     end
 
   end

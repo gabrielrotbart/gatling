@@ -26,7 +26,6 @@ describe Gatling::Image do
 
     it 'web element type' do
       mock_element = mock(Capybara::Node::Element)
-      mock_capture_element = mock(Gatling::CaptureElement)
       mock_image = mock(Magick::Image)
 
       Gatling::CaptureElement.should_receive(:new).and_return(mock_capture_element)
