@@ -13,18 +13,18 @@ module Gatling
 
     end
 
-    def save type
-      @path = path(type)
-      FileUtils::mkdir_p(File.dirname(@path)) unless File.exists?(@path)
-      @image.write @path
-      @path
+    def save(type = :reference)
+      save_path = path(type)
+      FileUtils::mkdir_p(File.dirname(save_path)) unless File.exists?(save_path)
+      @image.write save_path
+      save_path
     end
 
     def exists?
       File.exists?(path)
     end
 
-    def path type = :reference
+    def path(type = :reference)
       @path = File.join(Gatling::Configuration.path(type), @file_name)
     end
 
@@ -32,7 +32,7 @@ module Gatling
 
   class ImageFromElement < Image
 
-    def initialize element, file_name
+    def initialize(element, file_name)
       super(image, file_name)
       @element = element
       @image = Gatling::CaptureElement.capture(element)
@@ -57,8 +57,9 @@ module Gatling
 
   class ImageFromFile < Image
 
-    def initialize file_name
+    def initialize(file_name)
       super(image, file_name)
+
       @image = Magick::Image.read(path).first
     end
 

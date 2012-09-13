@@ -7,7 +7,6 @@ describe Gatling do
     config_clean_up
   end
 
-
   let(:actual_image)      { mock("Gatling::Image") }
   let(:expected_image)    { mock("Gatling::Image") }
   let(:comparison)        { mock("Gatling::Comparison") }
