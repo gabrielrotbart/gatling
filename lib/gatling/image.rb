@@ -6,11 +6,8 @@ module Gatling
     attr_reader :type
 
     def initialize image, file_name
-
       @file_name = file_name
-
       @image = image
-
     end
 
     def save(type = :reference)
@@ -35,21 +32,28 @@ module Gatling
     def initialize(element, file_name)
       super(image, file_name)
       @element = element
-      @image = Gatling::CaptureElement.capture(element)
+      @image = capture_image
     end
 
     def verify_and_save
-      comparable = Gatli
-      self.compare
+      Gatling::Configuration.max_no_tries.times do
+        verifiable_image = capture_image
+        matches = self.verify(verifiable_image)
+        if matches
+          self.save
+          return() 
+        end  
+      end
+      raise 'Could not save a stable image. This could be due to animations or page load times. Saved a reference image, delete it to re-try'
     end
 
     private
-    def compare
-
+    def verify(verifiable)
+      match = Gatling::Comparison.new(@image,verifiable).matches?
     end
 
     def capture_image
-      @image = Gatling::CaptureElement.new(@element).capture
+      Gatling::CaptureElement.capture(@element)
     end
 
     #TODO: make save a relevant subclass method

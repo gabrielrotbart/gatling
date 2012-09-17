@@ -36,7 +36,7 @@ module Gatling
           comparison.actual_image.save(:candidate)
           save_image_as_diff(comparison.diff_image)
         end
-        matches
+        matches 
       end
     end
 
@@ -73,14 +73,7 @@ module Gatling
     end
 
     def save_reference
-      comparison = compare_until_match(@actual_element, Gatling::ImageFromElement.new(@actual_element, @expected_reference_filename))
-      reference_image = comparison.actual_image
-      reference_image.save(:reference)
-      if comparison.matches?
-        puts "Saved #{reference_image.path} as reference"
-      else
-        raise "Saved an unstable reference: #{reference_image.path} . This might be caused by animated elements and can result in unstable tests"
-      end
+      ImageFromElement.new(@actual_element,@expected_reference_filename).verify_and_save
     end
 
     def config(&block)

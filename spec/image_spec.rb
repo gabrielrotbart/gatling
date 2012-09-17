@@ -23,14 +23,7 @@ describe Gatling::Image do
       subject.file_name.should == 'image.png'
     end
 
-    it 'web element type' do
-      mock_element = mock(Capybara::Node::Element)
-      Gatling::CaptureElement.should_receive(:capture).with(mock_element).and_return(example_image)
-
-      subject = Gatling::ImageFromElement.new(mock_element, "image.png")
-      subject.image.class.should == example_image.class
-      subject.file_name.should == 'image.png'
-    end
+    
   end
 
   describe "save" do
@@ -66,6 +59,32 @@ describe Gatling::Image do
     it "from candidate" do
       @subject.path(:candidate).should == '/some/path/candidate/image.png'
     end
+
+  end
+
+  describe "ImageFromElement" do
+
+    before :each do
+      @mock_element = mock(Capybara::Node::Element)
+    end
+
+    it 'should initialize from a web element' do
+      Gatling::CaptureElement.should_receive(:capture).with(@mock_element).and_return(example_image)
+
+      subject = Gatling::ImageFromElement.new(@mock_element, "image.png")
+      subject.image.class.should == example_image.class
+      subject.file_name.should == 'image.png'
+    end
+
+    # it '.save should verify the element and then save' do
+    #   Gatling::Configuration.max_no_tries = 3
+    #   Gatling::CaptureElement.should_receive(:capture).with(@mock_element).and_return(example_image)
+
+
+    #   # subject.should_receive(:save)
+    #   # example_image.should_receive(:write)
+    # end
+
 
   end
 
