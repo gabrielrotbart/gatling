@@ -5,9 +5,9 @@ describe Gatling::Image do
   let(:example_image)           { Magick::Image.new(1,1) }
   let(:ref_path)                { 'spec/reference_images/image.png' }
 
-  # before :all do
-  #   Gatling::Configuration.reference_image_path = 'spec/reference_images'
-  # end
+  before :each do
+    Gatling::Configuration.reference_image_path = 'spec/reference_images'
+  end
 
   after :each do
     config_clean_up
