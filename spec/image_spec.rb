@@ -64,26 +64,43 @@ describe Gatling::Image do
 
   describe "ImageFromElement" do
 
-    before :each do
-      @mock_element = mock(Capybara::Node::Element)
-    end
+    let(:mock_element) { mock(Capybara::Node::Element) }
+    let(:comparison)   { mock('comparison') }
 
     it 'should initialize from a web element' do
-      Gatling::CaptureElement.should_receive(:capture).with(@mock_element).and_return(example_image)
+      Gatling::CaptureElement.should_receive(:capture).with(mock_element).and_return(example_image)
 
-      subject = Gatling::ImageFromElement.new(@mock_element, "image.png")
+      subject = Gatling::ImageFromElement.new(mock_element, "image.png")
       subject.image.class.should == example_image.class
       subject.file_name.should == 'image.png'
     end
 
-    # it '.save should verify the element and then save' do
-    #   Gatling::Configuration.max_no_tries = 3
-    #   Gatling::CaptureElement.should_receive(:capture).with(@mock_element).and_return(example_image)
+    describe '.save_and_verify' do
 
+      it 'should verify the element and then save' do
+        Gatling::Comparison.should_receive(:new).exactly(2).times.and_return(comparison)
+        comparison.should_receive(:matches?).exactly(2).times.and_return(false,true)
 
-    #   # subject.should_receive(:save)
-    #   # example_image.should_receive(:write)
-    # end
+        Gatling::CaptureElement.should_receive(:capture).exactly(3).times.with(mock_element).and_return(example_image)
+
+        subject = Gatling::ImageFromElement.new(mock_element, "image.png")
+        subject.should_receive(:save)
+
+        Gatling::Configuration.max_no_tries = 3
+
+        subject.verify_and_save
+      end
+      
+      it 'should raise an exception if can\'t create a stable image' do
+        Gatling::Configuration.max_no_tries = 1
+        Gatling::CaptureElement.stub!(:capture).and_return(mock_element)
+        Gatling::Comparison.stub!(:matches?).and_return(false)
+
+        subject = Gatling::ImageFromElement.new(mock_element, "image.png")
+
+        expect {subject.verify_and_save}.to raise_error
+      end 
+    end
 
 
   end

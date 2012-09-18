@@ -37,21 +37,20 @@ module Gatling
 
     def verify_and_save
       Gatling::Configuration.max_no_tries.times do
-        verifiable_image = capture_image
-        matches = self.verify(verifiable_image)
+        comparable = capture_image
+        matches = Gatling::Comparison.new(self,Image.new(comparable,@file_name)).matches?
         if matches
           self.save
-          return() 
+          puts "Saved #{self.path} as reference"
+          return()
+        else
+          @image = comparable  
         end  
       end
       raise 'Could not save a stable image. This could be due to animations or page load times. Saved a reference image, delete it to re-try'
     end
 
     private
-    def verify(verifiable)
-      match = Gatling::Comparison.new(@image,verifiable).matches?
-    end
-
     def capture_image
       Gatling::CaptureElement.capture(@element)
     end

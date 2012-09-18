@@ -60,24 +60,6 @@ describe Gatling do
         Gatling.stub!(:compare_until_match).and_return(comparison)
       end
 
-      it "create stable reference" do
-        comparison.should_receive(:matches?).and_return(true)
-        comparison.should_receive(:actual_image).and_return(reference_image)
-        reference_image.should_receive(:path).and_return('/some/path/reference_image.png')
-        reference_image.should_receive(:save)
-
-        Gatling.save_reference
-      end 
-
-      it "create stable reference after trying twice" do
-        comparison.should_receive(:matches?).and_return(false)
-        comparison.should_receive(:actual_image).and_return(reference_image)
-        reference_image.should_receive(:path).and_return('/some/path/reference_image.png')
-        reference_image.should_receive(:save)
-
-        expect {Gatling.save_reference}.to raise_error(/Saved an unstable reference/)
-      end
-
     end
   end  
 
