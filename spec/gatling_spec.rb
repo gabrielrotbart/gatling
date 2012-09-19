@@ -73,7 +73,7 @@ describe Gatling do
     end
 
     it "should try match for a specified amount of times" do
-      comparison.should_receive(:matches?).exactly(3).times
+      comparison.should_receive(:matches?).exactly(3).times.and_return(false)
       Gatling.compare_until_match(@element, expected_image, 3, 0.1)
     end
 

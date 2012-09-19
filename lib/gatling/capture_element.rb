@@ -1,5 +1,5 @@
 require 'fileutils'
-require 'gatling/config'
+require 'gatling'
 
 module Gatling
   module CaptureElement

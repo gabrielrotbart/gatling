@@ -9,10 +9,6 @@ describe Gatling::Comparison do
     @orange = Gatling::Image.new(orange, "orange.png")
   end
 
-  describe 'will make images from ' do
-
-  end
-
   describe 'will compare two images' do
 
     it 'will return true if the images are identical' do

@@ -2,7 +2,7 @@ require 'RMagick'
 require 'capybara'
 require 'capybara/dsl'
 
-require 'gatling/config'
+require 'gatling/configuration'
 require 'gatling/image'
 require 'gatling/comparison'
 require 'gatling/capture_element'
@@ -15,11 +15,7 @@ module Gatling
   class << self
 
     def matches?(expected_reference_filename, actual_element)
-
-      if ENV['GATLING_TRAINER']
-        raise 'GATLING_TRAINER has been depreciated. Gatling will now create reference files where ones are missing. Delete bad references and re-run Gatling to re-train'
-      end  
-
+ 
       @actual_element = actual_element
       @expected_reference_filename = expected_reference_filename
       @expected_reference_file = (File.join(Gatling::Configuration.path(:reference), expected_reference_filename))
@@ -41,22 +37,20 @@ module Gatling
     end
 
     def compare_until_match actual_element, reference_file, max_no_tries = Gatling::Configuration.max_no_tries, sleep_time = Gatling::Configuration.sleep_between_tries
-      try = 0
-      match = false
-      expected_image = reference_file
-      comparison = nil
-      while !match && try < max_no_tries
+      max_no_tries.times do |i|
         actual_image = Gatling::ImageFromElement.new(actual_element, reference_file.file_name)
-        comparison = Gatling::Comparison.new(actual_image, expected_image)
+        comparison = Gatling::Comparison.new(actual_image, reference_file)
         match = comparison.matches?
         if !match
           sleep sleep_time
-          try += 1
           #TODO: Send to logger instead of puts
-          puts "Tried to match #{try} times"
+          i += 1
+          puts "Tried to match #{i} times"
+        else
+          return(comparison)
         end
+        return(comparison)
       end
-      comparison
     end
 
     def save_image_as_diff(image)
