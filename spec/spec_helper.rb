@@ -8,7 +8,6 @@ require 'fileutils'
 require 'pry'
 
 #todo: spec folders clean up method
-
 RSpec.configure do |config|
   config.color_enabled = true
   config.formatter     = 'documentation'

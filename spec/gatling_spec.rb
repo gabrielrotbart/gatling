@@ -69,6 +69,7 @@ describe Gatling do
       Gatling::ImageFromElement.stub!(:new).and_return(actual_image)
       Gatling::ImageFromFile.stub!(:new).and_return(expected_image)
       Gatling::Comparison.stub!(:new).and_return(comparison)
+
       expected_image.should_receive(:file_name).at_least(:once).and_return('expected_image.png')
     end
 
@@ -82,10 +83,5 @@ describe Gatling do
       Gatling.compare_until_match(@element, expected_image, 3, 0.1)
     end
 
-    it 'should compare image from the element with image from the file' do
-      comparison.stub!(:matches?).and_return(true)
-      Gatling::Comparison.should_receive(:new).with(actual_image, expected_image).and_return(comparison)
-      Gatling.compare_until_match(@element, expected_image, 3)
-    end
   end
 end

@@ -39,18 +39,18 @@ module Gatling
     def compare_until_match actual_element, reference_file, max_no_tries = Gatling::Configuration.max_no_tries, sleep_time = Gatling::Configuration.sleep_between_tries
       max_no_tries.times do |i|
         actual_image = Gatling::ImageFromElement.new(actual_element, reference_file.file_name)
-        comparison = Gatling::Comparison.new(actual_image, reference_file)
-        match = comparison.matches?
+        @comparison = Gatling::Comparison.new(actual_image, reference_file)
+        match = @comparison.matches?
         if !match
           sleep sleep_time
           #TODO: Send to logger instead of puts
           i += 1
           puts "Tried to match #{i} times"
         else
-          return(comparison)
+          return(@comparison)
         end
-        return(comparison)
       end
+      @comparison
     end
 
     def save_image_as_diff(image)
