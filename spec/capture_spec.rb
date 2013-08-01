@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Gatling::CaptureElement do
 
+  # creating a dummy class to test a module
   class SomeClass
   end
 
