@@ -18,7 +18,7 @@ module Gatling
 
       if ENV['GATLING_TRAINER']
         raise 'GATLING_TRAINER has been depreciated. Gatling will now create reference files where ones are missing. Delete bad references and re-run Gatling to re-train'
-      end  
+      end
 
       @actual_element = actual_element
       @expected_reference_filename = expected_reference_filename
@@ -36,7 +36,7 @@ module Gatling
           comparison.actual_image.save(:candidate)
           save_image_as_diff(comparison.diff_image)
         end
-        matches 
+        matches
       end
     end
 
@@ -82,8 +82,8 @@ module Gatling
         raise "No block provied" unless block_given?
         block.call(config_class)
       rescue
-         raise "Config block has changed. Example: Gatling.config {|c| c.reference_image_path = 'some/path'}. Please see README"  
-      end   
+         raise "Config block has changed. Example: Gatling.config {|c| c.reference_image_path = 'some/path'}. Please see README"
+      end
     end
 
   end

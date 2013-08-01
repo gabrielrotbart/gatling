@@ -34,6 +34,11 @@ describe 'Gatling' do
       create_square_image(@ref_path, 'black')
     end
 
+    after(:each) do
+      remove_refs(@ref_path)
+      config_clean_up
+    end
+
     it 'will return true if the images are identical' do
       black_element = element_for_spec('#black')
 

@@ -19,7 +19,7 @@ module Gatling
       end
 
       def sleep_between_tries
-        @sleep_between_tries ||= 0.5  
+        @sleep_between_tries ||= 0.5
       end
 
       def path(type)

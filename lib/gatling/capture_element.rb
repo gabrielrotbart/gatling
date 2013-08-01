@@ -3,7 +3,7 @@ require 'gatling/config'
 
 module Gatling
   module CaptureElement
-    extend Gatling::Configuration 
+    extend Gatling::Configuration
 
     def self.capture(element)
       # Getting the element position before screenshot because of a side effect
