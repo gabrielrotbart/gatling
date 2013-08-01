@@ -64,7 +64,7 @@ describe 'Gatling' do
     describe 'between images of the different size' do
 
       it 'will return false, creates new diff and candidate images' do
-        red_element = element_for_spec('#differentSize')
+        red_element = element_for_spec('#different-size')
         expected_error = "element did not match #{"black.png"}. " +
                          "A diff image: #{"black.png"} was created in #{@ref_path}/diff/#{"black.png"} " +
                          "A new reference #{@ref_path}/candidate/#{"black.png"} can be used to fix the test"

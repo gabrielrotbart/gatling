@@ -25,4 +25,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rake',['>=0.9.2'])
   s.add_development_dependency('rspec-instafail',['>=0.1.8'])
   s.add_development_dependency('pry',['>=0.9.8.2'])
+  s.add_development_dependency('selenium-webdriver',['~> 2.33.0'])
 end
